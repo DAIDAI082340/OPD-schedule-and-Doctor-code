@@ -32,6 +32,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      font-size: 16.5px;
       background-color: var(--bg);
       background-image: radial-gradient(at 50% 0%, #edf4fc 0%, #f8fafc 55%);
       background-repeat: no-repeat;
@@ -55,11 +56,11 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 3px 12px;
+      padding: 4px 14px;
       background: rgba(255, 255, 255, 0.12);
       border: 1px solid rgba(255, 255, 255, 0.22);
       border-radius: 20px;
-      font-size: 0.76rem;
+      font-size: 0.84rem;
       font-weight: 600;
       letter-spacing: 0.06em;
       color: #bae6fd;
@@ -67,13 +68,13 @@
       backdrop-filter: blur(4px);
     }
     header h1 {
-      font-size: 1.4rem;
+      font-size: 1.55rem;
       font-weight: 800;
       letter-spacing: 0.03em;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     header p {
-      font-size: 0.84rem;
+      font-size: 0.92rem;
       color: #93c5fd;
       letter-spacing: 0.04em;
       margin-top: 5px;
@@ -81,7 +82,7 @@
     }
 
     .container {
-      max-width: 980px;
+      max-width: 990px;
       margin: 18px auto;
       padding: 0 14px;
     }
@@ -99,10 +100,10 @@
     }
     .nav-tab {
       flex: 1;
-      padding: 11px 8px;
+      padding: 12px 10px;
       border: none;
       background: transparent;
-      font-size: 0.92rem;
+      font-size: 1.02rem;
       font-weight: 700;
       color: #475569;
       border-radius: 9px;
@@ -123,7 +124,7 @@
     .card {
       background: var(--card);
       border-radius: 14px;
-      padding: 20px 22px;
+      padding: 22px 24px;
       box-shadow: var(--shadow-lg);
       border: 1px solid #e2e8f0;
       margin-bottom: 20px;
@@ -131,38 +132,39 @@
     }
 
     .card-title {
-      font-size: 1.12rem;
+      font-size: 1.22rem;
       font-weight: 800;
       color: #0f172a;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       display: flex;
       align-items: center;
       gap: 10px;
       border-bottom: 2px solid #e0f2fe;
-      padding-bottom: 10px;
+      padding-bottom: 11px;
       letter-spacing: 0.01em;
     }
 
-    .form-group { margin-bottom: 14px; }
+    .form-group { margin-bottom: 16px; }
     label {
       display: block;
-      font-size: 0.9rem;
+      font-size: 1.02rem;
       font-weight: 700;
-      color: #334155;
-      margin-bottom: 7px;
+      color: #1e293b;
+      margin-bottom: 8px;
     }
 
     input[type="text"], select {
       width: 100%;
-      padding: 10px 14px;
+      padding: 11px 14px;
       border: 1.5px solid var(--border);
       border-radius: 9px;
-      font-size: 0.95rem;
+      font-size: 1.04rem;
       background: white;
       outline: none;
       color: var(--text);
       transition: all 0.2s ease;
       box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+      min-height: 46px;
     }
     input[type="text"]:focus, select:focus {
       border-color: var(--primary);
@@ -212,11 +214,11 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 14px;
+      padding: 7px 16px;
       background: white;
       border: 1px solid #cbd5e1;
       border-radius: 20px;
-      font-size: 0.86rem;
+      font-size: 0.94rem;
       cursor: pointer;
       user-select: none;
       transition: all 0.18s ease;
@@ -227,8 +229,8 @@
       background: #f1f5f9;
     }
     .chip input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
+      width: 17px;
+      height: 17px;
       cursor: pointer;
     }
     .chip.selected {
@@ -243,13 +245,14 @@
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: white;
       border: none;
-      padding: 12px;
+      padding: 13px 16px;
       border-radius: 9px;
-      font-size: 0.98rem;
+      font-size: 1.05rem;
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
       transition: all 0.2s ease;
+      min-height: 48px;
     }
     .btn-main:hover {
       background: linear-gradient(135deg, #0369a1, #075985);
@@ -262,15 +265,16 @@
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: white;
       border: none;
-      padding: 11px 16px;
+      padding: 12px 18px;
       border-radius: 9px;
-      font-size: 0.95rem;
+      font-size: 1.04rem;
       font-weight: 700;
       cursor: pointer;
       width: 100%;
       margin-bottom: 14px;
       box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
       transition: all 0.2s ease;
+      min-height: 46px;
     }
     .btn-add:hover {
       background: linear-gradient(135deg, #0369a1, #075985);
@@ -282,11 +286,11 @@
     .btn-reset {
       white-space: nowrap;
       background: #f8fafc;
-      color: #475569;
+      color: #334155;
       border: 1.5px solid #cbd5e1;
-      padding: 10px 16px;
+      padding: 11px 18px;
       border-radius: 9px;
-      font-size: 0.88rem;
+      font-size: 0.96rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -302,8 +306,8 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      min-height: 46px;
-      padding: 10px 12px;
+      min-height: 48px;
+      padding: 10px 14px;
       background: #f8fafc;
       border-radius: 10px;
       border: 1.5px dashed #cbd5e1;
@@ -314,11 +318,11 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 14px;
+      padding: 6px 14px;
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: white;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.94rem;
       font-weight: 700;
       box-shadow: 0 2px 5px rgba(2, 132, 199, 0.25);
     }
@@ -329,15 +333,15 @@
     .selected-tag span.close-btn {
       cursor: pointer;
       font-weight: bold;
-      margin-left: 4px;
+      margin-left: 5px;
       background: rgba(255,255,255,0.25);
       border-radius: 50%;
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
+      font-size: 0.82rem;
       transition: background 0.15s;
     }
     .selected-tag span.close-btn:hover { background: rgba(255,255,255,0.5); }
@@ -354,9 +358,9 @@
     }
     .day-header {
       background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
-      padding: 11px 16px;
+      padding: 12px 16px;
       font-weight: 800;
-      font-size: 0.94rem;
+      font-size: 1.02rem;
       color: #1e293b;
       display: flex;
       justify-content: space-between;
@@ -378,7 +382,7 @@
 
     .slot-title {
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.98rem;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -389,26 +393,26 @@
       background: var(--success-bg);
       border: 1px solid var(--success-border);
       color: var(--success-text);
-      padding: 2px 10px;
+      padding: 3px 11px;
       border-radius: 12px;
-      font-size: 0.78rem;
+      font-size: 0.85rem;
       font-weight: 700;
     }
     .badge-diff-time {
       background: #f8fafc;
       border: 1px solid #cbd5e1;
       color: var(--muted);
-      padding: 2px 10px;
+      padding: 3px 11px;
       border-radius: 12px;
-      font-size: 0.78rem;
+      font-size: 0.85rem;
     }
 
     .doc-tag {
       display: inline-block;
       margin: 3px 6px 3px 0;
-      padding: 6px 11px;
+      padding: 7px 12px;
       border-radius: 7px;
-      font-size: 0.86rem;
+      font-size: 0.94rem;
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       box-shadow: 0 1px 2px rgba(0,0,0,0.03);
@@ -454,7 +458,7 @@
     }
     .cross-section-title {
       font-weight: 700;
-      font-size: 0.94rem;
+      font-size: 1.02rem;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
@@ -464,9 +468,9 @@
     .badge-same-time-lg {
       background: #059669;
       color: white;
-      padding: 3px 12px;
+      padding: 4px 13px;
       border-radius: 20px;
-      font-size: 0.82rem;
+      font-size: 0.88rem;
       font-weight: 700;
       display: inline-flex;
       align-items: center;
@@ -476,9 +480,9 @@
     .badge-diff-time-lg {
       background: #d97706;
       color: white;
-      padding: 3px 12px;
+      padding: 4px 13px;
       border-radius: 20px;
-      font-size: 0.82rem;
+      font-size: 0.88rem;
       font-weight: 700;
       display: inline-flex;
       align-items: center;
@@ -487,7 +491,7 @@
     }
     .slot-sub-header {
       font-weight: 700;
-      font-size: 0.86rem;
+      font-size: 0.92rem;
       color: #92400e;
       margin: 10px 0 6px 0;
       display: flex;
@@ -506,7 +510,7 @@
     }
     .cross-matrix-table {
       width: 100%;
-      min-width: 560px;
+      min-width: 600px;
       border-collapse: collapse;
       background: #ffffff;
     }
@@ -514,8 +518,8 @@
       background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
       color: #1e293b;
       font-weight: 800;
-      font-size: 0.94rem;
-      padding: 11px 8px;
+      font-size: 1.08rem;
+      padding: 13px 10px;
       text-align: center;
       border-bottom: 2.5px solid #64748b;
       border-right: 1.5px solid #94a3b8;
@@ -525,7 +529,7 @@
       border-right: none;
     }
     .cross-matrix-table td {
-      padding: 9px 8px;
+      padding: 10px 8px;
       vertical-align: top;
       border-bottom: 1.5px solid #cbd5e1;
       border-right: 1.5px solid #94a3b8;
@@ -548,33 +552,33 @@
       text-align: center;
       vertical-align: middle !important;
       width: 14%;
-      min-width: 65px;
-      font-size: 0.96rem;
+      min-width: 75px;
+      font-size: 1.10rem;
       border-right: 2.5px solid #94a3b8 !important;
       letter-spacing: 0.02em;
     }
     .matrix-slot-cell {
       width: 28.6%;
-      min-height: 52px;
+      min-height: 56px;
     }
     .matrix-pills-wrap {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 7px;
     }
     .matrix-doc-pill {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 6px 12px;
-      border-radius: 7px;
-      font-size: 0.86rem;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 1.00rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 2px 4px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.7);
       text-align: center;
-      line-height: 1.4;
+      line-height: 1.45;
       word-break: break-word;
     }
     .matrix-doc-pill:hover {
@@ -599,7 +603,7 @@
       background: #ffffff;
       border: 1.5px solid #cbd5e1;
       border-radius: 10px;
-      padding: 12px 16px;
+      padding: 13px 18px;
       margin-bottom: 14px;
       box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
     }
@@ -618,8 +622,8 @@
       background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
       color: #1e293b;
       font-weight: 800;
-      font-size: 0.92rem;
-      padding: 9px 6px;
+      font-size: 1.04rem;
+      padding: 10px 8px;
       text-align: center;
       border-bottom: 2px solid #64748b;
       border-right: 1.5px solid #94a3b8;
@@ -628,7 +632,7 @@
       border-right: none;
     }
     .modal-matrix-table td {
-      padding: 7px 5px;
+      padding: 8px 6px;
       vertical-align: middle;
       border-bottom: 1.5px solid #cbd5e1;
       border-right: 1.5px solid #94a3b8;
@@ -644,18 +648,18 @@
       background: #f8fafc;
       font-weight: 800;
       color: #334155;
-      font-size: 0.9rem;
+      font-size: 1.04rem;
       width: 15%;
       border-right: 2px solid #94a3b8 !important;
     }
     .modal-slot-card {
-      border-radius: 7px;
-      padding: 7px 5px;
+      border-radius: 8px;
+      padding: 8px 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
+      gap: 3px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.7);
     }
     .slot-morning {
@@ -678,9 +682,9 @@
       display: inline-block;
       background: #e0e7ff;
       color: #3730a3;
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 5px;
-      font-size: 0.76rem;
+      font-size: 0.84rem;
       font-weight: 700;
       margin-right: 4px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -689,9 +693,9 @@
       display: inline-block;
       background: #dbeafe;
       color: #1e40af;
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 5px;
-      font-size: 0.76rem;
+      font-size: 0.84rem;
       font-weight: 700;
       margin-left: 4px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -703,26 +707,26 @@
       align-items: center;
       justify-content: space-between;
       margin-top: 14px;
-      padding: 12px 18px;
+      padding: 14px 20px;
       background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
       border: 1.5px solid #bae6fd;
       border-radius: 10px;
       box-shadow: 0 1px 3px rgba(2, 132, 199, 0.06);
     }
-    .dept-title { font-size: 1.05rem; font-weight: 800; color: #0369a1; }
+    .dept-title { font-size: 1.12rem; font-weight: 800; color: #0369a1; }
     .dept-code-tag-big {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.96rem;
+      font-size: 1.06rem;
       font-weight: 800;
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: #ffffff;
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 7px;
       box-shadow: 0 2px 5px rgba(2, 132, 199, 0.25);
     }
     .doctor-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
       gap: 12px;
       margin-top: 14px;
     }
@@ -730,7 +734,7 @@
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-left: 4px solid #0284c7;
-      padding: 12px 16px;
+      padding: 13px 18px;
       border-radius: 10px;
       display: flex;
       justify-content: space-between;
@@ -746,24 +750,24 @@
       box-shadow: 0 8px 18px -2px rgba(2, 132, 199, 0.15);
       transform: translateY(-2px);
     }
-    .doc-name { font-weight: 700; color: #1e293b; font-size: 0.95rem; }
+    .doc-name { font-weight: 700; color: #1e293b; font-size: 1.06rem; }
     .doc-code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-weight: 800;
       background: #e0f2fe;
       color: #0369a1;
-      padding: 3px 9px;
+      padding: 3px 10px;
       border-radius: 6px;
-      font-size: 0.95rem;
+      font-size: 1.08rem;
       border: 1px solid #bae6fd;
     }
-    .doc-code.empty { background: #f1f5f9; color: #94a3b8; border-color: #e2e8f0; font-size: 0.82rem; }
+    .doc-code.empty { background: #f1f5f9; color: #94a3b8; border-color: #e2e8f0; font-size: 0.88rem; }
 
     .empty-tip {
       text-align: center;
       padding: 24px;
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: 0.98rem;
     }
 
     /* 門診時刻表彈窗樣式 (Modal) */
@@ -788,7 +792,7 @@
     .modal-box {
       background: #ffffff;
       width: 100%;
-      max-width: 640px;
+      max-width: 660px;
       border-radius: 14px;
       box-shadow: 0 25px 50px -12px rgba(11, 19, 43, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1);
       overflow: hidden;
@@ -804,14 +808,14 @@
     .modal-header {
       background: linear-gradient(135deg, #0b132b 0%, #172554 60%, #1e3a8a 100%);
       color: white;
-      padding: 15px 20px;
+      padding: 16px 22px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     }
     .modal-title {
-      font-size: 1.1rem;
+      font-size: 1.22rem;
       font-weight: 800;
       letter-spacing: 0.02em;
     }
@@ -819,10 +823,10 @@
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -834,12 +838,12 @@
       transform: rotate(90deg);
     }
     .modal-body {
-      padding: 18px 20px;
+      padding: 18px 22px;
       overflow-y: auto;
       flex: 1;
     }
     .modal-footer {
-      padding: 12px 20px;
+      padding: 12px 22px;
       background: #f8fafc;
       border-top: 1px solid #e2e8f0;
       text-align: right;
@@ -848,10 +852,10 @@
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: white;
       border: none;
-      padding: 9px 22px;
+      padding: 10px 24px;
       border-radius: 8px;
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.98rem;
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
       transition: all 0.2s ease;
@@ -1573,11 +1577,11 @@
         return;
       }
 
-      let html = `<div class="card" style="background:linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%); border:1px solid #bae6fd; margin-bottom:14px; padding:14px 18px;">
-        <div style="font-size:0.95rem; font-weight:700; color:#0f172a;">
-          查詢基準：<span style="color:#0369a1;">[${deptCode}] ${docName} 醫師</span> ${docCode ? `<span class="doc-code-tag">${docCode}</span>` : ''}（每週門診 <strong>${docSlots.length}</strong> 診次）
+      let html = `<div class="card" style="background:linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%); border:1px solid #bae6fd; margin-bottom:14px; padding:16px 20px;">
+        <div style="font-size:1.06rem; font-weight:700; color:#0f172a;">
+          查詢基準：<span style="color:#0369a1;">[${deptCode}] ${docName} 醫師</span> ${docCode ? `<span class="doc-code-tag" style="font-size:0.92rem;">${docCode}</span>` : ''}（每週門診 <strong>${docSlots.length}</strong> 診次）
         </div>
-        <div style="font-size:0.82rem; color:#64748b; margin-top:5px; display:flex; align-items:center; gap:6px;">
+        <div style="font-size:0.92rem; color:#64748b; margin-top:6px; display:flex; align-items:center; gap:6px;">
           <span style="color:#0284c7;">✦</span> 點擊任何醫師標籤膠囊，皆可即時彈出查看該醫師每週完整門診表。
         </div>
       </div>`;
@@ -1650,8 +1654,8 @@
 
       // 頂部醫師色彩圖例列（純色呈現，無圖案）
       html += `<div class="matrix-legend-bar">
-        <div style="font-size:0.86rem; font-weight:800; color:#1e293b; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-          <span style="display:inline-block; width:3.5px; height:12px; background:#0284c7; border-radius:2px;"></span>
+        <div style="font-size:0.98rem; font-weight:800; color:#1e293b; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+          <span style="display:inline-block; width:4px; height:15px; background:#0284c7; border-radius:2px;"></span>
           醫師專屬色彩圖例：
         </div>
         <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
@@ -1775,11 +1779,11 @@
         <div class="doc-item" onclick="showDoctorScheduleModal('${item.doc}', '${item.deptCode}', '${item.dept}', '${item.docCode || ''}')">
           <div>
             <span class="doc-name">${item.doc}</span>
-            <div style="font-size: 0.75rem; color: #64748b;">${item.dept} (${item.deptCode})</div>
+            <div style="font-size: 0.86rem; color: #64748b; margin-top: 3px;">${item.dept} (${item.deptCode})</div>
           </div>
           <div style="text-align: right;">
             ${item.docCode ? `<span class="doc-code">${item.docCode}</span>` : `<span class="doc-code empty">無代碼</span>`}
-            <div style="font-size: 0.72rem; color: #0284c7; margin-top: 4px; font-weight: 600;">📅 查看門診 ❯</div>
+            <div style="font-size: 0.82rem; color: #0284c7; margin-top: 5px; font-weight: 700;">📅 查看門診 ❯</div>
           </div>
         </div>
       `).join("");
@@ -1827,12 +1831,12 @@
       const docSlots = schedules.filter(s => s.doctor === docName && (deptCode ? s.dept_code === deptCode : true));
 
       let bodyHtml = `
-        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%); padding: 12px 16px; border-radius: 10px; margin-bottom: 14px; border: 1.5px solid #bae6fd;">
+        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%); padding: 14px 18px; border-radius: 10px; margin-bottom: 14px; border: 1.5px solid #bae6fd;">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <strong style="color: #0f172a; font-size: 1.05rem; letter-spacing: 0.02em;">${docName} 醫師</strong>
+            <strong style="color: #0f172a; font-size: 1.18rem; letter-spacing: 0.02em;">${docName} 醫師</strong>
             <div>
-              <span style="font-size: 0.8rem; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; padding: 3px 10px; border-radius: 14px; font-weight: 700; box-shadow: 0 1px 3px rgba(2, 132, 199, 0.2);">[${deptCode}] ${deptName}</span>
-              <span style="font-size: 0.8rem; background: #e0f2fe; color: #0369a1; padding: 3px 10px; border-radius: 14px; font-weight: 800; font-family: ui-monospace, SFMono-Regular, monospace; margin-left: 5px; border: 1px solid #bae6fd;">${codeText}</span>
+              <span style="font-size: 0.88rem; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; padding: 4px 12px; border-radius: 14px; font-weight: 700; box-shadow: 0 1px 3px rgba(2, 132, 199, 0.2);">[${deptCode}] ${deptName}</span>
+              <span style="font-size: 0.92rem; background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 14px; font-weight: 800; font-family: ui-monospace, SFMono-Regular, monospace; margin-left: 6px; border: 1px solid #bae6fd;">${codeText}</span>
             </div>
           </div>
         </div>
@@ -1842,8 +1846,8 @@
         bodyHtml += `
           <div style="text-align: center; padding: 28px 16px; color: #64748b;">
             <div style="font-size: 2.2rem; margin-bottom: 8px;">🗓️</div>
-            <div style="font-weight: 700; font-size: 0.95rem; color: #334155;">此醫師目前暫無常規門診排班紀錄</div>
-            <div style="font-size: 0.82rem; color: #94a3b8; margin-top: 6px;">（可能為特約門診、住院/手術照會專科，或排班資料更新中）</div>
+            <div style="font-weight: 700; font-size: 1.02rem; color: #334155;">此醫師目前暫無常規門診排班紀錄</div>
+            <div style="font-size: 0.88rem; color: #94a3b8; margin-top: 6px;">（可能為特約門診、住院/手術照會專科，或排班資料更新中）</div>
           </div>
         `;
       } else {
@@ -1883,9 +1887,9 @@
                 }
 
                 bodyHtml += `<div class="modal-slot-card ${slotClass}">
-                  <span style="font-size: 0.76rem; font-weight: 700;">${slotLabel}</span>
-                  <strong style="font-size: 0.88rem;">${m.room || "看診中"}</strong>
-                  ${m.note ? `<span style="font-size: 0.72rem; background: #fee2e2; color: #b91c1c; padding: 1px 5px; border-radius: 4px; font-weight: 600; margin-top: 2px;">${m.note}</span>` : ""}
+                  <span style="font-size: 0.86rem; font-weight: 700;">${slotLabel}</span>
+                  <strong style="font-size: 1.02rem;">${m.room || "看診中"}</strong>
+                  ${m.note ? `<span style="font-size: 0.80rem; background: #fee2e2; color: #b91c1c; padding: 2px 6px; border-radius: 4px; font-weight: 600; margin-top: 2px;">${m.note}</span>` : ""}
                 </div>`;
               });
             }
@@ -1896,8 +1900,8 @@
         }
 
         bodyHtml += `</tbody></table></div>
-          <div style="margin-top: 12px; text-align: right; font-size: 0.88rem; color: #64748b; font-weight: 600;">
-            每週門診總計：<strong style="color: #0284c7; font-size: 1rem;">${docSlots.length}</strong> 個時段
+          <div style="margin-top: 14px; text-align: right; font-size: 0.96rem; color: #64748b; font-weight: 600;">
+            每週門診總計：<strong style="color: #0284c7; font-size: 1.12rem;">${docSlots.length}</strong> 個時段
           </div>
         `;
       }
