@@ -506,7 +506,7 @@
     .base-doc-pill {
       background: #0284c7 !important;
       color: #ffffff !important;
-      border: 1.5px solid #0369a1 !important;
+      border: 2px solid #0369a1 !important;
       font-weight: 700;
     }
     .matrix-legend-bar {
@@ -1513,17 +1513,16 @@
         }
       });
 
-      // 專屬調色盤庫（當比對多位醫師時，每位醫師依序分配獨立純色）
+      // 專屬調色盤庫（各大色相互斥，絕不撞色；邊框 2px 飽和高對比）
       const targetPalettes = [
-        { bg: "#ecfdf5", border: "#10b981", text: "#047857" }, // 翡翠綠
-        { bg: "#fffbeb", border: "#f59e0b", text: "#b45309" }, // 琥珀金
-        { bg: "#f5f3ff", border: "#8b5cf6", text: "#6d28d9" }, // 薰衣紫
-        { bg: "#fff1f2", border: "#f43f5e", text: "#be123c" }, // 玫瑰粉
-        { bg: "#f0fdfa", border: "#14b8a6", text: "#0f766e" }, // 湖水青
-        { bg: "#eef2ff", border: "#6366f1", text: "#4338ca" }, // 深靛藍
-        { bg: "#fff7ed", border: "#ea580c", text: "#9a3412" }, // 亮澄棕
-        { bg: "#f0fdf4", border: "#22c55e", text: "#15803d" }, // 亮草綠
-        { bg: "#fdf4ff", border: "#d946ef", text: "#a21caf" }  // 洋桃紅
+        { bg: "#ecfdf5", border: "#059669", text: "#064e3b" }, // 1. 正翡翠綠
+        { bg: "#fff7ed", border: "#ea580c", text: "#7c2d12" }, // 2. 活力亮橙
+        { bg: "#faf5ff", border: "#9333ea", text: "#581c87" }, // 3. 皇家深紫
+        { bg: "#fff1f2", border: "#e11d48", text: "#881337" }, // 4. 石榴鮮紅
+        { bg: "#fefce8", border: "#854d0e", text: "#422006" }, // 5. 焦糖深棕（大地色，徹底區隔綠/紫）
+        { bg: "#f1f5f9", border: "#334155", text: "#0f172a" }, // 6. 沉穩碳黑（黑墨邊框，極致高反差）
+        { bg: "#ecfeff", border: "#0891b2", text: "#164e63" }, // 7. 電光天青（亮水青）
+        { bg: "#fdf4ff", border: "#c026d3", text: "#701a75" }  // 8. 鮮亮洋紅（芭比桃紅）
       ];
 
       const doctorColorMap = new Map();
@@ -1562,7 +1561,7 @@
 
       targetDoctorList.forEach(td => {
         const pal = doctorColorMap.get(`${td.dept_code}___${td.doctor}`);
-        html += `<span class="matrix-doc-pill clickable" style="background:${pal.bg}; border:1.5px solid ${pal.border}; color:${pal.text};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${td.docCode}')" title="點擊查看 ${td.doctor} 醫師門診表">
+        html += `<span class="matrix-doc-pill clickable" style="background:${pal.bg}; border:2px solid ${pal.border}; color:${pal.text};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${td.docCode}')" title="點擊查看 ${td.doctor} 醫師門診表">
           ${td.doctor}
         </span>`;
       });
@@ -1607,7 +1606,7 @@
           // 比對醫師依序放於下方（各自專屬純色膠囊）
           targetMatches.forEach(td => {
             const pal = doctorColorMap.get(`${td.dept_code}___${td.doctor}`) || targetPalettes[0];
-            html += `<span class="matrix-doc-pill clickable" style="background:${pal.bg}; border:1.5px solid ${pal.border}; color:${pal.text};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
+            html += `<span class="matrix-doc-pill clickable" style="background:${pal.bg}; border:2px solid ${pal.border}; color:${pal.text};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
               ${td.doctor} (${td.room || "診間"}${td.note ? " / " + td.note : ""})
             </span>`;
           });
