@@ -424,6 +424,167 @@
       gap: 6px;
     }
 
+    /* 每週矩陣時刻表樣式 */
+    .matrix-container {
+      overflow-x: auto;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .cross-matrix-table {
+      width: 100%;
+      min-width: 560px;
+      border-collapse: collapse;
+      background: #ffffff;
+    }
+    .cross-matrix-table th {
+      background: #f1f5f9;
+      color: #1e293b;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 10px 8px;
+      text-align: center;
+      border-bottom: 2px solid #cbd5e1;
+      border-right: 1px solid #e2e8f0;
+    }
+    .cross-matrix-table th:last-child {
+      border-right: none;
+    }
+    .cross-matrix-table td {
+      padding: 8px;
+      vertical-align: top;
+      border-bottom: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      background: #ffffff;
+    }
+    .cross-matrix-table tr:last-child td {
+      border-bottom: none;
+    }
+    .cross-matrix-table td:last-child {
+      border-right: none;
+    }
+    .matrix-weekday-cell {
+      background: #f8fafc !important;
+      font-weight: 700;
+      color: #334155;
+      text-align: center;
+      vertical-align: middle !important;
+      width: 14%;
+      min-width: 65px;
+      font-size: 0.95rem;
+    }
+    .matrix-slot-cell {
+      width: 28.6%;
+      min-height: 48px;
+    }
+    .matrix-pills-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .matrix-doc-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      text-align: center;
+      line-height: 1.35;
+    }
+    .matrix-doc-pill:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+    }
+    .base-doc-pill {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border: 1.5px solid #0369a1 !important;
+      font-weight: 700;
+    }
+    .matrix-legend-bar {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+    }
+
+    /* 彈窗內矩陣表格樣式 */
+    .modal-matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .modal-matrix-table th {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 8px 6px;
+      text-align: center;
+      border-bottom: 2px solid #cbd5e1;
+      border-right: 1px solid #e2e8f0;
+    }
+    .modal-matrix-table th:last-child {
+      border-right: none;
+    }
+    .modal-matrix-table td {
+      padding: 6px 4px;
+      vertical-align: middle;
+      border-bottom: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      text-align: center;
+    }
+    .modal-matrix-table tr:last-child td {
+      border-bottom: none;
+    }
+    .modal-matrix-table td:last-child {
+      border-right: none;
+    }
+    .modal-weekday-cell {
+      background: #f8fafc;
+      font-weight: 700;
+      color: #475569;
+      font-size: 0.88rem;
+      width: 15%;
+    }
+    .modal-slot-card {
+      border-radius: 6px;
+      padding: 6px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .slot-morning {
+      background: #f0f9ff;
+      border: 1.5px solid #7dd3fc;
+      color: #0369a1;
+    }
+    .slot-afternoon {
+      background: #fffbeb;
+      border: 1.5px solid #fcd34d;
+      color: #b45309;
+    }
+    .slot-night {
+      background: #f5f3ff;
+      border: 1.5px solid #c4b5fd;
+      color: #6d28d9;
+    }
+
     .dept-code {
       display: inline-block;
       background: #e0e7ff;
@@ -532,7 +693,7 @@
     .modal-box {
       background: #ffffff;
       width: 100%;
-      max-width: 520px;
+      max-width: 620px;
       border-radius: 12px;
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.05);
       overflow: hidden;
@@ -1327,154 +1488,136 @@
         else if (t.startsWith("DOC_")) targetDocs.add(t.replace("DOC_", ""));
       });
 
-      // 依星期分組 (Group by Weekday)，解決同天多時段拆散之問題
-      const slotsByWeekday = {};
-      docSlots.forEach(slot => {
-        if (!slotsByWeekday[slot.weekday]) slotsByWeekday[slot.weekday] = [];
-        slotsByWeekday[slot.weekday].push(slot);
+      // 抓取所有符合條件的比對目標排班資料
+      const allTargetSchedules = schedules.filter(s => {
+        if (targetDepts.has(s.dept_code)) return true;
+        if (targetDocs.has(`${s.dept_code}___${s.doctor}`)) return true;
+        return false;
       });
 
-      const sortedWeekdays = Object.keys(slotsByWeekday).map(Number).sort((a, b) => a - b);
-
-      sortedWeekdays.forEach(wDay => {
-        const baseSlotsOnThisDay = [...slotsByWeekday[wDay]].sort((a, b) => {
-          return (slotRank[a.slot] || 99) - (slotRank[b.slot] || 99);
-        });
-
-        // 基準醫師本日所有看診班次摘要 (例: 下午診 (2樓88診) ｜ 夜診 (2樓88診))
-        const baseDutyList = baseSlotsOnThisDay.map(s => {
-          return `<strong>${formatSlot(s.slot)}</strong> (<span style="color:#0369a1; font-weight:600;">${s.room || "看診中"}</span>${s.note ? " / " + s.note : ""})`;
-        }).join(" ｜ ");
-
-        const baseSlotSet = new Set(baseSlotsOnThisDay.map(s => s.slot));
-
-        // 抓取在相同星期（同天）的所有目標出診記錄
-        const targetDaySchedules = schedules.filter(s => {
-          if (s.weekday !== wDay) return false;
-          if (targetDepts.has(s.dept_code)) return true;
-          if (targetDocs.has(`${s.dept_code}___${s.doctor}`)) return true;
-          return false;
-        });
-
-        // 1. 同天同時段：目標時段落在基準醫師今日有開診之時段
-        const sameSlotMatches = targetDaySchedules.filter(s => baseSlotSet.has(s.slot));
-
-        // 2. 同天不同時段：目標時段落在基準醫師今日未開診之時段
-        const diffSlotMatches = targetDaySchedules.filter(s => !baseSlotSet.has(s.slot));
-
-        html += `<div class="day-block">
-          <div class="day-header">
-            <span>📅 ${weekdayMap[wDay]}</span>
-            <span style="font-size:0.84rem; font-weight:normal; color:#475569;">
-              基準看診：<strong>${docName} 醫師</strong> [ ${baseDutyList} ]
-            </span>
-          </div>
-          <div class="day-body">`;
-
-        // 若當日兩者皆查無結果，呈現簡潔中立提示，絕不呈現任何綠色或黃色色彩框
-        if (sameSlotMatches.length === 0 && diffSlotMatches.length === 0) {
-          html += `<div style="color: #64748b; font-size: 0.88rem; padding: 10px 14px; background: #f8fafc; border-radius: 6px; border: 1px dashed #cbd5e1;">
-            所選比對目標於本日無門診。
-          </div>`;
-        } else {
-          // ==================== 區塊 1: 同天同時段 ====================
-          // 僅在有結果時呈現，無結果不呈現顏色框
-          if (sameSlotMatches.length > 0) {
-            html += `<div class="cross-section-block same-time-box">
-              <div class="cross-section-title">
-                <span class="badge-same-time-lg">🟢 同天同時段看診</span>
-              </div>`;
-
-            // 依基準醫師今日開診的時段逐一展開
-            baseSlotsOnThisDay.forEach(bSlot => {
-              const matchesInSlot = sameSlotMatches.filter(s => s.slot === bSlot.slot);
-              if (matchesInSlot.length === 0) return;
-
-              html += `<div style="margin-top:6px;">
-                <div class="slot-sub-header" style="color:#065f46;">
-                  <span>🕒 ${formatSlot(bSlot.slot)} (${matchesInSlot.length} 位出診)</span>
-                </div>`;
-
-              const grouped = {};
-              matchesInSlot.forEach(m => {
-                if (!grouped[m.dept_name]) grouped[m.dept_name] = [];
-                grouped[m.dept_name].push(m);
-              });
-
-              for (let dName in grouped) {
-                html += `<div style="margin-top:4px;">
-                  <strong style="font-size:0.88rem; color:#14532d;">${dName}：</strong>`;
-                grouped[dName].forEach(doc => {
-                  const dCode = findDocCode(doc.doctor);
-                  html += `<span class="doc-tag match clickable" onclick="showDoctorScheduleModal('${doc.doctor}', '${doc.dept_code}', '${doc.dept_name}', '${dCode || ''}')" title="點擊查看 ${doc.doctor} 醫師每週門診表">
-                    <span class="dept-code">${doc.dept_code}</span>
-                    <strong>${doc.doctor} 醫師</strong>
-                    ${dCode ? `<span class="doc-code-tag">${dCode}</span>` : ''}
-                    <small style="color:#15803d; margin-left:4px;">(${doc.room || "診間"}${doc.note ? " / " + doc.note : ""})</small>
-                  </span>`;
-                });
-                html += `</div>`;
-              }
-
-              html += `</div>`;
-            });
-
-            html += `</div>`;
-          }
-
-          // ==================== 區塊 2: 同天不同時段 ====================
-          // 僅在有結果時呈現，無結果不呈現顏色框
-          if (diffSlotMatches.length > 0) {
-            html += `<div class="cross-section-block diff-time-box">
-              <div class="cross-section-title">
-                <span class="badge-diff-time-lg">🟡 同日不同時段看診</span>
-              </div>`;
-
-            // 依基準醫師今日未開診之其他時段呈現（上午、下午、夜診）
-            const otherSlots = ["上午", "下午", "夜診"].filter(s => !baseSlotSet.has(s));
-            let diffRenderCount = 0;
-
-            otherSlots.forEach(otherS => {
-              const matchesInSlot = diffSlotMatches.filter(s => s.slot === otherS);
-              if (matchesInSlot.length === 0) return;
-
-              const borderStyle = diffRenderCount > 0 ? "margin-top:8px; padding-top:8px; border-top:1px dashed #fcd34d;" : "margin-top:4px;";
-              diffRenderCount++;
-
-              html += `<div class="diff-slot-group" style="${borderStyle}">
-                <div class="slot-sub-header">
-                  <span>🕒 ${formatSlot(otherS)} (${matchesInSlot.length} 位出診)</span>
-                </div>`;
-
-              const groupedDiff = {};
-              matchesInSlot.forEach(m => {
-                if (!groupedDiff[m.dept_name]) groupedDiff[m.dept_name] = [];
-                groupedDiff[m.dept_name].push(m);
-              });
-
-              for (let dName in groupedDiff) {
-                html += `<div style="margin-top:4px;">
-                  <strong style="font-size:0.86rem; color:#78350f;">${dName}：</strong>`;
-                groupedDiff[dName].forEach(doc => {
-                  const dCode = findDocCode(doc.doctor);
-                  html += `<span class="doc-tag match-diff clickable" onclick="showDoctorScheduleModal('${doc.doctor}', '${doc.dept_code}', '${doc.dept_name}', '${dCode || ''}')" title="點擊查看 ${doc.doctor} 醫師每週門診表">
-                    <span class="dept-code" style="background:#fef3c7; color:#92400e;">${doc.dept_code}</span>
-                    <strong>${doc.doctor} 醫師</strong>
-                    ${dCode ? `<span class="doc-code-tag">${dCode}</span>` : ''}
-                    <small style="color:#b45309; margin-left:4px;">(${doc.room || "診間"}${doc.note ? " / " + doc.note : ""})</small>
-                  </span>`;
-                });
-                html += `</div>`;
-              }
-              html += `</div>`;
-            });
-
-            html += `</div>`;
-          }
+      // 取得所有出現在比對結果中的獨立醫師清單（供指派個別專屬顏色，查詢超過3位以上顏色皆有區分）
+      const targetDoctorList = [];
+      const seenTargetDocs = new Set();
+      allTargetSchedules.forEach(s => {
+        const key = `${s.dept_code}___${s.doctor}`;
+        if (!seenTargetDocs.has(key)) {
+          seenTargetDocs.add(key);
+          targetDoctorList.push({
+            doctor: s.doctor,
+            dept_code: s.dept_code,
+            dept_name: s.dept_name,
+            docCode: findDocCode(s.doctor) || ""
+          });
         }
-
-        html += `</div></div>`;
       });
+
+      // 專屬調色盤庫（當比對多位醫師時，每位醫師依序分配獨立純色）
+      const targetPalettes = [
+        { bg: "#ecfdf5", border: "#10b981", text: "#047857" }, // 翡翠綠
+        { bg: "#fffbeb", border: "#f59e0b", text: "#b45309" }, // 琥珀金
+        { bg: "#f5f3ff", border: "#8b5cf6", text: "#6d28d9" }, // 薰衣紫
+        { bg: "#fff1f2", border: "#f43f5e", text: "#be123c" }, // 玫瑰粉
+        { bg: "#f0fdfa", border: "#14b8a6", text: "#0f766e" }, // 湖水青
+        { bg: "#eef2ff", border: "#6366f1", text: "#4338ca" }, // 深靛藍
+        { bg: "#fff7ed", border: "#ea580c", text: "#9a3412" }, // 亮澄棕
+        { bg: "#f0fdf4", border: "#22c55e", text: "#15803d" }, // 亮草綠
+        { bg: "#fdf4ff", border: "#d946ef", text: "#a21caf" }  // 洋桃紅
+      ];
+
+      const doctorColorMap = new Map();
+      targetDoctorList.forEach((td, idx) => {
+        const pal = targetPalettes[idx % targetPalettes.length];
+        doctorColorMap.set(`${td.dept_code}___${td.doctor}`, pal);
+      });
+
+      // 檢查哪些星期有門診（無門診不用呈現：只顯示基準醫師或比對目標有出診的星期）
+      const activeWeekdays = [];
+      for (let w = 1; w <= 6; w++) {
+        const baseCount = docSlots.filter(s => s.weekday === w).length;
+        const targetCount = allTargetSchedules.filter(s => s.weekday === w).length;
+        if (baseCount > 0 || targetCount > 0) {
+          activeWeekdays.push(w);
+        }
+      }
+
+      if (activeWeekdays.length === 0) {
+        html += `<div style="color: #64748b; font-size: 0.9rem; padding: 20px; text-align: center; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1;">
+          所選比對目標與基準醫師在全週各時段均無出診記錄。
+        </div>`;
+        resultArea.innerHTML = html;
+        return;
+      }
+
+      // 頂部醫師色彩圖例列（純色呈現，無圖案）
+      html += `<div class="matrix-legend-bar">
+        <div style="font-size:0.85rem; font-weight:700; color:#334155; margin-bottom:6px;">
+          醫師色彩圖例：
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+          <span class="matrix-doc-pill base-doc-pill clickable" onclick="showDoctorScheduleModal('${docName}', '${deptCode}', '${masterData.find(m=>m.deptCode===deptCode)?.dept || ''}', '${docCode || ''}')" title="點擊查看 ${docName} 醫師門診表">
+            ${docName} (基準)
+          </span>`;
+
+      targetDoctorList.forEach(td => {
+        const pal = doctorColorMap.get(`${td.dept_code}___${td.doctor}`);
+        html += `<span class="matrix-doc-pill clickable" style="background:${pal.bg}; border:1.5px solid ${pal.border}; color:${pal.text};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${td.docCode}')" title="點擊查看 ${td.doctor} 醫師門診表">
+          ${td.doctor}
+        </span>`;
+      });
+
+      html += `</div></div>`;
+
+      // 渲染每週矩陣時刻表（橫向：上午、下午、晚上；縱向：僅有門診的星期）
+      html += `<div class="matrix-container">
+        <table class="cross-matrix-table">
+          <thead>
+            <tr>
+              <th style="width: 14%; min-width: 65px;">星期</th>
+              <th style="width: 28.6%;">上午</th>
+              <th style="width: 28.6%;">下午</th>
+              <th style="width: 28.6%;">晚上</th>
+            </tr>
+          </thead>
+          <tbody>`;
+
+      const slots = ["上午", "下午", "夜診"];
+
+      activeWeekdays.forEach(w => {
+        html += `<tr>
+          <td class="matrix-weekday-cell">${weekdayMap[w]}</td>`;
+
+        slots.forEach(sl => {
+          // 基準醫師在此時段的排班
+          const baseMatch = docSlots.find(s => s.weekday === w && (s.slot === sl || (sl === "夜診" && s.slot.includes("夜"))));
+          
+          // 比對目標醫師在此時段的排班
+          const targetMatches = allTargetSchedules.filter(s => s.weekday === w && (s.slot === sl || (sl === "夜診" && s.slot.includes("夜"))));
+
+          html += `<td class="matrix-slot-cell"><div class="matrix-pills-wrap">`;
+
+          // 若有基準醫師，放於頂部（深藍純色膠囊）
+          if (baseMatch) {
+            html += `<span class="matrix-doc-pill base-doc-pill clickable" onclick="showDoctorScheduleModal('${docName}', '${deptCode}', '${masterData.find(m=>m.deptCode===deptCode)?.dept || ''}', '${docCode || ''}')" title="點擊查看 ${docName} 醫師每週門診表">
+              ${docName} (${baseMatch.room || "診間"}${baseMatch.note ? " / " + baseMatch.note : ""})
+            </span>`;
+          }
+
+          // 比對醫師依序放於下方（各自專屬純色膠囊）
+          targetMatches.forEach(td => {
+            const pal = doctorColorMap.get(`${td.dept_code}___${td.doctor}`) || targetPalettes[0];
+            html += `<span class="matrix-doc-pill clickable" style="background:${pal.bg}; border:1.5px solid ${pal.border}; color:${pal.text};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
+              ${td.doctor} (${td.room || "診間"}${td.note ? " / " + td.note : ""})
+            </span>`;
+          });
+
+          // 若皆無門診，乾淨留白，不呈現任何字樣
+          html += `</div></td>`;
+        });
+
+        html += `</tr>`;
+      });
+
+      html += `</tbody></table></div>`;
 
       resultArea.innerHTML = html;
     }
@@ -1603,62 +1746,57 @@
           </div>
         `;
       } else {
-        // 依星期與時段先後排序
-        const sorted = [...docSlots].sort((a,b) => {
-          if (a.weekday !== b.weekday) return a.weekday - b.weekday;
-          return (slotRank[a.slot] || 99) - (slotRank[b.slot] || 99);
-        });
+        // 渲染每週門診矩陣時刻表 (週一至週六 × 上午/下午/晚上)
+        bodyHtml += `<div class="matrix-container" style="margin-top:0;">
+          <table class="modal-matrix-table">
+            <thead>
+              <tr>
+                <th style="width: 15%;">星期</th>
+                <th style="width: 28.3%;">上午</th>
+                <th style="width: 28.3%;">下午</th>
+                <th style="width: 28.3%;">晚上</th>
+              </tr>
+            </thead>
+            <tbody>`;
 
-        // 依星期分組
-        const byDay = {};
-        sorted.forEach(s => {
-          if (!byDay[s.weekday]) byDay[s.weekday] = [];
-          byDay[s.weekday].push(s);
-        });
-
-        bodyHtml += `<div style="display: flex; flex-direction: column; gap: 10px;">`;
+        const modalSlots = ["上午", "下午", "夜診"];
 
         for (let w = 1; w <= 6; w++) {
-          if (!byDay[w]) continue;
-          const daySlots = byDay[w];
+          bodyHtml += `<tr>
+            <td class="modal-weekday-cell">${weekdayMap[w]}</td>`;
 
-          bodyHtml += `
-            <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
-              <div style="background: #f8fafc; padding: 8px 12px; font-weight: 700; font-size: 0.88rem; color: #334155; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-                <span>📅 ${weekdayMap[w]}</span>
-                <span style="font-size: 0.78rem; font-weight: normal; color: #64748b;">${daySlots.length} 個看診時段</span>
-              </div>
-              <div style="padding: 8px 12px; display: flex; flex-direction: column; gap: 6px;">
-          `;
+          modalSlots.forEach(sl => {
+            const matches = docSlots.filter(s => s.weekday === w && (s.slot === sl || (sl === "夜診" && s.slot.includes("夜"))));
 
-          daySlots.forEach(s => {
-            let slotColor = "#0284c7";
-            let slotBg = "#e0f2fe";
-            if (s.slot === "下午") { slotColor = "#d97706"; slotBg = "#fef3c7"; }
-            else if (s.slot.includes("夜")) { slotColor = "#7c3aed"; slotBg = "#ede9fe"; }
+            bodyHtml += `<td>`;
+            if (matches.length > 0) {
+              matches.forEach(m => {
+                let slotClass = "slot-morning";
+                let slotLabel = "🕒 上午診";
+                if (sl === "下午") {
+                  slotClass = "slot-afternoon";
+                  slotLabel = "🕒 下午診";
+                } else if (sl === "夜診") {
+                  slotClass = "slot-night";
+                  slotLabel = "🌙 夜診";
+                }
 
-            bodyHtml += `
-              <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; background: #ffffff; border-radius: 6px; border: 1px solid #f1f5f9;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                  <span style="background: ${slotBg}; color: ${slotColor}; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.82rem;">
-                    🕒 ${formatSlot(s.slot)}
-                  </span>
-                  <span style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">
-                    ${s.room || "看診中"}
-                  </span>
-                </div>
-                ${s.note ? `<span style="font-size: 0.78rem; background: #fee2e2; color: #b91c1c; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${s.note}</span>` : ''}
-              </div>
-            `;
+                bodyHtml += `<div class="modal-slot-card ${slotClass}">
+                  <span style="font-size: 0.78rem; font-weight: 700;">${slotLabel}</span>
+                  <strong style="font-size: 0.88rem;">${m.room || "看診中"}</strong>
+                  ${m.note ? `<span style="font-size: 0.72rem; background: #fee2e2; color: #b91c1c; padding: 1px 5px; border-radius: 4px; font-weight: 600; margin-top: 2px;">${m.note}</span>` : ""}
+                </div>`;
+              });
+            }
+            bodyHtml += `</td>`;
           });
 
-          bodyHtml += `</div></div>`;
+          bodyHtml += `</tr>`;
         }
 
-        bodyHtml += `
-          </div>
-          <div style="margin-top: 12px; text-align: right; font-size: 0.82rem; color: #64748b;">
-            每週門診總計：<strong style="color: #0284c7;">${sorted.length}</strong> 個時段
+        bodyHtml += `</tbody></table></div>
+          <div style="margin-top: 12px; text-align: right; font-size: 0.88rem; color: #64748b; font-weight: 600;">
+            每週門診總計：<strong style="color: #0284c7; font-size: 1rem;">${docSlots.length}</strong> 個時段
           </div>
         `;
       }
