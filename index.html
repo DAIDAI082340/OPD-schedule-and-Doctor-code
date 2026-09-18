@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>門診時段交叉查詢與醫師代碼查詢系統</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --primary-light: #e0f2fe;
+      --success-bg: #ecfdf5;
+      --success-border: #10b981;
+      --success-text: #065f46;
+      --warn-bg: #fffbeb;
+      --warn-border: #f59e0b;
+      --warn-text: #92400e;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #cbd5e1;
+      --radius: 10px;
+      --shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 60px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f172a, #0369a1);
+      color: white;
+      padding: 18px 16px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    header h1 { font-size: 1.3rem; margin-bottom: 2px; }
+    header p { font-size: 0.82rem; opacity: 0.88; }
+
+    .container {
+      max-width: 960px;
+      margin: 14px auto;
+      padding: 0 12px;
+    }
+
+    /* 頁籤 */
+    .nav-tabs {
+      display: flex;
+      background: #e2e8f0;
+      border-radius: var(--radius);
+      padding: 4px;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .nav-tab {
+      flex: 1;
+      padding: 10px 4px;
+      border: none;
+      background: transparent;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--muted);
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .nav-tab.active {
+      background: white;
+      color: var(--primary-dark);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid #e2e8f0;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--primary-light);
+      padding-bottom: 8px;
+    }
+
+    .form-group { margin-bottom: 12px; }
+    label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      background: white;
+      outline: none;
+      color: var(--text);
+    }
+    input[type="text"]:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 600px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .selector-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    @media (max-width: 600px) {
+      .selector-row { grid-template-columns: 1fr; }
+    }
+
+    .search-bar-wrap {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .search-bar-wrap input {
+      flex: 1;
+    }
+
+    .chip-box {
+      max-height: 220px;
+      overflow-y: auto;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #f8fafc;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 20px;
+      font-size: 0.86rem;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s;
+    }
+    .chip input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .chip.selected {
+      background: #e0f2fe;
+      border-color: #0284c7;
+      color: #0369a1;
+      font-weight: 700;
+    }
+
+    .btn-main {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-main:active { background: var(--primary-dark); }
+
+    .btn-add {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 11px 16px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 12px;
+      transition: background 0.2s;
+    }
+    .btn-add:hover { background: var(--primary-dark); }
+
+    .btn-reset {
+      white-space: nowrap;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1.5px solid #cbd5e1;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-reset:hover {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+
+    /* 已選取標籤清單 */
+    .selected-docs-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 42px;
+      padding: 8px;
+      background: #f1f5f9;
+      border-radius: 8px;
+      border: 1px dashed #cbd5e1;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+    .selected-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: #0284c7;
+      color: white;
+      border-radius: 16px;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+    .selected-tag.base {
+      background: #0f766e;
+    }
+    .selected-tag span.close-btn {
+      cursor: pointer;
+      font-weight: bold;
+      margin-left: 4px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+    .selected-tag span.close-btn:hover { background: rgba(255,255,255,0.45); }
+
+    /* 結果卡片 */
+    .result-section { margin-top: 16px; }
+    .day-block {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+    .day-header {
+      background: #f1f5f9;
+      padding: 10px 14px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .day-body { padding: 12px 14px; }
+
+    .slot-group {
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+    .slot-group:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .slot-title {
+      font-weight: 700;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .badge-same-time {
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success-text);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+    .badge-diff-time {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      color: var(--muted);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.76rem;
+    }
+
+    .doc-tag {
+      display: inline-block;
+      margin: 3px 6px 3px 0;
+      padding: 5px 9px;
+      border-radius: 6px;
+      font-size: 0.86rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+    .doc-tag.match {
+      background: #f0fdf4;
+      border-color: #86efac;
+      color: #14532d;
+      font-weight: 700;
+    }
+
+    .dept-code {
+      display: inline-block;
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-right: 4px;
+      font-family: monospace;
+    }
+    .doc-code-tag {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-left: 4px;
+      font-family: monospace;
+    }
+
+    /* 代碼速查樣式 */
+    .dept-header-box {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+    }
+    .dept-title { font-size: 1rem; font-weight: 700; color: #1e3a8a; }
+    .dept-code-tag-big {
+      font-family: monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      background: #2563eb;
+      color: #ffffff;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .doctor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .doc-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #2563eb;
+      padding: 10px 14px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .doc-name { font-weight: 600; color: #1e293b; }
+    .doc-code {
+      font-family: monospace;
+      font-weight: bold;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+    .doc-code.empty { background: #f1f5f9; color: #94a3b8; font-size: 0.8rem; }
+
+    .empty-tip {
+      text-align: center;
+      padding: 20px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>門診時段交叉查詢與醫師代碼查詢系統</h1>
+    <p>排班交叉查詢・跨科同時段對照・醫師及科別代碼整合</p>
+  </header>
+
+  <div class="container">
+
+    <!-- 頁籤 -->
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showTab('tab-cross', this)">門診 vs 跨科同時段</button>
+      <button class="nav-tab" onclick="showTab('tab-multi', this)">多位醫師門診比對</button>
+      <button class="nav-tab" onclick="showTab('tab-codes', this)">醫師/科別代碼查詢</button>
+    </div>
+
+    <!-- ==================== 功能 1: 某科別醫師門診時段 vs 其他科別同時段醫師查詢 ==================== -->
+    <div id="tab-cross" class="tab-pane">
+      <div class="card">
+        <div class="card-title">某科別醫師門診時段 vs 其他科別同時段醫師查詢</div>
+
+        <!-- 基準醫師選擇 -->
+        <label>1. 選擇基準醫師：</label>
+        <div class="grid-2">
+          <div class="form-group">
+            <select id="cross-base-dept-select" onchange="onCrossBaseDeptChanged()">
+              <!-- Dynamic options -->
+            </select>
+          </div>
+          <div class="form-group">
+            <select id="cross-base-doc-select" onchange="onCrossBaseDocSelected()">
+              <!-- Dynamic options -->
+            </select>
+          </div>
+        </div>
+
+        <hr style="border:none; border-top:1px dashed #cbd5e1; margin:10px 0 14px 0;">
+
+        <!-- 比對目標：科別 + 醫師下拉選單 ＋ 加入比對名單 -->
+        <label>2. 選擇比對科別或醫師：</label>
+        <div class="grid-2">
+          <div class="form-group">
+            <select id="cross-target-dept-select" onchange="onCrossTargetDeptChanged()">
+              <!-- Dynamic options -->
+            </select>
+          </div>
+          <div class="form-group">
+            <select id="cross-target-doc-select">
+              <!-- Dynamic options -->
+            </select>
+          </div>
+        </div>
+
+        <button type="button" class="btn-add" onclick="addCrossAllSelectedFromDropdown()">＋ 加入比對名單</button>
+
+        <div class="form-group">
+          <label>已加入之比對名單：</label>
+          <div id="cross-selected-tags" class="selected-docs-list">
+            <span style="color:#94a3b8; font-size:0.85rem;">尚未加入比對名單</span>
+          </div>
+        </div>
+
+        <!-- 搜尋功能：醫師姓名、科別 ＋ 清除搜尋並還原鍵 -->
+        <div class="form-group">
+          <label>搜尋醫師姓名、科別：</label>
+          <div class="search-bar-wrap">
+            <input type="text" id="cross-search-input" placeholder="搜尋醫師姓名或科別..." oninput="filterCrossTargets()">
+            <button type="button" class="btn-reset" onclick="resetCrossSearch()">清除搜尋並還原</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>或直接勾選科別/醫師加入：</label>
+          <div class="chip-box" id="cross-chips-box">
+            <!-- Dynamic checkboxes -->
+          </div>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:14px;">
+          <button class="btn-main" onclick="runCrossSearch()">查詢同時段醫師</button>
+          <button type="button" onclick="clearCrossTargets()" style="width:100px; background:#e2e8f0; color:#334155; border:none; border-radius:8px; font-weight:700; cursor:pointer;">清空</button>
+        </div>
+      </div>
+
+      <div id="cross-result-area" class="result-section"></div>
+    </div>
+
+    <!-- ==================== 功能 2: 多位醫師門診全盤比對 (依星期呈現) ==================== -->
+    <div id="tab-multi" class="tab-pane" style="display:none;">
+      <div class="card">
+        <div class="card-title">多位醫師門診全盤比對（依星期呈現）</div>
+
+        <label>選擇科別及醫師選單（總共 3 組可分別選擇）：</label>
+        
+        <!-- 第 1 組 -->
+        <div class="selector-row">
+          <select id="multi-dept-select-1" onchange="onMultiDeptRowChanged(1)">
+            <!-- Dynamic options -->
+          </select>
+          <select id="multi-doc-select-1">
+            <!-- Dynamic options -->
+          </select>
+        </div>
+
+        <!-- 第 2 組 -->
+        <div class="selector-row">
+          <select id="multi-dept-select-2" onchange="onMultiDeptRowChanged(2)">
+            <!-- Dynamic options -->
+          </select>
+          <select id="multi-doc-select-2">
+            <!-- Dynamic options -->
+          </select>
+        </div>
+
+        <!-- 第 3 組 -->
+        <div class="selector-row">
+          <select id="multi-dept-select-3" onchange="onMultiDeptRowChanged(3)">
+            <!-- Dynamic options -->
+          </select>
+          <select id="multi-doc-select-3">
+            <!-- Dynamic options -->
+          </select>
+        </div>
+
+        <!-- 搜尋欄位 ＋ 清除搜尋並還原 -->
+        <div class="form-group" style="margin-top:10px;">
+          <div class="search-bar-wrap">
+            <input type="text" id="multi-search-input" placeholder="搜尋醫師姓名或科別..." oninput="filterMultiDocs()">
+            <button type="button" class="btn-reset" onclick="resetMultiSearch()">清除搜尋並還原</button>
+          </div>
+        </div>
+
+        <button type="button" class="btn-add" onclick="addAllMultiDoctorsFromDropdowns()">＋ 加入比對名單</button>
+
+        <div class="form-group">
+          <label>已加入比對名單：</label>
+          <div id="selected-docs-tags" class="selected-docs-list">
+            <span style="color:#94a3b8; font-size:0.85rem;">尚未加入醫師</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>或直接勾選醫師：</label>
+          <div class="chip-box" id="multi-doc-chips">
+            <!-- Dynamic checkboxes -->
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-main" onclick="runMultiDoctorSearch()">開始比對呈現</button>
+          <button type="button" onclick="clearMultiDocs()" style="width:110px; background:#e2e8f0; color:#334155; border:none; border-radius:8px; font-weight:700; cursor:pointer;">清空</button>
+        </div>
+      </div>
+
+      <div id="multi-result-area" class="result-section"></div>
+    </div>
+
+    <!-- ==================== 功能 3: 醫師/科別代碼速查 ==================== -->
+    <div id="tab-codes" class="tab-pane" style="display:none;">
+      <div class="card">
+        <div class="card-title">科別與醫師代碼速查</div>
+        <label for="codeDeptSelect">選擇科別：</label>
+        <select id="codeDeptSelect">
+          <option value="">-- 請選擇科別 --</option>
+        </select>
+
+        <div id="deptHeaderBox" class="dept-header-box">
+          <div class="dept-title" id="dispDeptName">-</div>
+          <div>科別代碼：<span class="dept-code-tag-big" id="dispDeptCode">-</span></div>
+        </div>
+
+        <div class="doctor-grid" id="doctorContainer">
+          <div class="empty-tip" style="grid-column: 1 / -1;">請選擇科別</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">醫師代碼與姓名搜尋</div>
+        <label for="codeKeywordSearch">搜尋：</label>
+        <div class="search-bar-wrap" style="margin-bottom:10px;">
+          <input type="text" id="codeKeywordSearch" placeholder="搜尋醫師姓名、代碼或科別代碼...">
+          <button type="button" class="btn-reset" onclick="resetCodeSearch()">清除搜尋並還原</button>
+        </div>
+
+        <div class="doctor-grid" id="searchResultContainer" style="display: none;"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // 時段名稱格式化修正（將「夜診診」修正為正確的「夜診」）
+    function formatSlot(slot) {
+      if (!slot) return "";
+      if (slot.includes("夜診")) return "夜診";
+      return slot.endsWith("診") ? slot : (slot + "診");
+    }
+
+    // 樣式更新輔助函數
+    function toggleChipStyle(checkbox) {
+      if (!checkbox) return;
+      const parent = checkbox.parentElement;
+      if (!parent) return;
+      if (checkbox.checked) {
+        parent.classList.add("selected");
+      } else {
+        parent.classList.remove("selected");
+      }
+    }
+
+    // 頁籤切換
+    function showTab(tabId, btnElement) {
+      document.querySelectorAll(".tab-pane").forEach(el => el.style.display = "none");
+      document.querySelectorAll(".nav-tab").forEach(el => el.classList.remove("active"));
+      const targetPane = document.getElementById(tabId);
+      if (targetPane) targetPane.style.display = "block";
+      if (btnElement) {
+        btnElement.classList.add("active");
+      }
+    }
+
+    // 醫師主檔資料（已更新 (0262)陳詩典）
+    const masterData = [
+      { dept: "腸胃內科", deptCode: "AA", doc: "楊智超", docCode: "0256" },
+      { dept: "腸胃內科", deptCode: "AA", doc: "蔡安順", docCode: "0011" },
+      { dept: "腸胃內科", deptCode: "AA", doc: "王棋新", docCode: "1505" },
+      { dept: "腸胃內科", deptCode: "AA", doc: "陳詩典", docCode: "0262" },
+      { dept: "心臟內科", deptCode: "AB", doc: "何東錦", docCode: "0267" },
+      { dept: "心臟內科", deptCode: "AB", doc: "李翰", docCode: "0237" },
+      { dept: "心臟內科", deptCode: "AB", doc: "王彥翔", docCode: "1502" },
+      { dept: "心臟內科", deptCode: "AB", doc: "李學林", docCode: "1508" },
+      { dept: "胸腔內科", deptCode: "AC", doc: "黃伊文", docCode: "0274" },
+      { dept: "胸腔內科", deptCode: "AC", doc: "林澤宏", docCode: "0029" },
+      { dept: "胸腔內科", deptCode: "AC", doc: "張子晏", docCode: "0027" },
+      { dept: "胸腔內科", deptCode: "AC", doc: "佘養豪", docCode: "0035" },
+      { dept: "胸腔內科", deptCode: "AC", doc: "高劍虹", docCode: "" },
+      { dept: "腎臟內科", deptCode: "AD", doc: "黃耀宣", docCode: "0286" },
+      { dept: "腎臟內科", deptCode: "AD", doc: "蔡旻叡", docCode: "1601" },
+      { dept: "腎臟內科", deptCode: "AD", doc: "張淑鈺", docCode: "1604" },
+      { dept: "腎臟內科", deptCode: "AD", doc: "吳佶育", docCode: "0268" },
+      { dept: "免疫風濕科", deptCode: "AE", doc: "高堅凱", docCode: "0251" },
+      { dept: "免疫風濕科", deptCode: "AE", doc: "王仕凱", docCode: "1504" },
+      { dept: "血液腫瘤科", deptCode: "AF", doc: "陳筠方", docCode: "FB17" },
+      { dept: "血液腫瘤科", deptCode: "AF", doc: "張哲豪", docCode: "1510" },
+      { dept: "感染科", deptCode: "AH", doc: "莊佳慧", docCode: "2401" },
+      { dept: "神經內科", deptCode: "12", doc: "連宮瑩", docCode: "1213" },
+      { dept: "神經內科", deptCode: "12", doc: "林嶸洲", docCode: "1209" },
+      { dept: "神經內科", deptCode: "12", doc: "羅健寧", docCode: "" },
+      { dept: "新陳代謝科", deptCode: "0202", doc: "蔡知穎", docCode: "1230" },
+      { dept: "新陳代謝科", deptCode: "0202", doc: "張之昀", docCode: "1231" },
+      { dept: "放射腫瘤科", deptCode: "FB", doc: "吳俊玠", docCode: "8350" },
+      { dept: "放射腫瘤科", deptCode: "FB", doc: "林伯儒", docCode: "8352" },
+      { dept: "放射腫瘤科", deptCode: "FB", doc: "劉育昌", docCode: "8353" },
+      { dept: "家醫科", deptCode: "01", doc: "廖曜磐", docCode: "0103" },
+      { dept: "家醫科", deptCode: "01", doc: "郭馨鎂", docCode: "0113" },
+      { dept: "家醫科", deptCode: "01", doc: "吳偉", docCode: "0402" },
+      { dept: "心臟外科", deptCode: "BB", doc: "林雍凱", docCode: "0352" },
+      { dept: "心臟外科", deptCode: "BB", doc: "林文培", docCode: "0331" },
+      { dept: "胸腔外科", deptCode: "BC", doc: "林聿騰", docCode: "0341" },
+      { dept: "胸腔外科", deptCode: "BC", doc: "李佳穎", docCode: "0333" },
+      { dept: "一般外科", deptCode: "03", doc: "余明昌", docCode: "0306" },
+      { dept: "一般外科", deptCode: "03", doc: "李忠懷", docCode: "0321" },
+      { dept: "一般外科", deptCode: "03", doc: "蘇美旭", docCode: "0389" },
+      { dept: "大腸直腸外科", deptCode: "BA", doc: "陳璿夫", docCode: "0353" },
+      { dept: "大腸直腸外科", deptCode: "BA", doc: "蔡豐璟", docCode: "0390" },
+      { dept: "神經外科", deptCode: "07", doc: "趙紹清", docCode: "0709" },
+      { dept: "神經外科", deptCode: "07", doc: "賴肇康", docCode: "0710" },
+      { dept: "神經外科", deptCode: "07", doc: "張昕煥", docCode: "0713" },
+      { dept: "神經外科", deptCode: "07", doc: "方鵬翔", docCode: "0715" },
+      { dept: "骨科", deptCode: "06", doc: "王守吉", docCode: "0304" },
+      { dept: "骨科", deptCode: "06", doc: "李文宏", docCode: "0604" },
+      { dept: "骨科", deptCode: "06", doc: "陳柏辰", docCode: "0609" },
+      { dept: "骨科", deptCode: "06", doc: "洪宗賢", docCode: "0665" },
+      { dept: "骨科", deptCode: "06", doc: "魏伯翰", docCode: "0610" },
+      { dept: "泌尿科", deptCode: "08", doc: "林憲治", docCode: "0801" },
+      { dept: "泌尿科", deptCode: "08", doc: "陳文銘", docCode: "0809" },
+      { dept: "泌尿科", deptCode: "08", doc: "蔡卓榮", docCode: "0865" },
+      { dept: "泌尿科", deptCode: "08", doc: "劉清耀", docCode: "0808" },
+      { dept: "耳鼻喉科", deptCode: "09", doc: "許嘉方", docCode: "0928" },
+      { dept: "耳鼻喉科", deptCode: "09", doc: "施彥旭", docCode: "0933" },
+      { dept: "耳鼻喉科", deptCode: "09", doc: "施凱翔", docCode: "0936" },
+      { dept: "整形外科", deptCode: "15", doc: "呂明川", docCode: "0337" },
+      { dept: "婦產科", deptCode: "05", doc: "林茂", docCode: "0503" },
+      { dept: "婦產科", deptCode: "05", doc: "林文斌", docCode: "0511" },
+      { dept: "婦產科", deptCode: "05", doc: "李伊菱", docCode: "0566" },
+      { dept: "婦產科", deptCode: "05", doc: "林玉珊", docCode: "0567" },
+      { dept: "高壓氧", deptCode: "0208", doc: "張子晏", docCode: "0027" },
+      { dept: "高壓氧", deptCode: "0208", doc: "陳柏辰", docCode: "0609" },
+      { dept: "高壓氧", deptCode: "0208", doc: "蔡卓榮", docCode: "0865" },
+      { dept: "皮膚科", deptCode: "11", doc: "郭峰昇", docCode: "1110" },
+      { dept: "眼科", deptCode: "10", doc: "許紜睿", docCode: "1015" },
+      { dept: "眼科", deptCode: "10", doc: "粘展瑋", docCode: "1018" },
+      { dept: "眼科", deptCode: "10", doc: "曾士豪", docCode: "1019" },
+      { dept: "牙科", deptCode: "40", doc: "金椿期", docCode: "4003" },
+      { dept: "牙科", deptCode: "40", doc: "鍾先揚", docCode: "4073" },
+      { dept: "牙科", deptCode: "40", doc: "陳聰洲", docCode: "4006" },
+      { dept: "牙科", deptCode: "40", doc: "黃惠娟", docCode: "4072" },
+      { dept: "復健科", deptCode: "14", doc: "廖宜新", docCode: "1428" },
+      { dept: "復健科", deptCode: "14", doc: "林昭宏", docCode: "1427" },
+      { dept: "復健科", deptCode: "14", doc: "賴仲亮", docCode: "1421" },
+      { dept: "精神科", deptCode: "13", doc: "梁孫源", docCode: "1307" },
+      { dept: "精神科", deptCode: "13", doc: "蕭銘鴻", docCode: "1309" },
+      { dept: "精神科", deptCode: "13", doc: "王鴻松", docCode: "1310" },
+      { dept: "精神科", deptCode: "13", doc: "李景嶽", docCode: "1315" },
+      { dept: "精神科", deptCode: "13", doc: "陳羿行", docCode: "1316" },
+      { dept: "精神科", deptCode: "13", doc: "葉騰尹", docCode: "1319" },
+      { dept: "小兒科", deptCode: "04", doc: "鍾瑞賢", docCode: "0412" },
+      { dept: "小兒科", deptCode: "04", doc: "馬瑞杉", docCode: "0477" },
+      { dept: "中醫科", deptCode: "60", doc: "張煒東", docCode: "6009" },
+      { dept: "中醫科", deptCode: "60", doc: "梁惠宇", docCode: "6013" },
+      { dept: "中醫科", deptCode: "60", doc: "馮天祥", docCode: "6014" }
+    ];
+
+    function findDocCode(doctorName) {
+      const item = masterData.find(d => d.doc === doctorName || doctorName.includes(d.doc));
+      return item && item.docCode ? item.docCode : "";
+    }
+
+    // 排班資料庫（排除一般內科）
+    const schedules = [
+      // 腎臟內科 (AD)
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "蔡旻叡", weekday: 1, slot: "上午", room: "2樓88診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "張淑鈺", weekday: 1, slot: "下午", room: "2樓88診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "張淑鈺", weekday: 2, slot: "上午", room: "1樓11診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 2, slot: "下午", room: "2樓88診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "張淑鈺", weekday: 3, slot: "上午", room: "1樓11診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 3, slot: "下午", room: "2樓88診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 3, slot: "夜診", room: "2樓88診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "吳佶育", weekday: 4, slot: "上午", room: "2樓88診", note: "限約診" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "蔡旻叡", weekday: 4, slot: "下午", room: "2樓88診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 5, slot: "上午", room: "2樓88診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "蔡旻叡", weekday: 5, slot: "下午", room: "2樓88診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "蔡旻叡", weekday: 5, slot: "夜診", room: "2樓88診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "張淑鈺", weekday: 6, slot: "上午", room: "2樓88診", note: "9/12.26" },
+
+      // 肝膽胃腸科 (AA)
+      { dept_code: "AA", dept_name: "肝膽胃腸科", doctor: "蔡安順", weekday: 1, slot: "上午", room: "2診", note: "" },
+      { dept_code: "AA", dept_name: "肝膽胃腸科", doctor: "王棋新", weekday: 1, slot: "下午", room: "2診", note: "" },
+      { dept_code: "AA", dept_name: "肝膽胃腸科", doctor: "楊智超", weekday: 2, slot: "上午", room: "2診", note: "" },
+      { dept_code: "AA", dept_name: "肝膽胃腸科", doctor: "王棋新", weekday: 2, slot: "下午", room: "2診", note: "" },
+      { dept_code: "AA", dept_name: "肝膽胃腸科", doctor: "蔡安順", weekday: 2, slot: "夜診", room: "2診", note: "" },
+      { dept_code: "AA", dept_name: "肝膽胃腸科", doctor: "楊智超", weekday: 3, slot: "上午", room: "2診", note: "" },
+      { dept_code: "AA", dept_name: "肝膽胃腸科", doctor: "蔡安順", weekday: 3, slot: "下午", room: "2診", note: "" },
+      { dept_code: "AA", dept_name: "肝膽胃腸科", doctor: "楊智超", weekday: 3, slot: "夜診", room: "2診", note: "" },
+      { dept_code: "AA", dept_name: "肝膽胃腸科", doctor: "王棋新", weekday: 4, slot: "上午", room: "2診", note: "" },
+      { dept_code: "AA", dept_name: "肝膽胃腸科", doctor: "陳詩典", weekday: 4, slot: "下午", room: "2診", note: "肝癌特診" },
+      { dept_code: "AA", dept_name: "肝膽胃腸科", doctor: "蔡安順", weekday: 5, slot: "上午", room: "2診", note: "" },
+      { dept_code: "AA", dept_name: "肝膽胃腸科", doctor: "楊智超", weekday: 5, slot: "下午", room: "2診", note: "" },
+      { dept_code: "AA", dept_name: "肝膽胃腸科", doctor: "王棋新", weekday: 6, slot: "上午", room: "2診", note: "" },
+
+      // 免疫風濕科 (AE)
+      { dept_code: "AE", dept_name: "免疫風濕科", doctor: "高堅凱", weekday: 1, slot: "上午", room: "7診", note: "" },
+      { dept_code: "AE", dept_name: "免疫風濕科", doctor: "王仕凱", weekday: 1, slot: "下午", room: "7診", note: "" },
+      { dept_code: "AE", dept_name: "免疫風濕科", doctor: "王仕凱", weekday: 1, slot: "夜診", room: "7診", note: "" },
+      { dept_code: "AE", dept_name: "免疫風濕科", doctor: "王仕凱", weekday: 3, slot: "上午", room: "7診", note: "" },
+      { dept_code: "AE", dept_name: "免疫風濕科", doctor: "高堅凱", weekday: 3, slot: "夜診", room: "7診", note: "" },
+      { dept_code: "AE", dept_name: "免疫風濕科", doctor: "高堅凱", weekday: 4, slot: "上午", room: "7診", note: "" },
+      { dept_code: "AE", dept_name: "免疫風濕科", doctor: "高堅凱", weekday: 4, slot: "下午", room: "7診", note: "" },
+      { dept_code: "AE", dept_name: "免疫風濕科", doctor: "王仕凱", weekday: 5, slot: "上午", room: "7診", note: "" },
+
+      // 心臟內科 (AB)
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "王彥翔", weekday: 1, slot: "上午", room: "11診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "何東錦", weekday: 1, slot: "上午", room: "12診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "王彥翔", weekday: 1, slot: "下午", room: "12診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "何東錦", weekday: 1, slot: "夜診", room: "12診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "李學林", weekday: 2, slot: "上午", room: "6診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "李翰", weekday: 2, slot: "上午", room: "12診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "何東錦", weekday: 2, slot: "下午", room: "12診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "王彥翔", weekday: 2, slot: "夜診", room: "12診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "何東錦", weekday: 3, slot: "上午", room: "12診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "李翰", weekday: 3, slot: "下午", room: "12診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "李學林", weekday: 4, slot: "上午", room: "6診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "李翰", weekday: 4, slot: "上午", room: "12診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "李學林", weekday: 4, slot: "下午", room: "6診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "李翰", weekday: 4, slot: "夜診", room: "12診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "何東錦", weekday: 5, slot: "上午", room: "12診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "王彥翔", weekday: 5, slot: "下午", room: "12診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "李學林", weekday: 5, slot: "夜診", room: "6診", note: "" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "李學林", weekday: 6, slot: "上午", room: "6診", note: "9/12.26" },
+
+      // 胸腔內科 (AC)
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "佘養豪", weekday: 1, slot: "上午", room: "5診", note: "肺癌特診" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "林澤宏", weekday: 1, slot: "下午", room: "5診", note: "" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "林澤宏", weekday: 1, slot: "夜診", room: "5診", note: "" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "佘養豪", weekday: 2, slot: "上午", room: "5診", note: "肺癌特診" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "佘養豪", weekday: 2, slot: "夜診", room: "5診", note: "" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "張子晏", weekday: 3, slot: "上午", room: "3診", note: "" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "黃伊文", weekday: 3, slot: "上午", room: "5診", note: "肺癌特診" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "佘養豪", weekday: 3, slot: "下午", room: "5診", note: "" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "張子晏", weekday: 3, slot: "夜診", room: "5診", note: "" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "高劍虹", weekday: 4, slot: "上午", room: "3診", note: "" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "林澤宏", weekday: 4, slot: "上午", room: "5診", note: "肺癌特診" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "黃伊文", weekday: 4, slot: "下午", room: "5診", note: "" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "黃伊文", weekday: 4, slot: "夜診", room: "5診", note: "" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "張子晏", weekday: 5, slot: "上午", room: "3診", note: "" },
+      { dept_code: "AC", dept_name: "胸腔內科", doctor: "林澤宏", weekday: 5, slot: "上午", room: "5診", note: "" },
+
+      // 神經內科 (12)
+      { dept_code: "12", dept_name: "神經內科", doctor: "林嶸洲", weekday: 1, slot: "上午", room: "1診", note: "" },
+      { dept_code: "12", dept_name: "神經內科", doctor: "羅健寧", weekday: 1, slot: "下午", room: "1診", note: "" },
+      { dept_code: "12", dept_name: "神經內科", doctor: "林嶸洲", weekday: 1, slot: "夜診", room: "1診", note: "" },
+      { dept_code: "12", dept_name: "神經內科", doctor: "連宮瑩", weekday: 2, slot: "上午", room: "1診", note: "" },
+      { dept_code: "12", dept_name: "神經內科", doctor: "林嶸洲", weekday: 2, slot: "下午", room: "1診", note: "" },
+      { dept_code: "12", dept_name: "神經內科", doctor: "林嶸洲", weekday: 3, slot: "上午", room: "1診", note: "" },
+      { dept_code: "12", dept_name: "神經內科", doctor: "連宮瑩", weekday: 3, slot: "下午", room: "1診", note: "" },
+      { dept_code: "12", dept_name: "神經內科", doctor: "連宮瑩", weekday: 4, slot: "上午", room: "1診", note: "" },
+      { dept_code: "12", dept_name: "神經內科", doctor: "連宮瑩", weekday: 5, slot: "上午", room: "1診", note: "" },
+
+      // 感染科 (AH)
+      { dept_code: "AH", dept_name: "感染科", doctor: "莊佳慧", weekday: 1, slot: "上午", room: "39診", note: "" },
+      { dept_code: "AH", dept_name: "感染科", doctor: "莊佳慧", weekday: 2, slot: "夜診", room: "3診", note: "" },
+      { dept_code: "AH", dept_name: "感染科", doctor: "莊佳慧", weekday: 3, slot: "上午", room: "39診", note: "" },
+      { dept_code: "AH", dept_name: "感染科", doctor: "莊佳慧", weekday: 4, slot: "下午", room: "39診", note: "" },
+
+      // 血液腫瘤科 (AF)
+      { dept_code: "AF", dept_name: "血液腫瘤科", doctor: "張哲豪", weekday: 4, slot: "上午", room: "52診", note: "" },
+      { dept_code: "AF", dept_name: "血液腫瘤科", doctor: "陳筠方", weekday: 5, slot: "上午", room: "52診", note: "9/11.25" },
+
+      // 新陳代謝科 (0202)
+      { dept_code: "0202", dept_name: "新陳代謝科", doctor: "張之昀", weekday: 2, slot: "上午", room: "6診", note: "限掛" },
+      { dept_code: "0202", dept_name: "新陳代謝科", doctor: "蔡知穎", weekday: 3, slot: "下午", room: "6診", note: "限掛" },
+
+      // 泌尿科 (08)
+      { dept_code: "08", dept_name: "泌尿科", doctor: "劉清耀", weekday: 1, slot: "上午", room: "16診", note: "" },
+      { dept_code: "08", dept_name: "泌尿科", doctor: "蔡卓榮", weekday: 1, slot: "上午", room: "18診", note: "" },
+      { dept_code: "08", dept_name: "泌尿科", doctor: "林憲治", weekday: 1, slot: "下午", room: "18診", note: "" },
+      { dept_code: "08", dept_name: "泌尿科", doctor: "林憲治", weekday: 1, slot: "夜診", room: "18診", note: "" },
+      { dept_code: "08", dept_name: "泌尿科", doctor: "林憲治", weekday: 2, slot: "上午", room: "18診", note: "" },
+      { dept_code: "08", dept_name: "泌尿科", doctor: "陳文銘", weekday: 2, slot: "下午", room: "18診", note: "" },
+      { dept_code: "08", dept_name: "泌尿科", doctor: "蔡卓榮", weekday: 3, slot: "上午", room: "18診", note: "" },
+      { dept_code: "08", dept_name: "泌尿科", doctor: "陳文銘", weekday: 3, slot: "下午", room: "18診", note: "" },
+      { dept_code: "08", dept_name: "泌尿科", doctor: "陳文銘", weekday: 3, slot: "夜診", room: "18診", note: "" },
+      { dept_code: "08", dept_name: "泌尿科", doctor: "林憲治", weekday: 4, slot: "上午", room: "18診", note: "" },
+      { dept_code: "08", dept_name: "泌尿科", doctor: "劉清耀", weekday: 4, slot: "下午", room: "18診", note: "" },
+      { dept_code: "08", dept_name: "泌尿科", doctor: "陳文銘", weekday: 5, slot: "上午", room: "18診", note: "" },
+      { dept_code: "08", dept_name: "泌尿科", doctor: "蔡卓榮", weekday: 5, slot: "下午", room: "18診", note: "" },
+      { dept_code: "08", dept_name: "泌尿科", doctor: "蔡卓榮", weekday: 5, slot: "夜診", room: "18診", note: "" },
+
+      // 骨科 (06)
+      { dept_code: "06", dept_name: "骨科", doctor: "洪宗賢", weekday: 1, slot: "上午", room: "17診", note: "" },
+      { dept_code: "06", dept_name: "骨科", doctor: "陳柏辰", weekday: 1, slot: "下午", room: "11診", note: "" },
+      { dept_code: "06", dept_name: "骨科", doctor: "李文宏", weekday: 1, slot: "下午", room: "17診", note: "" },
+      { dept_code: "06", dept_name: "骨科", doctor: "王守吉", weekday: 2, slot: "上午", room: "17診", note: "" },
+      { dept_code: "06", dept_name: "骨科", doctor: "洪宗賢", weekday: 2, slot: "下午", room: "17診", note: "" },
+      { dept_code: "06", dept_name: "骨科", doctor: "李文宏", weekday: 2, slot: "夜診", room: "17診", note: "" },
+      { dept_code: "06", dept_name: "骨科", doctor: "洪宗賢", weekday: 3, slot: "上午", room: "17診", note: "" },
+      { dept_code: "06", dept_name: "骨科", doctor: "王守吉", weekday: 3, slot: "夜診", room: "17診", note: "" },
+      { dept_code: "06", dept_name: "骨科", doctor: "王守吉", weekday: 4, slot: "上午", room: "17診", note: "" },
+      { dept_code: "06", dept_name: "骨科", doctor: "洪宗賢", weekday: 4, slot: "夜診", room: "17診", note: "" },
+      { dept_code: "06", dept_name: "骨科", doctor: "魏伯翰", weekday: 5, slot: "上午", room: "16診", note: "" },
+      { dept_code: "06", dept_name: "骨科", doctor: "李文宏", weekday: 5, slot: "上午", room: "17診", note: "" },
+      { dept_code: "06", dept_name: "骨科", doctor: "王守吉", weekday: 5, slot: "下午", room: "17診", note: "" },
+      { dept_code: "06", dept_name: "骨科", doctor: "李文宏", weekday: 6, slot: "上午", room: "17診", note: "" },
+
+      // 神經外科 (07)
+      { dept_code: "07", dept_name: "神經外科", doctor: "賴肇康", weekday: 1, slot: "上午", room: "38診", note: "" },
+      { dept_code: "07", dept_name: "神經外科", doctor: "賴肇康", weekday: 1, slot: "下午", room: "38診", note: "" },
+      { dept_code: "07", dept_name: "神經外科", doctor: "張昕煥", weekday: 1, slot: "夜診", room: "38診", note: "" },
+      { dept_code: "07", dept_name: "神經外科", doctor: "趙紹清", weekday: 2, slot: "上午", room: "38診", note: "" },
+      { dept_code: "07", dept_name: "神經外科", doctor: "張昕煥", weekday: 2, slot: "下午", room: "38診", note: "" },
+      { dept_code: "07", dept_name: "神經外科", doctor: "方鵬翔", weekday: 2, slot: "夜診", room: "38診", note: "限掛" },
+      { dept_code: "07", dept_name: "神經外科", doctor: "張昕煥", weekday: 3, slot: "上午", room: "38診", note: "" },
+      { dept_code: "07", dept_name: "神經外科", doctor: "賴肇康", weekday: 3, slot: "下午", room: "38診", note: "" },
+      { dept_code: "07", dept_name: "神經外科", doctor: "賴肇康", weekday: 4, slot: "上午", room: "38診", note: "" },
+      { dept_code: "07", dept_name: "神經外科", doctor: "趙紹清", weekday: 4, slot: "下午", room: "38診", note: "" },
+      { dept_code: "07", dept_name: "神經外科", doctor: "趙紹清", weekday: 5, slot: "上午", room: "38診", note: "" },
+      { dept_code: "07", dept_name: "神經外科", doctor: "張昕煥", weekday: 5, slot: "下午", room: "38診", note: "" },
+
+      // 一般外科 (03)
+      { dept_code: "03", dept_name: "一般外科", doctor: "蘇美旭", weekday: 1, slot: "上午", room: "13診", note: "" },
+      { dept_code: "03", dept_name: "一般外科", doctor: "余明昌", weekday: 1, slot: "下午", room: "13診", note: "" },
+      { dept_code: "03", dept_name: "一般外科", doctor: "蘇美旭", weekday: 1, slot: "夜診", room: "13診", note: "" },
+      { dept_code: "03", dept_name: "一般外科", doctor: "余明昌", weekday: 2, slot: "上午", room: "13診", note: "" },
+      { dept_code: "03", dept_name: "一般外科", doctor: "李忠懷", weekday: 2, slot: "夜診", room: "13診", note: "" },
+      { dept_code: "03", dept_name: "一般外科", doctor: "李忠懷", weekday: 3, slot: "上午", room: "13診", note: "" },
+      { dept_code: "03", dept_name: "一般外科", doctor: "余明昌", weekday: 4, slot: "上午", room: "13診", note: "" },
+      { dept_code: "03", dept_name: "一般外科", doctor: "蘇美旭", weekday: 4, slot: "下午", room: "13診", note: "" },
+      { dept_code: "03", dept_name: "一般外科", doctor: "蘇美旭", weekday: 5, slot: "上午", room: "13診", note: "" },
+      { dept_code: "03", dept_name: "一般外科", doctor: "李忠懷", weekday: 6, slot: "上午", room: "13診", note: "" },
+
+      // 大腸直腸外科 (BA)
+      { dept_code: "BA", dept_name: "大腸直腸外科", doctor: "余明昌", weekday: 1, slot: "下午", room: "13診", note: "" },
+      { dept_code: "BA", dept_name: "大腸直腸外科", doctor: "余明昌", weekday: 2, slot: "上午", room: "13診", note: "" },
+      { dept_code: "BA", dept_name: "大腸直腸外科", doctor: "余明昌", weekday: 4, slot: "上午", room: "13診", note: "" },
+      { dept_code: "BA", dept_name: "大腸直腸外科", doctor: "蔡豐璟", weekday: 4, slot: "上午", room: "16診", note: "" },
+      { dept_code: "BA", dept_name: "大腸直腸外科", doctor: "陳璿夫", weekday: 5, slot: "下午", room: "13診", note: "" },
+
+      // 家醫科 (01)
+      { dept_code: "01", dept_name: "家醫科", doctor: "郭馨鎂", weekday: 1, slot: "上午", room: "8診", note: "" },
+      { dept_code: "01", dept_name: "家醫科", doctor: "郭馨鎂", weekday: 1, slot: "下午", room: "8診", note: "" },
+      { dept_code: "01", dept_name: "家醫科", doctor: "廖曜磐", weekday: 2, slot: "上午", room: "8診", note: "" },
+      { dept_code: "01", dept_name: "家醫科", doctor: "吳偉", weekday: 2, slot: "下午", room: "8診", note: "" },
+      { dept_code: "01", dept_name: "家醫科", doctor: "吳偉", weekday: 3, slot: "下午", room: "8診", note: "" },
+      { dept_code: "01", dept_name: "家醫科", doctor: "廖曜磐", weekday: 4, slot: "上午", room: "8診", note: "" },
+      { dept_code: "01", dept_name: "家醫科", doctor: "廖曜磐", weekday: 4, slot: "下午", room: "8診", note: "" },
+      { dept_code: "01", dept_name: "家醫科", doctor: "廖曜磐", weekday: 4, slot: "夜診", room: "8診", note: "" },
+      { dept_code: "01", dept_name: "家醫科", doctor: "吳偉", weekday: 5, slot: "上午", room: "8診", note: "" },
+      { dept_code: "01", dept_name: "家醫科", doctor: "郭馨鎂", weekday: 5, slot: "下午", room: "8診", note: "" },
+
+      // 復健科 (14)
+      { dept_code: "14", dept_name: "復健科", doctor: "廖宜新", weekday: 1, slot: "上午", room: "25診", note: "" },
+      { dept_code: "14", dept_name: "復健科", doctor: "廖宜新", weekday: 1, slot: "下午", room: "25診", note: "" },
+      { dept_code: "14", dept_name: "復健科", doctor: "林昭宏", weekday: 2, slot: "上午", room: "25診", note: "" },
+      { dept_code: "14", dept_name: "復健科", doctor: "林昭宏", weekday: 2, slot: "下午", room: "25診", note: "" },
+      { dept_code: "14", dept_name: "復健科", doctor: "廖宜新", weekday: 3, slot: "上午", room: "25診", note: "" },
+      { dept_code: "14", dept_name: "復健科", doctor: "林昭宏", weekday: 3, slot: "下午", room: "25診", note: "" },
+      { dept_code: "14", dept_name: "復健科", doctor: "廖宜新", weekday: 4, slot: "上午", room: "25診", note: "" },
+      { dept_code: "14", dept_name: "復健科", doctor: "廖宜新", weekday: 4, slot: "下午", room: "25診", note: "約診" },
+      { dept_code: "14", dept_name: "復健科", doctor: "林昭宏", weekday: 5, slot: "上午", room: "25診", note: "" },
+      { dept_code: "14", dept_name: "復健科", doctor: "賴仲亮", weekday: 5, slot: "上午", room: "25診", note: "約診" },
+      { dept_code: "14", dept_name: "復健科", doctor: "賴仲亮", weekday: 5, slot: "下午", room: "25診", note: "" },
+
+      // 婦產科 (05)
+      { dept_code: "05", dept_name: "婦產科", doctor: "林文斌", weekday: 1, slot: "上午", room: "29診", note: "" },
+      { dept_code: "05", dept_name: "婦產科", doctor: "林文斌", weekday: 2, slot: "上午", room: "29診", note: "" },
+      { dept_code: "05", dept_name: "婦產科", doctor: "林茂", weekday: 2, slot: "下午", room: "29診", note: "" },
+      { dept_code: "05", dept_name: "婦產科", doctor: "林文斌", weekday: 3, slot: "上午", room: "29診", note: "" },
+      { dept_code: "05", dept_name: "婦產科", doctor: "林文斌", weekday: 4, slot: "上午", room: "29診", note: "" },
+      { dept_code: "05", dept_name: "婦產科", doctor: "林文斌", weekday: 5, slot: "上午", room: "29診", note: "9/4.18.25" },
+      { dept_code: "05", dept_name: "婦產科", doctor: "李伊菱", weekday: 5, slot: "上午", room: "29診", note: "9/11" },
+
+      // 小兒科 (04)
+      { dept_code: "04", dept_name: "小兒科", doctor: "鍾瑞賢", weekday: 1, slot: "上午", room: "28診", note: "" },
+      { dept_code: "04", dept_name: "小兒科", doctor: "馬瑞杉", weekday: 1, slot: "下午", room: "28診", note: "" },
+      { dept_code: "04", dept_name: "小兒科", doctor: "鍾瑞賢", weekday: 1, slot: "夜診", room: "28診", note: "" },
+      { dept_code: "04", dept_name: "小兒科", doctor: "鍾瑞賢", weekday: 2, slot: "上午", room: "28診", note: "" },
+      { dept_code: "04", dept_name: "小兒科", doctor: "馬瑞杉", weekday: 2, slot: "下午", room: "28診", note: "" },
+      { dept_code: "04", dept_name: "小兒科", doctor: "馬瑞杉", weekday: 3, slot: "上午", room: "28診", note: "" },
+      { dept_code: "04", dept_name: "小兒科", doctor: "鍾瑞賢", weekday: 3, slot: "下午", room: "28診", note: "" },
+      { dept_code: "04", dept_name: "小兒科", doctor: "鍾瑞賢", weekday: 4, slot: "下午", room: "28診", note: "" },
+      { dept_code: "04", dept_name: "小兒科", doctor: "馬瑞杉", weekday: 5, slot: "上午", room: "28診", note: "" },
+
+      // 耳鼻喉科 (09)
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 1, slot: "上午", room: "22診", note: "" },
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "施凱翔", weekday: 2, slot: "上午", room: "22診", note: "" },
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 3, slot: "上午", room: "22診", note: "" },
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 4, slot: "下午", room: "22診", note: "限掛35位" },
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 4, slot: "夜診", room: "22診", note: "限掛" },
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 5, slot: "上午", room: "22診", note: "" },
+
+      // 眼科 (10)
+      { dept_code: "10", dept_name: "眼科", doctor: "許紜睿", weekday: 1, slot: "上午", room: "20診", note: "" },
+      { dept_code: "10", dept_name: "眼科", doctor: "粘展瑋", weekday: 1, slot: "下午", room: "20診", note: "" },
+      { dept_code: "10", dept_name: "眼科", doctor: "粘展瑋", weekday: 2, slot: "上午", room: "20診", note: "" },
+      { dept_code: "10", dept_name: "眼科", doctor: "曾士豪", weekday: 3, slot: "上午", room: "20診", note: "" },
+      { dept_code: "10", dept_name: "眼科", doctor: "曾士豪", weekday: 4, slot: "上午", room: "20診", note: "" },
+      { dept_code: "10", dept_name: "眼科", doctor: "曾士豪", weekday: 4, slot: "下午", room: "20診", note: "" },
+      { dept_code: "10", dept_name: "眼科", doctor: "許紜睿", weekday: 5, slot: "上午", room: "20診", note: "" },
+
+      // 皮膚科 (11)
+      { dept_code: "11", dept_name: "皮膚科", doctor: "郭峰昇", weekday: 1, slot: "下午", room: "61診", note: "" },
+      { dept_code: "11", dept_name: "皮膚科", doctor: "郭峰昇", weekday: 1, slot: "夜診", room: "61診", note: "" },
+      { dept_code: "11", dept_name: "皮膚科", doctor: "郭峰昇", weekday: 2, slot: "上午", room: "61診", note: "" },
+      { dept_code: "11", dept_name: "皮膚科", doctor: "郭峰昇", weekday: 3, slot: "上午", room: "61診", note: "" },
+      { dept_code: "11", dept_name: "皮膚科", doctor: "郭峰昇", weekday: 3, slot: "下午", room: "61診", note: "" },
+      { dept_code: "11", dept_name: "皮膚科", doctor: "郭峰昇", weekday: 4, slot: "上午", room: "61診", note: "" },
+
+      // 精神科 (13)
+      { dept_code: "13", dept_name: "精神科", doctor: "陳羿行", weekday: 1, slot: "上午", room: "26診", note: "" },
+      { dept_code: "13", dept_name: "精神科", doctor: "蕭銘鴻", weekday: 1, slot: "下午", room: "27診", note: "酒癮特診" },
+      { dept_code: "13", dept_name: "精神科", doctor: "蕭銘鴻", weekday: 1, slot: "夜診", room: "26診", note: "" },
+      { dept_code: "13", dept_name: "精神科", doctor: "王鴻松", weekday: 2, slot: "上午", room: "26診", note: "" },
+      { dept_code: "13", dept_name: "精神科", doctor: "李景嶽", weekday: 2, slot: "下午", room: "27診", note: "酒癮特診" },
+      { dept_code: "13", dept_name: "精神科", doctor: "李景嶽", weekday: 3, slot: "上午", room: "26診", note: "" },
+      { dept_code: "13", dept_name: "精神科", doctor: "蕭銘鴻", weekday: 4, slot: "上午", room: "26診", note: "" },
+      { dept_code: "13", dept_name: "精神科", doctor: "葉騰尹", weekday: 5, slot: "上午", room: "26診", note: "" }
+    ];
+
+    const weekdayMap = { 1: "星期一", 2: "星期二", 3: "星期三", 4: "星期四", 5: "星期五", 6: "星期六" };
+    const slotRank = { "上午": 1, "下午": 2, "夜診": 3 };
+
+    function getAllDepts() {
+      const map = new Map();
+      schedules.forEach(s => {
+        if (!map.has(s.dept_code)) {
+          map.set(s.dept_code, { code: s.dept_code, name: s.dept_name });
+        }
+      });
+      return Array.from(map.values()).sort((a,b) => a.code.localeCompare(b.code));
+    }
+
+    function getDocsByDept(dept_code) {
+      const set = new Set();
+      schedules.filter(s => s.dept_code === dept_code).forEach(s => set.add(s.doctor));
+      return Array.from(set);
+    }
+
+    function getAllDoctors() {
+      const map = new Map();
+      schedules.forEach(s => {
+        const key = `${s.dept_code}___${s.doctor}`;
+        if (!map.has(key)) {
+          const docCode = findDocCode(s.doctor);
+          map.set(key, { key, code: s.dept_code, dept: s.dept_name, doctor: s.doctor, docCode });
+        }
+      });
+      return Array.from(map.values()).sort((a,b) => a.doctor.localeCompare(b.doctor, "zh-TW"));
+    }
+
+    // 初始化整個系統
+    function initApp() {
+      initCrossTab();
+      initMultiTabDropdowns();
+      renderMultiDocChips();
+      initCodeSearchModule();
+    }
+
+    // ==================== 功能 1: 某科別醫師門診時段 vs 其他科別同時段醫師查詢 ====================
+    let crossBaseDoctorKey = ""; // 儲存基準醫師 key
+    let crossSelectedTargets = new Set(); // 儲存目標 "DEPT_08" 或 "DOC_08___林憲治"
+
+    function initCrossTab() {
+      const depts = getAllDepts();
+
+      // 基準科別
+      const baseDeptSelect = document.getElementById("cross-base-dept-select");
+      baseDeptSelect.innerHTML = "";
+      depts.forEach(d => {
+        const opt = document.createElement("option");
+        opt.value = d.code;
+        opt.textContent = `[${d.code}] ${d.name}`;
+        baseDeptSelect.appendChild(opt);
+      });
+      onCrossBaseDeptChanged();
+
+      // 比對目標科別
+      const targetDeptSelect = document.getElementById("cross-target-dept-select");
+      targetDeptSelect.innerHTML = "";
+      depts.forEach(d => {
+        const opt = document.createElement("option");
+        opt.value = d.code;
+        opt.textContent = `[${d.code}] ${d.name}`;
+        targetDeptSelect.appendChild(opt);
+      });
+      onCrossTargetDeptChanged();
+
+      renderCrossChips();
+    }
+
+    function onCrossBaseDeptChanged() {
+      const deptCode = document.getElementById("cross-base-dept-select").value;
+      const docSelect = document.getElementById("cross-base-doc-select");
+      docSelect.innerHTML = "";
+      const docs = getDocsByDept(deptCode);
+      docs.forEach(doc => {
+        const docCode = findDocCode(doc);
+        const opt = document.createElement("option");
+        opt.value = `${deptCode}___${doc}`;
+        opt.textContent = docCode ? `${doc} (${docCode})` : doc;
+        docSelect.appendChild(opt);
+      });
+      onCrossBaseDocSelected();
+    }
+
+    function onCrossBaseDocSelected() {
+      const docSelect = document.getElementById("cross-base-doc-select");
+      if (docSelect) {
+        crossBaseDoctorKey = docSelect.value;
+      }
+      renderCrossTargetTags();
+      if (crossSelectedTargets.size > 0) {
+        runCrossSearch();
+      }
+    }
+
+    function onCrossTargetDeptChanged() {
+      const deptCode = document.getElementById("cross-target-dept-select").value;
+      const docSelect = document.getElementById("cross-target-doc-select");
+      docSelect.innerHTML = "";
+
+      const optAll = document.createElement("option");
+      optAll.value = "";
+      optAll.textContent = "-- 全科所有醫師 --";
+      docSelect.appendChild(optAll);
+
+      const docs = getDocsByDept(deptCode);
+      docs.forEach(doc => {
+        const docCode = findDocCode(doc);
+        const opt = document.createElement("option");
+        opt.value = `${deptCode}___${doc}`;
+        opt.textContent = docCode ? `${doc} (${docCode})` : doc;
+        docSelect.appendChild(opt);
+      });
+    }
+
+    // 基準醫師及選擇比對目標選好後，按「＋ 加入比對名單」後一起帶入已加入之比對名單
+    function addCrossAllSelectedFromDropdown() {
+      const baseDocKey = document.getElementById("cross-base-doc-select").value;
+      if (baseDocKey) {
+        crossBaseDoctorKey = baseDocKey;
+      }
+
+      const deptCode = document.getElementById("cross-target-dept-select").value;
+      const docKey = document.getElementById("cross-target-doc-select").value;
+
+      if (!docKey) {
+        crossSelectedTargets.add(`DEPT_${deptCode}`);
+      } else {
+        crossSelectedTargets.add(`DOC_${docKey}`);
+      }
+
+      syncCrossChips();
+      renderCrossTargetTags();
+      runCrossSearch();
+    }
+
+    function removeCrossTarget(key) {
+      crossSelectedTargets.delete(key);
+      syncCrossChips();
+      renderCrossTargetTags();
+      runCrossSearch();
+    }
+
+    function clearCrossBaseDoctor() {
+      crossBaseDoctorKey = "";
+      renderCrossTargetTags();
+      document.getElementById("cross-result-area").innerHTML = "";
+    }
+
+    function renderCrossTargetTags() {
+      const container = document.getElementById("cross-selected-tags");
+      if (!crossBaseDoctorKey && crossSelectedTargets.size === 0) {
+        container.innerHTML = `<span style="color:#94a3b8; font-size:0.85rem;">尚未加入比對名單</span>`;
+        return;
+      }
+      container.innerHTML = "";
+      const allDepts = getAllDepts();
+
+      // 基準醫師標籤
+      if (crossBaseDoctorKey) {
+        const [bCode, bDoc] = crossBaseDoctorKey.split("___");
+        const bDocCode = findDocCode(bDoc);
+        const baseTag = document.createElement("div");
+        baseTag.className = "selected-tag base";
+        baseTag.innerHTML = `[基準醫師] [${bCode}] ${bDoc} ${bDocCode ? `(${bDocCode})` : ''} <span class="close-btn" onclick="clearCrossBaseDoctor()">✕</span>`;
+        container.appendChild(baseTag);
+      }
+
+      // 所有比對目標標籤
+      crossSelectedTargets.forEach(key => {
+        const tag = document.createElement("div");
+        tag.className = "selected-tag";
+
+        if (key.startsWith("DEPT_")) {
+          const code = key.replace("DEPT_", "");
+          const dObj = allDepts.find(d => d.code === code);
+          const name = dObj ? dObj.name : code;
+          tag.innerHTML = `[比對科別] [${code}] ${name} <span class="close-btn" onclick="removeCrossTarget('${key}')">✕</span>`;
+        } else {
+          const docStr = key.replace("DOC_", "");
+          const [code, doc] = docStr.split("___");
+          const docCode = findDocCode(doc);
+          tag.innerHTML = `[比對醫師] [${code}] ${doc} ${docCode ? `(${docCode})` : ''} <span class="close-btn" onclick="removeCrossTarget('${key}')">✕</span>`;
+        }
+        container.appendChild(tag);
+      });
+    }
+
+    function syncCrossChips() {
+      const chips = document.getElementById("cross-chips-box").querySelectorAll("input[type='checkbox']");
+      chips.forEach(cb => {
+        cb.checked = crossSelectedTargets.has(cb.value);
+        toggleChipStyle(cb);
+      });
+    }
+
+    function renderCrossChips() {
+      const box = document.getElementById("cross-chips-box");
+      box.innerHTML = "";
+      const depts = getAllDepts();
+
+      depts.forEach(d => {
+        const label = document.createElement("label");
+        label.className = "chip";
+        label.setAttribute("data-search", `${d.name} ${d.code}`);
+        label.innerHTML = `
+          <input type="checkbox" value="DEPT_${d.code}" onchange="onCrossChipToggled(this)">
+          <span class="dept-code">${d.code}</span>
+          <span>${d.name} (整科)</span>
+        `;
+        box.appendChild(label);
+      });
+
+      const docs = getAllDoctors();
+      docs.forEach(doc => {
+        const label = document.createElement("label");
+        label.className = "chip";
+        label.setAttribute("data-search", `${doc.doctor} ${doc.dept} ${doc.code}`);
+        label.innerHTML = `
+          <input type="checkbox" value="DOC_${doc.key}" onchange="onCrossChipToggled(this)">
+          <span class="dept-code">${doc.code}</span>
+          <span>${doc.doctor}</span>
+          ${doc.docCode ? `<span class="doc-code-tag">${doc.docCode}</span>` : ''}
+          <span style="font-size:0.75rem; color:#64748b;">(${doc.dept})</span>
+        `;
+        box.appendChild(label);
+      });
+    }
+
+    function onCrossChipToggled(cb) {
+      if (cb.checked) {
+        crossSelectedTargets.add(cb.value);
+      } else {
+        crossSelectedTargets.delete(cb.value);
+      }
+      toggleChipStyle(cb);
+      renderCrossTargetTags();
+      runCrossSearch();
+    }
+
+    function filterCrossTargets() {
+      const q = document.getElementById("cross-search-input").value.toLowerCase().trim();
+      const chips = document.getElementById("cross-chips-box").getElementsByClassName("chip");
+      for (let chip of chips) {
+        const text = (chip.getAttribute("data-search") || "").toLowerCase();
+        chip.style.display = (!q || text.includes(q)) ? "inline-flex" : "none";
+      }
+    }
+
+    // 清除搜尋並還原鍵
+    function resetCrossSearch() {
+      document.getElementById("cross-search-input").value = "";
+      filterCrossTargets();
+    }
+
+    function clearCrossTargets() {
+      crossSelectedTargets.clear();
+      syncCrossChips();
+      renderCrossTargetTags();
+      document.getElementById("cross-search-input").value = "";
+      filterCrossTargets();
+      document.getElementById("cross-result-area").innerHTML = "";
+    }
+
+    function runCrossSearch() {
+      if (!crossBaseDoctorKey) {
+        const docSelect = document.getElementById("cross-base-doc-select");
+        if (docSelect) crossBaseDoctorKey = docSelect.value;
+      }
+      const resultArea = document.getElementById("cross-result-area");
+
+      if (!crossBaseDoctorKey) {
+        resultArea.innerHTML = `<div class="empty-tip">請先選擇基準醫師</div>`;
+        return;
+      }
+
+      const [deptCode, docName] = crossBaseDoctorKey.split("___");
+      const docSlots = schedules.filter(s => s.dept_code === deptCode && s.doctor === docName);
+      const docCode = findDocCode(docName);
+
+      if (crossSelectedTargets.size === 0) {
+        resultArea.innerHTML = `<div class="card" style="border-left:4px solid var(--warn-border);">
+          請在上方選擇或勾選欲比對之目標科別或醫師。
+        </div>`;
+        return;
+      }
+
+      let html = `<div class="card" style="background:#f8fafc; border:1px solid #cbd5e1; margin-bottom:12px;">
+        <div>查詢基準：<strong>[${deptCode}] ${docName} 醫師</strong> ${docCode ? `<span class="doc-code-tag">${docCode}</span>` : ''}（每週共有 ${docSlots.length} 個門診時段）</div>
+      </div>`;
+
+      const targetDepts = new Set();
+      const targetDocs = new Set();
+      crossSelectedTargets.forEach(t => {
+        if (t.startsWith("DEPT_")) targetDepts.add(t.replace("DEPT_", ""));
+        else if (t.startsWith("DOC_")) targetDocs.add(t.replace("DOC_", ""));
+      });
+
+      docSlots.sort((a,b) => {
+        if (a.weekday !== b.weekday) return a.weekday - b.weekday;
+        return slotRank[a.slot] - slotRank[b.slot];
+      }).forEach(mySlot => {
+        const matches = schedules.filter(s => {
+          if (s.weekday !== mySlot.weekday || s.slot !== mySlot.slot) return false;
+          if (targetDepts.has(s.dept_code)) return true;
+          if (targetDocs.has(`${s.dept_code}___${s.doctor}`)) return true;
+          return false;
+        });
+
+        html += `<div class="day-block">
+          <div class="day-header">
+            <span>📅 ${weekdayMap[mySlot.weekday]} ${formatSlot(mySlot.slot)}</span>
+            <span style="font-size:0.82rem; font-weight:normal; color:#475569;">
+              ${docName} 醫師：<strong style="color:#0369a1;">${mySlot.room || "看診中"}</strong> ${mySlot.note ? "("+mySlot.note+")" : ""}
+            </span>
+          </div>
+          <div class="day-body">`;
+
+        if (matches.length === 0) {
+          html += `<div style="color:var(--muted); font-size:0.88rem; padding:4px 0;">
+            所選目標於此時段無門診。
+          </div>`;
+        } else {
+          const grouped = {};
+          matches.forEach(m => {
+            if (!grouped[m.dept_name]) grouped[m.dept_name] = [];
+            grouped[m.dept_name].push(m);
+          });
+
+          for (let dName in grouped) {
+            html += `<div style="margin-bottom:8px;">
+              <strong style="font-size:0.9rem; color:#0f172a;">${dName}：</strong>`;
+            grouped[dName].forEach(doc => {
+              const dCode = findDocCode(doc.doctor);
+              html += `<span class="doc-tag match">
+                <span class="dept-code">${doc.dept_code}</span>
+                <strong>${doc.doctor} 醫師</strong>
+                ${dCode ? `<span class="doc-code-tag">${dCode}</span>` : ''}
+                <small style="color:#64748b; margin-left:4px;">(${doc.room || "診間"}${doc.note ? " / " + doc.note : ""})</small>
+              </span>`;
+            });
+            html += `</div>`;
+          }
+        }
+
+        html += `</div></div>`;
+      });
+
+      resultArea.innerHTML = html;
+    }
+
+
+    // ==================== 功能 2: 多位醫師門診全盤比對 (依星期呈現) ====================
+    let selectedMultiDocsSet = new Set();
+
+    // 往下共 3 個下拉式科別及醫師選單
+    function initMultiTabDropdowns() {
+      const depts = getAllDepts();
+      for (let i = 1; i <= 3; i++) {
+        const deptSelect = document.getElementById(`multi-dept-select-${i}`);
+        deptSelect.innerHTML = "";
+        
+        const optDefault = document.createElement("option");
+        optDefault.value = "";
+        optDefault.textContent = `-- 請選擇第 ${i} 組科別 --`;
+        deptSelect.appendChild(optDefault);
+
+        depts.forEach(d => {
+          const opt = document.createElement("option");
+          opt.value = d.code;
+          opt.textContent = `[${d.code}] ${d.name}`;
+          deptSelect.appendChild(opt);
+        });
+        onMultiDeptRowChanged(i);
+      }
+    }
+
+    function onMultiDeptRowChanged(rowIndex) {
+      const deptCode = document.getElementById(`multi-dept-select-${rowIndex}`).value;
+      const docSelect = document.getElementById(`multi-doc-select-${rowIndex}`);
+      docSelect.innerHTML = "";
+
+      const optDefault = document.createElement("option");
+      optDefault.value = "";
+      optDefault.textContent = `-- 請選擇醫師 --`;
+      docSelect.appendChild(optDefault);
+
+      if (!deptCode) return;
+
+      const docs = getDocsByDept(deptCode);
+      docs.forEach(doc => {
+        const docCode = findDocCode(doc);
+        const opt = document.createElement("option");
+        opt.value = `${deptCode}___${doc}`;
+        opt.textContent = docCode ? `${doc} (${docCode})` : doc;
+        docSelect.appendChild(opt);
+      });
+    }
+
+    // 按「＋ 加入比對名單」一次將三組選好的醫師加入
+    function addAllMultiDoctorsFromDropdowns() {
+      let addedCount = 0;
+      for (let i = 1; i <= 3; i++) {
+        const docSelect = document.getElementById(`multi-doc-select-${i}`);
+        if (docSelect && docSelect.value) {
+          selectedMultiDocsSet.add(docSelect.value);
+          addedCount++;
+        }
+      }
+      syncMultiChipsFromSet();
+      renderSelectedTags();
+      runMultiDoctorSearch();
+    }
+
+    function removeSelectedDoctor(docKey) {
+      selectedMultiDocsSet.delete(docKey);
+      syncMultiChipsFromSet();
+      renderSelectedTags();
+      runMultiDoctorSearch();
+    }
+
+    function renderSelectedTags() {
+      const container = document.getElementById("selected-docs-tags");
+      if (selectedMultiDocsSet.size === 0) {
+        container.innerHTML = `<span style="color:#94a3b8; font-size:0.85rem;">尚未加入醫師</span>`;
+        return;
+      }
+      container.innerHTML = "";
+      selectedMultiDocsSet.forEach(key => {
+        const [code, name] = key.split("___");
+        const docCode = findDocCode(name);
+        const tag = document.createElement("div");
+        tag.className = "selected-tag";
+        tag.innerHTML = `[${code}] ${name} ${docCode ? `(${docCode})` : ''} <span class="close-btn" onclick="removeSelectedDoctor('${key}')">✕</span>`;
+        container.appendChild(tag);
+      });
+    }
+
+    function syncMultiChipsFromSet() {
+      const chips = document.getElementById("multi-doc-chips").querySelectorAll("input[type='checkbox']");
+      chips.forEach(cb => {
+        cb.checked = selectedMultiDocsSet.has(cb.value);
+        toggleChipStyle(cb);
+      });
+    }
+
+    function renderMultiDocChips() {
+      const box = document.getElementById("multi-doc-chips");
+      box.innerHTML = "";
+      const docs = getAllDoctors();
+      docs.forEach(doc => {
+        const label = document.createElement("label");
+        label.className = "chip";
+        label.setAttribute("data-search", `${doc.doctor} ${doc.dept} ${doc.code}`);
+        label.innerHTML = `
+          <input type="checkbox" value="${doc.key}" onchange="onMultiChipToggled(this)">
+          <span class="dept-code">${doc.code}</span>
+          <span class="name-span">${doc.doctor}</span>
+          ${doc.docCode ? `<span class="doc-code-tag">${doc.docCode}</span>` : ''}
+          <span style="font-size:0.75rem; color:#64748b;">(${doc.dept})</span>
+        `;
+        box.appendChild(label);
+      });
+    }
+
+    function onMultiChipToggled(cb) {
+      if (cb.checked) {
+        selectedMultiDocsSet.add(cb.value);
+      } else {
+        selectedMultiDocsSet.delete(cb.value);
+      }
+      toggleChipStyle(cb);
+      renderSelectedTags();
+      runMultiDoctorSearch();
+    }
+
+    function filterMultiDocs() {
+      const q = document.getElementById("multi-search-input").value.trim().toLowerCase();
+      const chips = document.getElementById("multi-doc-chips").getElementsByClassName("chip");
+
+      for (let chip of chips) {
+        const text = (chip.getAttribute("data-search") || "").toLowerCase();
+        chip.style.display = (!q || text.includes(q)) ? "inline-flex" : "none";
+      }
+    }
+
+    // 清除搜尋並還原鍵
+    function resetMultiSearch() {
+      document.getElementById("multi-search-input").value = "";
+      filterMultiDocs();
+    }
+
+    function clearMultiDocs() {
+      selectedMultiDocsSet.clear();
+      syncMultiChipsFromSet();
+      renderSelectedTags();
+      document.getElementById("multi-search-input").value = "";
+      filterMultiDocs();
+      document.getElementById("multi-result-area").innerHTML = "";
+    }
+
+    function runMultiDoctorSearch() {
+      const selected = Array.from(selectedMultiDocsSet);
+      const resultArea = document.getElementById("multi-result-area");
+
+      if (selected.length < 2) {
+        resultArea.innerHTML = `<div class="card" style="border-left:4px solid var(--warn-border); color:var(--warn-text);">
+          請至少選擇 2 位醫師進行比對。
+        </div>`;
+        return;
+      }
+
+      const selectedDocsInfo = selected.map(key => {
+        const [c, d] = key.split("___");
+        const match = schedules.find(s => s.dept_code === c && s.doctor === d);
+        const docCode = findDocCode(d);
+        return { code: c, doctor: d, dept: match ? match.dept_name : "", docCode };
+      });
+
+      const targetRows = schedules.filter(s => selected.includes(`${s.dept_code}___${s.doctor}`));
+
+      const byWeekday = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };
+      targetRows.forEach(r => {
+        if (byWeekday[r.weekday]) byWeekday[r.weekday].push(r);
+      });
+
+      let html = `<div class="card" style="background:#f8fafc; border:1px solid #cbd5e1; margin-bottom:12px;">
+        <div style="font-weight:700;">比對醫師名單：</div>
+        <div style="margin-top:6px;">`;
+      selectedDocsInfo.forEach(doc => {
+        html += `<span class="doc-tag"><span class="dept-code">${doc.code}</span><strong>${doc.doctor}</strong>${doc.docCode ? `<span class="doc-code-tag">${doc.docCode}</span>`:''} (${doc.dept})</span>`;
+      });
+      html += `</div></div>`;
+
+      let activeDaysCount = 0;
+
+      for (let w = 1; w <= 6; w++) {
+        const dayRows = byWeekday[w];
+        if (dayRows.length === 0) continue;
+
+        activeDaysCount++;
+        const presentDocKeys = new Set(dayRows.map(r => `${r.dept_code}___${r.doctor}`));
+        const bySlot = { "上午": [], "下午": [], "夜診": [] };
+        dayRows.forEach(r => bySlot[r.slot].push(r));
+
+        html += `<div class="day-block">
+          <div class="day-header">
+            <span>📅 ${weekdayMap[w]}</span>
+            <span style="font-size:0.82rem; color:#475569;">
+              看診醫師：<strong>${presentDocKeys.size}</strong> 位
+            </span>
+          </div>
+          <div class="day-body">`;
+
+        ["上午", "下午", "夜診"].forEach(slot => {
+          const slotRows = bySlot[slot];
+          if (slotRows.length === 0) return;
+
+          const isOverlap = slotRows.length >= 2;
+
+          html += `<div class="slot-group">
+            <div class="slot-title">
+              <span>🕒 ${formatSlot(slot)}</span>
+              ${isOverlap 
+                ? `<span class="badge-same-time">同時段看診 (${slotRows.length}位)</span>` 
+                : `<span class="badge-diff-time">單獨看診</span>`}
+            </div>
+            <div>`;
+
+          slotRows.forEach(r => {
+            const dCode = findDocCode(r.doctor);
+            html += `<span class="doc-tag ${isOverlap ? 'match' : ''}">
+              <span class="dept-code">${r.dept_code}</span>
+              <strong>${r.doctor} 醫師</strong>
+              ${dCode ? `<span class="doc-code-tag">${dCode}</span>` : ''}
+              <small style="color:#64748b;">(${r.dept_name} / ${r.room || "診間"}${r.note ? " / " + r.note : ""})</small>
+            </span>`;
+          });
+
+          html += `</div></div>`;
+        });
+
+        html += `</div></div>`;
+      }
+
+      if (activeDaysCount === 0) {
+        html += `<div class="empty-tip">查無排班資料。</div>`;
+      }
+
+      resultArea.innerHTML = html;
+    }
+
+
+    // ==================== 功能 3: 醫師/科別代碼速查模組 ====================
+    function initCodeSearchModule() {
+      const codeDeptSelect = document.getElementById("codeDeptSelect");
+      const doctorContainer = document.getElementById("doctorContainer");
+      const deptHeaderBox = document.getElementById("deptHeaderBox");
+      const dispDeptName = document.getElementById("dispDeptName");
+      const dispDeptCode = document.getElementById("dispDeptCode");
+      const codeKeywordSearch = document.getElementById("codeKeywordSearch");
+      const searchResultContainer = document.getElementById("searchResultContainer");
+
+      const deptMap = new Map();
+      masterData.forEach(item => {
+        if (!deptMap.has(item.dept)) {
+          deptMap.set(item.dept, item.deptCode);
+        }
+      });
+
+      deptMap.forEach((code, dept) => {
+        const opt = document.createElement("option");
+        opt.value = dept;
+        opt.textContent = `[${code}] ${dept}`;
+        codeDeptSelect.appendChild(opt);
+      });
+
+      function createDocCards(items) {
+        return items.map(item => `
+          <div class="doc-item">
+            <div>
+              <span class="doc-name">${item.doc}</span>
+              <div style="font-size: 0.75rem; color: #64748b;">${item.dept} (${item.deptCode})</div>
+            </div>
+            ${item.docCode ? `<span class="doc-code">${item.docCode}</span>` : `<span class="doc-code empty">無代碼</span>`}
+          </div>
+        `).join("");
+      }
+
+      codeDeptSelect.addEventListener("change", function () {
+        const selectedDept = this.value;
+        if (!selectedDept) {
+          deptHeaderBox.style.display = "none";
+          doctorContainer.innerHTML = '<div class="empty-tip" style="grid-column: 1 / -1;">請選擇科別</div>';
+          return;
+        }
+
+        const docs = masterData.filter(item => item.dept === selectedDept);
+        const code = docs[0].deptCode;
+
+        dispDeptName.textContent = selectedDept;
+        dispDeptCode.textContent = code;
+        deptHeaderBox.style.display = "flex";
+        doctorContainer.innerHTML = createDocCards(docs);
+      });
+
+      codeKeywordSearch.addEventListener("input", function () {
+        filterCodeSearch();
+      });
+    }
+
+    function filterCodeSearch() {
+      const keyword = document.getElementById("codeKeywordSearch").value.trim().toLowerCase();
+      const searchResultContainer = document.getElementById("searchResultContainer");
+      if (!keyword) {
+        searchResultContainer.style.display = "none";
+        return;
+      }
+
+      const matches = masterData.filter(item => 
+        item.dept.toLowerCase().includes(keyword) ||
+        item.deptCode.toLowerCase().includes(keyword) ||
+        item.doc.toLowerCase().includes(keyword) ||
+        item.docCode.toLowerCase().includes(keyword)
+      );
+
+      searchResultContainer.style.display = "grid";
+      if (matches.length === 0) {
+        searchResultContainer.innerHTML = '<div class="empty-tip" style="grid-column: 1 / -1;">查無相符資料</div>';
+      } else {
+        searchResultContainer.innerHTML = matches.map(item => `
+          <div class="doc-item">
+            <div>
+              <span class="doc-name">${item.doc}</span>
+              <div style="font-size: 0.75rem; color: #64748b;">${item.dept} (${item.deptCode})</div>
+            </div>
+            ${item.docCode ? `<span class="doc-code">${item.docCode}</span>` : `<span class="doc-code empty">無代碼</span>`}
+          </div>
+        `).join("");
+      }
+    }
+
+    function resetCodeSearch() {
+      document.getElementById("codeKeywordSearch").value = "";
+      document.getElementById("searchResultContainer").style.display = "none";
+    }
+
+    window.onload = initApp;
+  </script>
+</body>
+</html>
