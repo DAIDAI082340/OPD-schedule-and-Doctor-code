@@ -410,6 +410,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .doc-item:hover {
+      background: #eff6ff;
+      border-color: #3b82f6;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+      transform: translateY(-1px);
     }
     .doc-name { font-weight: 600; color: #1e293b; }
     .doc-code {
@@ -429,6 +437,95 @@
       color: var(--muted);
       font-size: 0.88rem;
     }
+
+    /* 門診時刻表彈窗樣式 (Modal) */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(2px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-box {
+      background: #ffffff;
+      width: 100%;
+      max-width: 520px;
+      border-radius: 12px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      animation: modalFadeIn 0.2s ease-out;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .modal-header {
+      background: linear-gradient(135deg, #0f172a, #0369a1);
+      color: white;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .modal-close-btn:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+    .modal-body {
+      padding: 16px 18px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .modal-footer {
+      padding: 10px 18px;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      text-align: right;
+    }
+    .btn-modal-close {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-modal-close:hover {
+      background: #0369a1;
+    }
   </style>
 </head>
 <body>
@@ -443,7 +540,6 @@
     <!-- 頁籤 -->
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="showTab('tab-cross', this)">門診 vs 跨科同時段</button>
-      <button class="nav-tab" onclick="showTab('tab-multi', this)">多位醫師門診比對</button>
       <button class="nav-tab" onclick="showTab('tab-codes', this)">醫師/科別代碼查詢</button>
     </div>
 
@@ -493,22 +589,6 @@
           </div>
         </div>
 
-        <!-- 搜尋功能：醫師姓名、科別 ＋ 清除搜尋並還原鍵 -->
-        <div class="form-group">
-          <label>搜尋醫師姓名、科別：</label>
-          <div class="search-bar-wrap">
-            <input type="text" id="cross-search-input" placeholder="搜尋醫師姓名或科別..." oninput="filterCrossTargets()">
-            <button type="button" class="btn-reset" onclick="resetCrossSearch()">清除搜尋並還原</button>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>或直接勾選科別/醫師加入：</label>
-          <div class="chip-box" id="cross-chips-box">
-            <!-- Dynamic checkboxes -->
-          </div>
-        </div>
-
         <div style="display:flex; gap:8px; margin-top:14px;">
           <button class="btn-main" onclick="runCrossSearch()">查詢同時段醫師</button>
           <button type="button" onclick="clearCrossTargets()" style="width:100px; background:#e2e8f0; color:#334155; border:none; border-radius:8px; font-weight:700; cursor:pointer;">清空</button>
@@ -518,77 +598,7 @@
       <div id="cross-result-area" class="result-section"></div>
     </div>
 
-    <!-- ==================== 功能 2: 多位醫師門診全盤比對 (依星期呈現) ==================== -->
-    <div id="tab-multi" class="tab-pane" style="display:none;">
-      <div class="card">
-        <div class="card-title">多位醫師門診全盤比對（依星期呈現）</div>
-
-        <label>選擇科別及醫師選單（總共 3 組可分別選擇）：</label>
-        
-        <!-- 第 1 組 -->
-        <div class="selector-row">
-          <select id="multi-dept-select-1" onchange="onMultiDeptRowChanged(1)">
-            <!-- Dynamic options -->
-          </select>
-          <select id="multi-doc-select-1">
-            <!-- Dynamic options -->
-          </select>
-        </div>
-
-        <!-- 第 2 組 -->
-        <div class="selector-row">
-          <select id="multi-dept-select-2" onchange="onMultiDeptRowChanged(2)">
-            <!-- Dynamic options -->
-          </select>
-          <select id="multi-doc-select-2">
-            <!-- Dynamic options -->
-          </select>
-        </div>
-
-        <!-- 第 3 組 -->
-        <div class="selector-row">
-          <select id="multi-dept-select-3" onchange="onMultiDeptRowChanged(3)">
-            <!-- Dynamic options -->
-          </select>
-          <select id="multi-doc-select-3">
-            <!-- Dynamic options -->
-          </select>
-        </div>
-
-        <!-- 搜尋欄位 ＋ 清除搜尋並還原 -->
-        <div class="form-group" style="margin-top:10px;">
-          <div class="search-bar-wrap">
-            <input type="text" id="multi-search-input" placeholder="搜尋醫師姓名或科別..." oninput="filterMultiDocs()">
-            <button type="button" class="btn-reset" onclick="resetMultiSearch()">清除搜尋並還原</button>
-          </div>
-        </div>
-
-        <button type="button" class="btn-add" onclick="addAllMultiDoctorsFromDropdowns()">＋ 加入比對名單</button>
-
-        <div class="form-group">
-          <label>已加入比對名單：</label>
-          <div id="selected-docs-tags" class="selected-docs-list">
-            <span style="color:#94a3b8; font-size:0.85rem;">尚未加入醫師</span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>或直接勾選醫師：</label>
-          <div class="chip-box" id="multi-doc-chips">
-            <!-- Dynamic checkboxes -->
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 8px;">
-          <button class="btn-main" onclick="runMultiDoctorSearch()">開始比對呈現</button>
-          <button type="button" onclick="clearMultiDocs()" style="width:110px; background:#e2e8f0; color:#334155; border:none; border-radius:8px; font-weight:700; cursor:pointer;">清空</button>
-        </div>
-      </div>
-
-      <div id="multi-result-area" class="result-section"></div>
-    </div>
-
-    <!-- ==================== 功能 3: 醫師/科別代碼速查 ==================== -->
+    <!-- ==================== 功能 2: 醫師/科別代碼速查 ==================== -->
     <div id="tab-codes" class="tab-pane" style="display:none;">
       <div class="card">
         <div class="card-title">科別與醫師代碼速查</div>
@@ -619,6 +629,22 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- 醫師門診時刻表彈窗 (Modal) -->
+  <div id="scheduleModal" class="modal-overlay" onclick="onModalOverlayClicked(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="modalDoctorTitle">👨‍⚕️ 醫師門診時刻表</div>
+        <button type="button" class="modal-close-btn" onclick="closeDoctorScheduleModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modalDoctorContent">
+        <!-- Dynamic schedule content -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-modal-close" onclick="closeDoctorScheduleModal()">關閉</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -678,7 +704,7 @@
       { dept: "感染科", deptCode: "AH", doc: "莊佳慧", docCode: "2401" },
       { dept: "神經內科", deptCode: "12", doc: "連宮瑩", docCode: "1213" },
       { dept: "神經內科", deptCode: "12", doc: "林嶸洲", docCode: "1209" },
-      { dept: "神經內科", deptCode: "12", doc: "羅健寧", docCode: "" },
+      { dept: "神經內科", deptCode: "12", doc: "羅健寧", docCode: "1212" },
       { dept: "新陳代謝科", deptCode: "0202", doc: "蔡知穎", docCode: "1230" },
       { dept: "新陳代謝科", deptCode: "0202", doc: "張之昀", docCode: "1231" },
       { dept: "放射腫瘤科", deptCode: "FB", doc: "吳俊玠", docCode: "8350" },
@@ -1033,8 +1059,6 @@
     // 初始化整個系統
     function initApp() {
       initCrossTab();
-      initMultiTabDropdowns();
-      renderMultiDocChips();
       initCodeSearchModule();
     }
 
@@ -1066,8 +1090,6 @@
         targetDeptSelect.appendChild(opt);
       });
       onCrossTargetDeptChanged();
-
-      renderCrossChips();
     }
 
     function onCrossBaseDeptChanged() {
@@ -1132,14 +1154,12 @@
         crossSelectedTargets.add(`DOC_${docKey}`);
       }
 
-      syncCrossChips();
       renderCrossTargetTags();
       runCrossSearch();
     }
 
     function removeCrossTarget(key) {
       crossSelectedTargets.delete(key);
-      syncCrossChips();
       renderCrossTargetTags();
       runCrossSearch();
     }
@@ -1189,79 +1209,9 @@
       });
     }
 
-    function syncCrossChips() {
-      const chips = document.getElementById("cross-chips-box").querySelectorAll("input[type='checkbox']");
-      chips.forEach(cb => {
-        cb.checked = crossSelectedTargets.has(cb.value);
-        toggleChipStyle(cb);
-      });
-    }
-
-    function renderCrossChips() {
-      const box = document.getElementById("cross-chips-box");
-      box.innerHTML = "";
-      const depts = getAllDepts();
-
-      depts.forEach(d => {
-        const label = document.createElement("label");
-        label.className = "chip";
-        label.setAttribute("data-search", `${d.name} ${d.code}`);
-        label.innerHTML = `
-          <input type="checkbox" value="DEPT_${d.code}" onchange="onCrossChipToggled(this)">
-          <span class="dept-code">${d.code}</span>
-          <span>${d.name} (整科)</span>
-        `;
-        box.appendChild(label);
-      });
-
-      const docs = getAllDoctors();
-      docs.forEach(doc => {
-        const label = document.createElement("label");
-        label.className = "chip";
-        label.setAttribute("data-search", `${doc.doctor} ${doc.dept} ${doc.code}`);
-        label.innerHTML = `
-          <input type="checkbox" value="DOC_${doc.key}" onchange="onCrossChipToggled(this)">
-          <span class="dept-code">${doc.code}</span>
-          <span>${doc.doctor}</span>
-          ${doc.docCode ? `<span class="doc-code-tag">${doc.docCode}</span>` : ''}
-          <span style="font-size:0.75rem; color:#64748b;">(${doc.dept})</span>
-        `;
-        box.appendChild(label);
-      });
-    }
-
-    function onCrossChipToggled(cb) {
-      if (cb.checked) {
-        crossSelectedTargets.add(cb.value);
-      } else {
-        crossSelectedTargets.delete(cb.value);
-      }
-      toggleChipStyle(cb);
-      renderCrossTargetTags();
-      runCrossSearch();
-    }
-
-    function filterCrossTargets() {
-      const q = document.getElementById("cross-search-input").value.toLowerCase().trim();
-      const chips = document.getElementById("cross-chips-box").getElementsByClassName("chip");
-      for (let chip of chips) {
-        const text = (chip.getAttribute("data-search") || "").toLowerCase();
-        chip.style.display = (!q || text.includes(q)) ? "inline-flex" : "none";
-      }
-    }
-
-    // 清除搜尋並還原鍵
-    function resetCrossSearch() {
-      document.getElementById("cross-search-input").value = "";
-      filterCrossTargets();
-    }
-
     function clearCrossTargets() {
       crossSelectedTargets.clear();
-      syncCrossChips();
       renderCrossTargetTags();
-      document.getElementById("cross-search-input").value = "";
-      filterCrossTargets();
       document.getElementById("cross-result-area").innerHTML = "";
     }
 
@@ -1353,248 +1303,7 @@
     }
 
 
-    // ==================== 功能 2: 多位醫師門診全盤比對 (依星期呈現) ====================
-    let selectedMultiDocsSet = new Set();
-
-    // 往下共 3 個下拉式科別及醫師選單
-    function initMultiTabDropdowns() {
-      const depts = getAllDepts();
-      for (let i = 1; i <= 3; i++) {
-        const deptSelect = document.getElementById(`multi-dept-select-${i}`);
-        deptSelect.innerHTML = "";
-        
-        const optDefault = document.createElement("option");
-        optDefault.value = "";
-        optDefault.textContent = `-- 請選擇第 ${i} 組科別 --`;
-        deptSelect.appendChild(optDefault);
-
-        depts.forEach(d => {
-          const opt = document.createElement("option");
-          opt.value = d.code;
-          opt.textContent = `[${d.code}] ${d.name}`;
-          deptSelect.appendChild(opt);
-        });
-        onMultiDeptRowChanged(i);
-      }
-    }
-
-    function onMultiDeptRowChanged(rowIndex) {
-      const deptCode = document.getElementById(`multi-dept-select-${rowIndex}`).value;
-      const docSelect = document.getElementById(`multi-doc-select-${rowIndex}`);
-      docSelect.innerHTML = "";
-
-      const optDefault = document.createElement("option");
-      optDefault.value = "";
-      optDefault.textContent = `-- 請選擇醫師 --`;
-      docSelect.appendChild(optDefault);
-
-      if (!deptCode) return;
-
-      const docs = getDocsByDept(deptCode);
-      docs.forEach(doc => {
-        const docCode = findDocCode(doc);
-        const opt = document.createElement("option");
-        opt.value = `${deptCode}___${doc}`;
-        opt.textContent = docCode ? `${doc} (${docCode})` : doc;
-        docSelect.appendChild(opt);
-      });
-    }
-
-    // 按「＋ 加入比對名單」一次將三組選好的醫師加入
-    function addAllMultiDoctorsFromDropdowns() {
-      let addedCount = 0;
-      for (let i = 1; i <= 3; i++) {
-        const docSelect = document.getElementById(`multi-doc-select-${i}`);
-        if (docSelect && docSelect.value) {
-          selectedMultiDocsSet.add(docSelect.value);
-          addedCount++;
-        }
-      }
-      syncMultiChipsFromSet();
-      renderSelectedTags();
-      runMultiDoctorSearch();
-    }
-
-    function removeSelectedDoctor(docKey) {
-      selectedMultiDocsSet.delete(docKey);
-      syncMultiChipsFromSet();
-      renderSelectedTags();
-      runMultiDoctorSearch();
-    }
-
-    function renderSelectedTags() {
-      const container = document.getElementById("selected-docs-tags");
-      if (selectedMultiDocsSet.size === 0) {
-        container.innerHTML = `<span style="color:#94a3b8; font-size:0.85rem;">尚未加入醫師</span>`;
-        return;
-      }
-      container.innerHTML = "";
-      selectedMultiDocsSet.forEach(key => {
-        const [code, name] = key.split("___");
-        const docCode = findDocCode(name);
-        const tag = document.createElement("div");
-        tag.className = "selected-tag";
-        tag.innerHTML = `[${code}] ${name} ${docCode ? `(${docCode})` : ''} <span class="close-btn" onclick="removeSelectedDoctor('${key}')">✕</span>`;
-        container.appendChild(tag);
-      });
-    }
-
-    function syncMultiChipsFromSet() {
-      const chips = document.getElementById("multi-doc-chips").querySelectorAll("input[type='checkbox']");
-      chips.forEach(cb => {
-        cb.checked = selectedMultiDocsSet.has(cb.value);
-        toggleChipStyle(cb);
-      });
-    }
-
-    function renderMultiDocChips() {
-      const box = document.getElementById("multi-doc-chips");
-      box.innerHTML = "";
-      const docs = getAllDoctors();
-      docs.forEach(doc => {
-        const label = document.createElement("label");
-        label.className = "chip";
-        label.setAttribute("data-search", `${doc.doctor} ${doc.dept} ${doc.code}`);
-        label.innerHTML = `
-          <input type="checkbox" value="${doc.key}" onchange="onMultiChipToggled(this)">
-          <span class="dept-code">${doc.code}</span>
-          <span class="name-span">${doc.doctor}</span>
-          ${doc.docCode ? `<span class="doc-code-tag">${doc.docCode}</span>` : ''}
-          <span style="font-size:0.75rem; color:#64748b;">(${doc.dept})</span>
-        `;
-        box.appendChild(label);
-      });
-    }
-
-    function onMultiChipToggled(cb) {
-      if (cb.checked) {
-        selectedMultiDocsSet.add(cb.value);
-      } else {
-        selectedMultiDocsSet.delete(cb.value);
-      }
-      toggleChipStyle(cb);
-      renderSelectedTags();
-      runMultiDoctorSearch();
-    }
-
-    function filterMultiDocs() {
-      const q = document.getElementById("multi-search-input").value.trim().toLowerCase();
-      const chips = document.getElementById("multi-doc-chips").getElementsByClassName("chip");
-
-      for (let chip of chips) {
-        const text = (chip.getAttribute("data-search") || "").toLowerCase();
-        chip.style.display = (!q || text.includes(q)) ? "inline-flex" : "none";
-      }
-    }
-
-    // 清除搜尋並還原鍵
-    function resetMultiSearch() {
-      document.getElementById("multi-search-input").value = "";
-      filterMultiDocs();
-    }
-
-    function clearMultiDocs() {
-      selectedMultiDocsSet.clear();
-      syncMultiChipsFromSet();
-      renderSelectedTags();
-      document.getElementById("multi-search-input").value = "";
-      filterMultiDocs();
-      document.getElementById("multi-result-area").innerHTML = "";
-    }
-
-    function runMultiDoctorSearch() {
-      const selected = Array.from(selectedMultiDocsSet);
-      const resultArea = document.getElementById("multi-result-area");
-
-      if (selected.length < 2) {
-        resultArea.innerHTML = `<div class="card" style="border-left:4px solid var(--warn-border); color:var(--warn-text);">
-          請至少選擇 2 位醫師進行比對。
-        </div>`;
-        return;
-      }
-
-      const selectedDocsInfo = selected.map(key => {
-        const [c, d] = key.split("___");
-        const match = schedules.find(s => s.dept_code === c && s.doctor === d);
-        const docCode = findDocCode(d);
-        return { code: c, doctor: d, dept: match ? match.dept_name : "", docCode };
-      });
-
-      const targetRows = schedules.filter(s => selected.includes(`${s.dept_code}___${s.doctor}`));
-
-      const byWeekday = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };
-      targetRows.forEach(r => {
-        if (byWeekday[r.weekday]) byWeekday[r.weekday].push(r);
-      });
-
-      let html = `<div class="card" style="background:#f8fafc; border:1px solid #cbd5e1; margin-bottom:12px;">
-        <div style="font-weight:700;">比對醫師名單：</div>
-        <div style="margin-top:6px;">`;
-      selectedDocsInfo.forEach(doc => {
-        html += `<span class="doc-tag"><span class="dept-code">${doc.code}</span><strong>${doc.doctor}</strong>${doc.docCode ? `<span class="doc-code-tag">${doc.docCode}</span>`:''} (${doc.dept})</span>`;
-      });
-      html += `</div></div>`;
-
-      let activeDaysCount = 0;
-
-      for (let w = 1; w <= 6; w++) {
-        const dayRows = byWeekday[w];
-        if (dayRows.length === 0) continue;
-
-        activeDaysCount++;
-        const presentDocKeys = new Set(dayRows.map(r => `${r.dept_code}___${r.doctor}`));
-        const bySlot = { "上午": [], "下午": [], "夜診": [] };
-        dayRows.forEach(r => bySlot[r.slot].push(r));
-
-        html += `<div class="day-block">
-          <div class="day-header">
-            <span>📅 ${weekdayMap[w]}</span>
-            <span style="font-size:0.82rem; color:#475569;">
-              看診醫師：<strong>${presentDocKeys.size}</strong> 位
-            </span>
-          </div>
-          <div class="day-body">`;
-
-        ["上午", "下午", "夜診"].forEach(slot => {
-          const slotRows = bySlot[slot];
-          if (slotRows.length === 0) return;
-
-          const isOverlap = slotRows.length >= 2;
-
-          html += `<div class="slot-group">
-            <div class="slot-title">
-              <span>🕒 ${formatSlot(slot)}</span>
-              ${isOverlap 
-                ? `<span class="badge-same-time">同時段看診 (${slotRows.length}位)</span>` 
-                : `<span class="badge-diff-time">單獨看診</span>`}
-            </div>
-            <div>`;
-
-          slotRows.forEach(r => {
-            const dCode = findDocCode(r.doctor);
-            html += `<span class="doc-tag ${isOverlap ? 'match' : ''}">
-              <span class="dept-code">${r.dept_code}</span>
-              <strong>${r.doctor} 醫師</strong>
-              ${dCode ? `<span class="doc-code-tag">${dCode}</span>` : ''}
-              <small style="color:#64748b;">(${r.dept_name} / ${r.room || "診間"}${r.note ? " / " + r.note : ""})</small>
-            </span>`;
-          });
-
-          html += `</div></div>`;
-        });
-
-        html += `</div></div>`;
-      }
-
-      if (activeDaysCount === 0) {
-        html += `<div class="empty-tip">查無排班資料。</div>`;
-      }
-
-      resultArea.innerHTML = html;
-    }
-
-
-    // ==================== 功能 3: 醫師/科別代碼速查模組 ====================
+    // ==================== 功能 2: 醫師/科別代碼速查模組 ====================
     function initCodeSearchModule() {
       const codeDeptSelect = document.getElementById("codeDeptSelect");
       const doctorContainer = document.getElementById("doctorContainer");
@@ -1618,18 +1327,6 @@
         codeDeptSelect.appendChild(opt);
       });
 
-      function createDocCards(items) {
-        return items.map(item => `
-          <div class="doc-item">
-            <div>
-              <span class="doc-name">${item.doc}</span>
-              <div style="font-size: 0.75rem; color: #64748b;">${item.dept} (${item.deptCode})</div>
-            </div>
-            ${item.docCode ? `<span class="doc-code">${item.docCode}</span>` : `<span class="doc-code empty">無代碼</span>`}
-          </div>
-        `).join("");
-      }
-
       codeDeptSelect.addEventListener("change", function () {
         const selectedDept = this.value;
         if (!selectedDept) {
@@ -1652,6 +1349,21 @@
       });
     }
 
+    function createDocCards(items) {
+      return items.map(item => `
+        <div class="doc-item" onclick="showDoctorScheduleModal('${item.doc}', '${item.deptCode}', '${item.dept}', '${item.docCode || ''}')">
+          <div>
+            <span class="doc-name">${item.doc}</span>
+            <div style="font-size: 0.75rem; color: #64748b;">${item.dept} (${item.deptCode})</div>
+          </div>
+          <div style="text-align: right;">
+            ${item.docCode ? `<span class="doc-code">${item.docCode}</span>` : `<span class="doc-code empty">無代碼</span>`}
+            <div style="font-size: 0.72rem; color: #0284c7; margin-top: 4px; font-weight: 600;">📅 查看門診 ❯</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
     function filterCodeSearch() {
       const keyword = document.getElementById("codeKeywordSearch").value.trim().toLowerCase();
       const searchResultContainer = document.getElementById("searchResultContainer");
@@ -1671,15 +1383,7 @@
       if (matches.length === 0) {
         searchResultContainer.innerHTML = '<div class="empty-tip" style="grid-column: 1 / -1;">查無相符資料</div>';
       } else {
-        searchResultContainer.innerHTML = matches.map(item => `
-          <div class="doc-item">
-            <div>
-              <span class="doc-name">${item.doc}</span>
-              <div style="font-size: 0.75rem; color: #64748b;">${item.dept} (${item.deptCode})</div>
-            </div>
-            ${item.docCode ? `<span class="doc-code">${item.docCode}</span>` : `<span class="doc-code empty">無代碼</span>`}
-          </div>
-        `).join("");
+        searchResultContainer.innerHTML = createDocCards(matches);
       }
     }
 
@@ -1687,6 +1391,122 @@
       document.getElementById("codeKeywordSearch").value = "";
       document.getElementById("searchResultContainer").style.display = "none";
     }
+
+    // ==================== 門診時刻表彈窗邏輯 (Modal) ====================
+    function showDoctorScheduleModal(docName, deptCode, deptName, docCode) {
+      const modal = document.getElementById("scheduleModal");
+      const titleEl = document.getElementById("modalDoctorTitle");
+      const contentEl = document.getElementById("modalDoctorContent");
+      if (!modal || !titleEl || !contentEl) return;
+
+      const codeText = docCode ? `醫師代碼: ${docCode}` : "無代碼";
+      titleEl.innerHTML = `👨‍⚕️ ${docName} 醫師門診時刻表`;
+
+      // 提取該醫師於排班資料庫中的門診時段
+      const docSlots = schedules.filter(s => s.doctor === docName && (deptCode ? s.dept_code === deptCode : true));
+
+      let bodyHtml = `
+        <div style="background: #f1f5f9; padding: 10px 14px; border-radius: 8px; margin-bottom: 14px; border: 1px solid #e2e8f0;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong style="color: #1e293b; font-size: 1rem;">${docName} 醫師</strong>
+            <div>
+              <span style="font-size: 0.78rem; background: #0284c7; color: white; padding: 2px 8px; border-radius: 12px; font-weight: 600;">[${deptCode}] ${deptName}</span>
+              <span style="font-size: 0.78rem; background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 12px; font-weight: 700; font-family: monospace; margin-left: 4px;">${codeText}</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      if (docSlots.length === 0) {
+        bodyHtml += `
+          <div style="text-align: center; padding: 28px 16px; color: #64748b;">
+            <div style="font-size: 2.2rem; margin-bottom: 8px;">🗓️</div>
+            <div style="font-weight: 700; font-size: 0.95rem; color: #334155;">此醫師目前暫無常規門診排班紀錄</div>
+            <div style="font-size: 0.82rem; color: #94a3b8; margin-top: 6px;">（可能為特約門診、住院/手術照會專科，或排班資料更新中）</div>
+          </div>
+        `;
+      } else {
+        // 依星期與時段先後排序
+        const sorted = [...docSlots].sort((a,b) => {
+          if (a.weekday !== b.weekday) return a.weekday - b.weekday;
+          return (slotRank[a.slot] || 99) - (slotRank[b.slot] || 99);
+        });
+
+        // 依星期分組
+        const byDay = {};
+        sorted.forEach(s => {
+          if (!byDay[s.weekday]) byDay[s.weekday] = [];
+          byDay[s.weekday].push(s);
+        });
+
+        bodyHtml += `<div style="display: flex; flex-direction: column; gap: 10px;">`;
+
+        for (let w = 1; w <= 6; w++) {
+          if (!byDay[w]) continue;
+          const daySlots = byDay[w];
+
+          bodyHtml += `
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+              <div style="background: #f8fafc; padding: 8px 12px; font-weight: 700; font-size: 0.88rem; color: #334155; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <span>📅 ${weekdayMap[w]}</span>
+                <span style="font-size: 0.78rem; font-weight: normal; color: #64748b;">${daySlots.length} 個看診時段</span>
+              </div>
+              <div style="padding: 8px 12px; display: flex; flex-direction: column; gap: 6px;">
+          `;
+
+          daySlots.forEach(s => {
+            let slotColor = "#0284c7";
+            let slotBg = "#e0f2fe";
+            if (s.slot === "下午") { slotColor = "#d97706"; slotBg = "#fef3c7"; }
+            else if (s.slot.includes("夜")) { slotColor = "#7c3aed"; slotBg = "#ede9fe"; }
+
+            bodyHtml += `
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; background: #ffffff; border-radius: 6px; border: 1px solid #f1f5f9;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="background: ${slotBg}; color: ${slotColor}; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.82rem;">
+                    🕒 ${formatSlot(s.slot)}
+                  </span>
+                  <span style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">
+                    ${s.room || "看診中"}
+                  </span>
+                </div>
+                ${s.note ? `<span style="font-size: 0.78rem; background: #fee2e2; color: #b91c1c; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${s.note}</span>` : ''}
+              </div>
+            `;
+          });
+
+          bodyHtml += `</div></div>`;
+        }
+
+        bodyHtml += `
+          </div>
+          <div style="margin-top: 12px; text-align: right; font-size: 0.82rem; color: #64748b;">
+            每週門診總計：<strong style="color: #0284c7;">${sorted.length}</strong> 個時段
+          </div>
+        `;
+      }
+
+      contentEl.innerHTML = bodyHtml;
+      modal.classList.add("active");
+    }
+
+    function closeDoctorScheduleModal() {
+      const modal = document.getElementById("scheduleModal");
+      if (modal) modal.classList.remove("active");
+    }
+
+    function onModalOverlayClicked(e) {
+      if (e.target && e.target.id === "scheduleModal") {
+        closeDoctorScheduleModal();
+      }
+    }
+
+    // 支援 ESC 鍵關閉彈窗
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape") {
+        closeDoctorScheduleModal();
+      }
+    });
 
     window.onload = initApp;
   </script>
