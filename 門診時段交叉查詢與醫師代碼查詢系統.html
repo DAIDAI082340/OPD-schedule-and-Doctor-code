@@ -1327,120 +1327,151 @@
         else if (t.startsWith("DOC_")) targetDocs.add(t.replace("DOC_", ""));
       });
 
-      // 依星期先後、再依時段排序基準醫師門診
-      const sortedSlots = [...docSlots].sort((a,b) => {
-        if (a.weekday !== b.weekday) return a.weekday - b.weekday;
-        return (slotRank[a.slot] || 99) - (slotRank[b.slot] || 99);
+      // 依星期分組 (Group by Weekday)，解決同天多時段拆散之問題
+      const slotsByWeekday = {};
+      docSlots.forEach(slot => {
+        if (!slotsByWeekday[slot.weekday]) slotsByWeekday[slot.weekday] = [];
+        slotsByWeekday[slot.weekday].push(slot);
       });
 
-      sortedSlots.forEach(mySlot => {
+      const sortedWeekdays = Object.keys(slotsByWeekday).map(Number).sort((a, b) => a - b);
+
+      sortedWeekdays.forEach(wDay => {
+        const baseSlotsOnThisDay = [...slotsByWeekday[wDay]].sort((a, b) => {
+          return (slotRank[a.slot] || 99) - (slotRank[b.slot] || 99);
+        });
+
+        // 基準醫師本日所有看診班次摘要 (例: 下午診 (2樓88診) ｜ 夜診 (2樓88診))
+        const baseDutyList = baseSlotsOnThisDay.map(s => {
+          return `<strong>${formatSlot(s.slot)}</strong> (<span style="color:#0369a1; font-weight:600;">${s.room || "看診中"}</span>${s.note ? " / " + s.note : ""})`;
+        }).join(" ｜ ");
+
+        const baseSlotSet = new Set(baseSlotsOnThisDay.map(s => s.slot));
+
         // 抓取在相同星期（同天）的所有目標出診記錄
         const targetDaySchedules = schedules.filter(s => {
-          if (s.weekday !== mySlot.weekday) return false;
+          if (s.weekday !== wDay) return false;
           if (targetDepts.has(s.dept_code)) return true;
           if (targetDocs.has(`${s.dept_code}___${s.doctor}`)) return true;
           return false;
         });
 
-        // 1. 同天同時段
-        const sameSlotMatches = targetDaySchedules.filter(s => s.slot === mySlot.slot);
+        // 1. 同天同時段：目標時段落在基準醫師今日有開診之時段
+        const sameSlotMatches = targetDaySchedules.filter(s => baseSlotSet.has(s.slot));
 
-        // 2. 同天不同時段
-        const diffSlotMatches = targetDaySchedules.filter(s => s.slot !== mySlot.slot);
+        // 2. 同天不同時段：目標時段落在基準醫師今日未開診之時段
+        const diffSlotMatches = targetDaySchedules.filter(s => !baseSlotSet.has(s.slot));
 
         html += `<div class="day-block">
           <div class="day-header">
-            <span>📅 ${weekdayMap[mySlot.weekday]} ${formatSlot(mySlot.slot)}</span>
-            <span style="font-size:0.82rem; font-weight:normal; color:#475569;">
-              基準看診：<strong>${docName} 醫師</strong> (<strong style="color:#0369a1;">${mySlot.room || "看診中"}</strong>${mySlot.note ? " / " + mySlot.note : ""})
+            <span>📅 ${weekdayMap[wDay]}</span>
+            <span style="font-size:0.84rem; font-weight:normal; color:#475569;">
+              基準看診：<strong>${docName} 醫師</strong> [ ${baseDutyList} ]
             </span>
           </div>
           <div class="day-body">`;
 
-        // ==================== 區塊 1: 同天同時段 ====================
-        html += `<div class="cross-section-block same-time-box">
-          <div class="cross-section-title">
-            <span class="badge-same-time-lg">🟢 同天同時段看診</span>
-            <span style="font-size:0.8rem; color:#065f46; font-weight:normal;">
-              （與基準醫師同在 ${formatSlot(mySlot.slot)} 出診，可同半天接續就醫）
-            </span>
+        // 若當日兩者皆查無結果，呈現簡潔中立提示，絕不呈現任何綠色或黃色色彩框
+        if (sameSlotMatches.length === 0 && diffSlotMatches.length === 0) {
+          html += `<div style="color: #64748b; font-size: 0.88rem; padding: 10px 14px; background: #f8fafc; border-radius: 6px; border: 1px dashed #cbd5e1;">
+            所選比對目標於本日無門診。
           </div>`;
-
-        if (sameSlotMatches.length === 0) {
-          html += `<div style="color: #64748b; font-size: 0.84rem; padding: 4px 0;">所選比對目標於此 ${formatSlot(mySlot.slot)} 無出診醫師。</div>`;
         } else {
-          // 依科別分組
-          const grouped = {};
-          sameSlotMatches.forEach(m => {
-            if (!grouped[m.dept_name]) grouped[m.dept_name] = [];
-            grouped[m.dept_name].push(m);
-          });
+          // ==================== 區塊 1: 同天同時段 ====================
+          // 僅在有結果時呈現，無結果不呈現顏色框
+          if (sameSlotMatches.length > 0) {
+            html += `<div class="cross-section-block same-time-box">
+              <div class="cross-section-title">
+                <span class="badge-same-time-lg">🟢 同天同時段看診</span>
+              </div>`;
 
-          for (let dName in grouped) {
-            html += `<div style="margin-top:6px;">
-              <strong style="font-size:0.88rem; color:#14532d;">${dName}：</strong>`;
-            grouped[dName].forEach(doc => {
-              const dCode = findDocCode(doc.doctor);
-              html += `<span class="doc-tag match clickable" onclick="showDoctorScheduleModal('${doc.doctor}', '${doc.dept_code}', '${doc.dept_name}', '${dCode || ''}')" title="點擊查看 ${doc.doctor} 醫師每週門診表">
-                <span class="dept-code">${doc.dept_code}</span>
-                <strong>${doc.doctor} 醫師</strong>
-                ${dCode ? `<span class="doc-code-tag">${dCode}</span>` : ''}
-                <small style="color:#15803d; margin-left:4px;">(${doc.room || "診間"}${doc.note ? " / " + doc.note : ""})</small>
-              </span>`;
+            // 依基準醫師今日開診的時段逐一展開
+            baseSlotsOnThisDay.forEach(bSlot => {
+              const matchesInSlot = sameSlotMatches.filter(s => s.slot === bSlot.slot);
+              if (matchesInSlot.length === 0) return;
+
+              html += `<div style="margin-top:6px;">
+                <div class="slot-sub-header" style="color:#065f46;">
+                  <span>🕒 ${formatSlot(bSlot.slot)} (${matchesInSlot.length} 位出診)</span>
+                </div>`;
+
+              const grouped = {};
+              matchesInSlot.forEach(m => {
+                if (!grouped[m.dept_name]) grouped[m.dept_name] = [];
+                grouped[m.dept_name].push(m);
+              });
+
+              for (let dName in grouped) {
+                html += `<div style="margin-top:4px;">
+                  <strong style="font-size:0.88rem; color:#14532d;">${dName}：</strong>`;
+                grouped[dName].forEach(doc => {
+                  const dCode = findDocCode(doc.doctor);
+                  html += `<span class="doc-tag match clickable" onclick="showDoctorScheduleModal('${doc.doctor}', '${doc.dept_code}', '${doc.dept_name}', '${dCode || ''}')" title="點擊查看 ${doc.doctor} 醫師每週門診表">
+                    <span class="dept-code">${doc.dept_code}</span>
+                    <strong>${doc.doctor} 醫師</strong>
+                    ${dCode ? `<span class="doc-code-tag">${dCode}</span>` : ''}
+                    <small style="color:#15803d; margin-left:4px;">(${doc.room || "診間"}${doc.note ? " / " + doc.note : ""})</small>
+                  </span>`;
+                });
+                html += `</div>`;
+              }
+
+              html += `</div>`;
             });
+
+            html += `</div>`;
+          }
+
+          // ==================== 區塊 2: 同天不同時段 ====================
+          // 僅在有結果時呈現，無結果不呈現顏色框
+          if (diffSlotMatches.length > 0) {
+            html += `<div class="cross-section-block diff-time-box">
+              <div class="cross-section-title">
+                <span class="badge-diff-time-lg">🟡 同日不同時段看診</span>
+              </div>`;
+
+            // 依基準醫師今日未開診之其他時段呈現（上午、下午、夜診）
+            const otherSlots = ["上午", "下午", "夜診"].filter(s => !baseSlotSet.has(s));
+            let diffRenderCount = 0;
+
+            otherSlots.forEach(otherS => {
+              const matchesInSlot = diffSlotMatches.filter(s => s.slot === otherS);
+              if (matchesInSlot.length === 0) return;
+
+              const borderStyle = diffRenderCount > 0 ? "margin-top:8px; padding-top:8px; border-top:1px dashed #fcd34d;" : "margin-top:4px;";
+              diffRenderCount++;
+
+              html += `<div class="diff-slot-group" style="${borderStyle}">
+                <div class="slot-sub-header">
+                  <span>🕒 ${formatSlot(otherS)} (${matchesInSlot.length} 位出診)</span>
+                </div>`;
+
+              const groupedDiff = {};
+              matchesInSlot.forEach(m => {
+                if (!groupedDiff[m.dept_name]) groupedDiff[m.dept_name] = [];
+                groupedDiff[m.dept_name].push(m);
+              });
+
+              for (let dName in groupedDiff) {
+                html += `<div style="margin-top:4px;">
+                  <strong style="font-size:0.86rem; color:#78350f;">${dName}：</strong>`;
+                groupedDiff[dName].forEach(doc => {
+                  const dCode = findDocCode(doc.doctor);
+                  html += `<span class="doc-tag match-diff clickable" onclick="showDoctorScheduleModal('${doc.doctor}', '${doc.dept_code}', '${doc.dept_name}', '${dCode || ''}')" title="點擊查看 ${doc.doctor} 醫師每週門診表">
+                    <span class="dept-code" style="background:#fef3c7; color:#92400e;">${doc.dept_code}</span>
+                    <strong>${doc.doctor} 醫師</strong>
+                    ${dCode ? `<span class="doc-code-tag">${dCode}</span>` : ''}
+                    <small style="color:#b45309; margin-left:4px;">(${doc.room || "診間"}${doc.note ? " / " + doc.note : ""})</small>
+                  </span>`;
+                });
+                html += `</div>`;
+              }
+              html += `</div>`;
+            });
+
             html += `</div>`;
           }
         }
-        html += `</div>`;
-
-        // ==================== 區塊 2: 同天不同時段 ====================
-        html += `<div class="cross-section-block diff-time-box">
-          <div class="cross-section-title">
-            <span class="badge-diff-time-lg">🟡 同天不同時段看診</span>
-            <span style="font-size:0.8rem; color:#92400e; font-weight:normal;">
-              （同在 ${weekdayMap[mySlot.weekday]} 但不同時段，病患當天跑一趟醫院可跨時段就醫）
-            </span>
-          </div>`;
-
-        if (diffSlotMatches.length === 0) {
-          html += `<div style="color: #64748b; font-size: 0.84rem; padding: 4px 0;">所選比對目標於本日其他時段無門診。</div>`;
-        } else {
-          // 依其他時段分組（上午、下午、夜診）
-          const otherSlots = ["上午", "下午", "夜診"].filter(s => s !== mySlot.slot);
-          
-          otherSlots.forEach(otherS => {
-            const matchesInSlot = diffSlotMatches.filter(s => s.slot === otherS);
-            if (matchesInSlot.length === 0) return;
-
-            html += `<div class="diff-slot-group" style="margin-top:6px; padding-top:6px; border-top:1px dashed #fcd34d;">
-              <div class="slot-sub-header">
-                <span>🕒 ${formatSlot(otherS)} (${matchesInSlot.length} 位出診)</span>
-              </div>`;
-
-            const groupedDiff = {};
-            matchesInSlot.forEach(m => {
-              if (!groupedDiff[m.dept_name]) groupedDiff[m.dept_name] = [];
-              groupedDiff[m.dept_name].push(m);
-            });
-
-            for (let dName in groupedDiff) {
-              html += `<div style="margin-top:4px;">
-                <strong style="font-size:0.86rem; color:#78350f;">${dName}：</strong>`;
-              groupedDiff[dName].forEach(doc => {
-                const dCode = findDocCode(doc.doctor);
-                html += `<span class="doc-tag match-diff clickable" onclick="showDoctorScheduleModal('${doc.doctor}', '${doc.dept_code}', '${doc.dept_name}', '${dCode || ''}')" title="點擊查看 ${doc.doctor} 醫師每週門診表">
-                  <span class="dept-code" style="background:#fef3c7; color:#92400e;">${doc.dept_code}</span>
-                  <strong>${doc.doctor} 醫師</strong>
-                  ${dCode ? `<span class="doc-code-tag">${dCode}</span>` : ''}
-                  <small style="color:#b45309; margin-left:4px;">(${doc.room || "診間"}${doc.note ? " / " + doc.note : ""})</small>
-                </span>`;
-              });
-              html += `</div>`;
-            }
-            html += `</div>`;
-          });
-        }
-        html += `</div>`;
 
         html += `</div></div>`;
       });
