@@ -12,6 +12,8 @@
 | **目前版本** | `v0.1.0` (單檔原型已完成，正式建立專案紀錄與規格庫) |
 | **主要目標使用者** | 臨床醫師、門診跟診護理師、轉診中心個案管理師、批價掛號櫃檯人員、專科護理師 (NP)、各科行政秘書 |
 | **運作環境** | 現代網頁瀏覽器 (Chrome, Edge, Safari, Firefox)、支援行動裝置 (RWD)、純前端零依賴離線運作 (Zero-dependency Web App) |
+| **GitHub 倉庫** | `https://github.com/DAIDAI082340/OPD-schedule-and-Doctor-code` |
+| **GitHub Pages 線上網址** | `https://daidai082340.github.io/OPD-schedule-and-Doctor-code/` |
 | **專案路徑** | `c:\Users\X4715G\Desktop\Antigravity 專案\門診時段交叉查詢與醫師代碼查詢系統` |
 
 ---
@@ -188,7 +190,9 @@ flowchart TD
 ## 9. 變更紀錄 (Changelog)
 
 - **v0.1.0 (2026-09-18)**:
-  - 正式建立專案紀錄檔案 `PROJECT_RECORD.md`。
+  - 正式建立專案紀錄檔案 `PROJECT_RECORD.md` 與入門指引 `README.md`。
   - 完成現有 `門診時段交叉查詢與醫師代碼查詢系統.html` 原始檔案與功能盤點（三大查詢頁籤、29 個科別、86+ 位醫師主檔、數百筆門診時段）。
   - 確立三大核心模組規格（跨科同時段比對、多醫師星期聚合比對、科別與醫師代碼速查）。
-  - 定義標準資料架構規範 (`masterData`, `schedules`) 與後續開發藍圖。
+  - 建立入口首頁 `index.html`，具備 GitHub Pages 靜態託管規格相容性。
+  - 完成 Git 本地倉庫初始化 (`main` 分支) 並配置 `.gitignore`。
+  - 連接 GitHub 遠端倉庫 `DAIDAI082340/OPD-schedule-and-Doctor-code` 並啟用 GitHub Pages 線上服務。

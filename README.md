@@ -47,7 +47,16 @@
 
 ---
 
+## 🌐 線上速查系統 (GitHub Pages)
+
+本系統已配置標準 `index.html`，可直接透過瀏覽器線上使用：
+- **線上系統網址**：[https://daidai082340.github.io/OPD-schedule-and-Doctor-code/](https://daidai082340.github.io/OPD-schedule-and-Doctor-code/)
+- **GitHub 專案倉庫**：[https://github.com/DAIDAI082340/OPD-schedule-and-Doctor-code](https://github.com/DAIDAI082340/OPD-schedule-and-Doctor-code)
+
+---
+
 ## 📖 詳細專案規格與開發計畫
 
 完整架構設計、資料庫規格與後續開發里程碑請參閱：  
 👉 [PROJECT_RECORD.md](file:///c:/Users/X4715G/Desktop/Antigravity%20專案/門診時段交叉查詢與醫師代碼查詢系統/PROJECT_RECORD.md)
+
