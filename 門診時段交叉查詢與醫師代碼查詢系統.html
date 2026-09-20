@@ -909,12 +909,12 @@
         <div class="grid-2">
           <div class="form-group">
             <select id="cross-base-dept-select" onchange="onCrossBaseDeptChanged()">
-              <!-- Dynamic options -->
+              <option value="">-- 請選擇科別 --</option>
             </select>
           </div>
           <div class="form-group">
             <select id="cross-base-doc-select" onchange="onCrossBaseDocSelected()">
-              <!-- Dynamic options -->
+              <option value="">-- 全科所有醫師 --</option>
             </select>
           </div>
         </div>
@@ -926,12 +926,12 @@
         <div class="grid-2">
           <div class="form-group">
             <select id="cross-target-dept-select" onchange="onCrossTargetDeptChanged()">
-              <!-- Dynamic options -->
+              <option value="">-- 請選擇科別 --</option>
             </select>
           </div>
           <div class="form-group">
             <select id="cross-target-doc-select">
-              <!-- Dynamic options -->
+              <option value="">-- 全科所有醫師 --</option>
             </select>
           </div>
         </div>
@@ -1385,17 +1385,18 @@
     const slotRank = { "上午": 1, "下午": 2, "夜診": 3 };
 
     // 柔和金屬棕／香檳金色系色彩池 (Color Array，依使用者加入名單順序動態分配，絕不綁定特定醫師)
+    // 嚴格採用 10 組互斥色相之建築礦物金屬色階，兼顧頂級典雅質感與超高辨識度
     const metallicColorPalette = [
-      { id: "espresso",   bg: "linear-gradient(135deg, #5b4638 0%, #3e2d24 100%)", border: "#36261d", text: "#ffffff", shadow: "rgba(62, 45, 36, 0.35)" }, // 1. 深培濃縮棕 (基準醫師)
-      { id: "caramel",    bg: "linear-gradient(135deg, #ab8967 0%, #8f6e4d 100%)", border: "#7d5e3f", text: "#ffffff", shadow: "rgba(143, 110, 77, 0.35)" }, // 2. 焦糖暖金棕
-      { id: "rosebronze", bg: "linear-gradient(135deg, #9e6962 0%, #824f48 100%)", border: "#70403a", text: "#ffffff", shadow: "rgba(130, 79, 72, 0.35)" },  // 3. 玫瑰金屬褐
-      { id: "olivetaupe", bg: "linear-gradient(135deg, #7c735d 0%, #635b47 100%)", border: "#524b3a", text: "#ffffff", shadow: "rgba(99, 91, 71, 0.35)" },   // 4. 橄欖金屬灰褐
-      { id: "cognac",     bg: "linear-gradient(135deg, #a15f48 0%, #834431 100%)", border: "#713524", text: "#ffffff", shadow: "rgba(131, 68, 49, 0.35)" },   // 5. 干邑琥珀棕
-      { id: "slate",      bg: "linear-gradient(135deg, #6e6766 0%, #544d4c 100%)", border: "#453e3d", text: "#ffffff", shadow: "rgba(84, 77, 76, 0.35)" },    // 6. 錫灰古銅褐
-      { id: "champagne",  bg: "linear-gradient(135deg, #b99a68 0%, #9e7f4e 100%)", border: "#886c3d", text: "#ffffff", shadow: "rgba(158, 127, 78, 0.35)" }, // 7. 香檳古銅金
-      { id: "walnut",     bg: "linear-gradient(135deg, #6c534e 0%, #4f3935 100%)", border: "#402c29", text: "#ffffff", shadow: "rgba(79, 57, 53, 0.35)" },    // 8. 深胡桃可可棕
-      { id: "brass",      bg: "linear-gradient(135deg, #b58855 0%, #976b3b 100%)", border: "#805628", text: "#ffffff", shadow: "rgba(151, 107, 59, 0.35)" },  // 9. 暖黃銅赭
-      { id: "copper",     bg: "linear-gradient(135deg, #8b5344 0%, #6d392c 100%)", border: "#5a2b20", text: "#ffffff", shadow: "rgba(109, 57, 44, 0.35)" }   // 10. 燻銅深赤褐
+      { id: "espresso",   bg: "linear-gradient(135deg, #38251b 0%, #1f140e 100%)", border: "#180e0a", text: "#ffffff", shadow: "rgba(31, 20, 14, 0.45)" }, // 1. 黑曜深焙摩卡 (基準醫師：沉穩黑曜鈦棕，深邃醒目)
+      { id: "champagne",  bg: "linear-gradient(135deg, #bf8c2c 0%, #8c6014 100%)", border: "#734c08", text: "#ffffff", shadow: "rgba(140, 96, 20, 0.4)" },  // 2. 璀璨香檳金 (高亮度明豔黃金，視覺第一焦點)
+      { id: "copper",     bg: "linear-gradient(135deg, #b84a2b 0%, #8c2e14 100%)", border: "#73230d", text: "#ffffff", shadow: "rgba(140, 46, 20, 0.4)" },  // 3. 干邑赤銅紅 (飽和熱烈金屬赤紅銅)
+      { id: "olive",      bg: "linear-gradient(135deg, #5e6b35 0%, #414c1e 100%)", border: "#303912", text: "#ffffff", shadow: "rgba(65, 76, 30, 0.4)" },   // 4. 青銅古綠 (古典金屬青銅苔綠，綠調強烈對比)
+      { id: "amber",      bg: "linear-gradient(135deg, #be7328 0%, #914f10 100%)", border: "#733c06", text: "#ffffff", shadow: "rgba(145, 79, 16, 0.4)" },   // 5. 焦糖暖琥珀 (濃郁金屬橘琥珀色)
+      { id: "burgundy",   bg: "linear-gradient(135deg, #7e394b 0%, #561d2d 100%)", border: "#42101e", text: "#ffffff", shadow: "rgba(86, 29, 45, 0.4)" },   // 6. 紫檀金屬褐 (雅致深醇酒紅紫檀)
+      { id: "pewter",     bg: "linear-gradient(135deg, #6c7075 0%, #4b4e53 100%)", border: "#373a3e", text: "#ffffff", shadow: "rgba(75, 78, 83, 0.4)" },   // 7. 錫灰銀鈦 (冷調現代金屬錫銀灰)
+      { id: "tealbronze", bg: "linear-gradient(135deg, #246473 0%, #12404b 100%)", border: "#0a2c34", text: "#ffffff", shadow: "rgba(18, 64, 75, 0.4)" },   // 8. 青金孔雀藍銅 (奢華礦物孔雀藍青銅)
+      { id: "almond",     bg: "linear-gradient(135deg, #8f7560 0%, #695240 100%)", border: "#523e2e", text: "#ffffff", shadow: "rgba(105, 82, 64, 0.35)" }, // 9. 燻烤杏仁奶金 (溫潤金屬杏仁燕麥灰褐)
+      { id: "rosegold",   bg: "linear-gradient(135deg, #af5f6f 0%, #833c4b 100%)", border: "#682734", text: "#ffffff", shadow: "rgba(131, 60, 75, 0.4)" }   // 10. 粉漾玫瑰金 (優雅金屬粉紅玫瑰金)
     ];
 
     // 動態色彩分配管理：依照加入順序依序賦予顏色；全科比對時，該科底下每一位個別醫師皆分配互不相同的色彩
@@ -1513,7 +1514,7 @@
       baseDeptSelect.value = "";
 
       const baseDocSelect = document.getElementById("cross-base-doc-select");
-      baseDocSelect.innerHTML = '<option value="">-- 請先選擇科別 --</option>';
+      baseDocSelect.innerHTML = '<option value="">-- 全科所有醫師 --</option>';
       crossBaseDoctorKey = "";
 
       // 比對目標科別：預設為空「-- 請選擇科別 --」
@@ -1537,7 +1538,7 @@
       docSelect.innerHTML = "";
 
       if (!deptCode) {
-        docSelect.innerHTML = '<option value="">-- 請先選擇科別 --</option>';
+        docSelect.innerHTML = '<option value="">-- 全科所有醫師 --</option>';
         crossBaseDoctorKey = "";
         renderCrossTargetTags();
         return;
@@ -1545,7 +1546,7 @@
 
       const optDefault = document.createElement("option");
       optDefault.value = "";
-      optDefault.textContent = "-- 請選擇醫師 --";
+      optDefault.textContent = "-- 全科所有醫師 --";
       docSelect.appendChild(optDefault);
 
       const docs = getDocsByDept(deptCode);
@@ -1688,7 +1689,7 @@
       const baseDept = document.getElementById("cross-base-dept-select");
       if (baseDept) baseDept.value = "";
       const baseDoc = document.getElementById("cross-base-doc-select");
-      if (baseDoc) baseDoc.innerHTML = '<option value="">-- 請先選擇科別 --</option>';
+      if (baseDoc) baseDoc.innerHTML = '<option value="">-- 全科所有醫師 --</option>';
 
       const targetDept = document.getElementById("cross-target-dept-select");
       if (targetDept) targetDept.value = "";
