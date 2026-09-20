@@ -204,21 +204,25 @@ def scrape_clinic_schedules(depts, doc_code_map):
                 "slot": slot_label,
                 "room": room_label,
                 "date": date_display,
+                "full_date": dt,
                 "is_stopped": is_stopped,
                 "special_note": special_note
             })
 
     # 聚合門診常規排班規則
+    # 唯一鍵綁定 (科別, 醫師, 星期, 時段)，保證同一時段絕不產生重複門診卡片
     grouped = {}
     for item in all_raw_slots:
-        key = (item["dept_code"], item["dept_name"], item["doctor"], item["weekday"], item["slot"], item["room"])
+        key = (item["dept_code"], item["dept_name"], item["doctor"], item["weekday"], item["slot"])
         if key not in grouped:
             grouped[key] = {
                 "total_occurrences": 0,
                 "stopped_dates": [],
-                "special_notes": set()
+                "special_notes": set(),
+                "room_records": []
             }
         grouped[key]["total_occurrences"] += 1
+        grouped[key]["room_records"].append((item["full_date"], item["room"]))
         if item["is_stopped"]:
             grouped[key]["stopped_dates"].append(item["date"])
         if item["special_note"]:
@@ -226,8 +230,15 @@ def scrape_clinic_schedules(depts, doc_code_map):
 
     schedules = []
     for key, val in grouped.items():
-        dept_code, dept_name, doctor, weekday, slot, room = key
+        dept_code, dept_name, doctor, weekday, slot = key
         
+        # 決定常規診間：依日期排序，若跨月更換診間，以最新月份之診間為準
+        val["room_records"].sort(key=lambda x: x[0])
+        latest_date = val["room_records"][-1][0]
+        latest_month = latest_date.month
+        latest_month_rooms = [r for d, r in val["room_records"] if d.month == latest_month]
+        room = max(set(latest_month_rooms), key=latest_month_rooms.count) if latest_month_rooms else val["room_records"][-1][1]
+
         # 組合備註：若有特殊診名則優先保留，並附加停診日
         note_parts = []
         if val["special_notes"]:

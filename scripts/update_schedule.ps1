@@ -161,6 +161,7 @@ foreach ($dept in $depts) {
                 Slot = $slotLabel
                 Room = $roomLabel
                 Date = $dateDisp
+                DateObj = $dt
                 IsStopped = $isStopped
                 SpecialNote = $specNote
             }
@@ -170,10 +171,10 @@ foreach ($dept in $depts) {
     }
 }
 
-# 聚合常規門診與停診日期
+# 聚合常規門診與停診日期（唯一鍵排除 Room，防止同一時段產生重複門診卡片）
 $grouped = @{}
 foreach ($item in $rawSlots) {
-    $k = "$($item.DeptCode)___$($item.DeptName)___$($item.Doctor)___$($item.Weekday)___$($item.Slot)___$($item.Room)"
+    $k = "$($item.DeptCode)___$($item.DeptName)___$($item.Doctor)___$($item.Weekday)___$($item.Slot)"
     if (-not $grouped.ContainsKey($k)) {
         $grouped[$k] = @{
             DeptCode = $item.DeptCode
@@ -181,11 +182,12 @@ foreach ($item in $rawSlots) {
             Doctor = $item.Doctor
             Weekday = $item.Weekday
             Slot = $item.Slot
-            Room = $item.Room
+            RoomRecords = [System.Collections.Generic.List[PSCustomObject]]::new()
             StoppedDates = [System.Collections.Generic.List[string]]::new()
             SpecialNotes = [System.Collections.Generic.HashSet[string]]::new()
         }
     }
+    $grouped[$k].RoomRecords.Add([PSCustomObject]@{ Date = $item.DateObj; Room = $item.Room })
     if ($item.IsStopped) {
         if (-not $grouped[$k].StoppedDates.Contains($item.Date)) {
             $grouped[$k].StoppedDates.Add($item.Date)
@@ -199,19 +201,18 @@ foreach ($item in $rawSlots) {
 $schedules = [System.Collections.Generic.List[PSCustomObject]]::new()
 foreach ($k in $grouped.Keys) {
     $val = $grouped[$k]
+    # 依日期排序，若跨月換診間，以最新月份之診間為準
+    $sortedRooms = @($val.RoomRecords | Sort-Object { $_.Date })
+    $chosenRoom = if ($sortedRooms.Count -gt 0) { $sortedRooms[-1].Room } else { "" }
+
     $noteParts = @()
     if ($val.SpecialNotes.Count -gt 0) {
         $noteParts += ($val.SpecialNotes -join "/")
     }
     if ($val.StoppedDates.Count -gt 0) {
         $sortedDates = @($val.StoppedDates | Sort-Object { [int]($_ -split '/')[0] * 100 + [int]($_ -split '/')[1] })
-        if ($sortedDates.Count -eq 1) {
-            $noteParts += "$($sortedDates[0])停診"
-        } elseif ($sortedDates.Count -le 3) {
-            $noteParts += (($sortedDates -join ".") + "停診")
-        } else {
-            $noteParts += "近期停診($($sortedDates[0])等$($sortedDates.Count)診)"
-        }
+        # 依使用者需求全面完整列出所有具體停診日期，取消等N診之縮寫
+        $noteParts += (($sortedDates -join ".") + "停診")
     }
     $finalNote = $noteParts -join " "
 
@@ -221,7 +222,7 @@ foreach ($k in $grouped.Keys) {
         doctor = $val.Doctor
         weekday = $val.Weekday
         slot = $val.Slot
-        room = $val.Room
+        room = $chosenRoom
         note = $finalNote
     })
 }
