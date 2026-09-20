@@ -236,20 +236,8 @@ def scrape_clinic_schedules(depts, doc_code_map):
         # 去除重複停診日並排序
         stopped_dates = sorted(list(set(val["stopped_dates"])), key=lambda x: [int(p) for p in x.split('/')])
         if stopped_dates:
-            # 格式化為如: "10/10.17停診" 或 "10/10停診"
-            if len(stopped_dates) == 1:
-                note_parts.append(f"{stopped_dates[0]}停診")
-            elif len(stopped_dates) <= 3:
-                # 合併為 10/10.17.24停診
-                first_month = stopped_dates[0].split('/')[0]
-                same_month = all(d.split('/')[0] == first_month for d in stopped_dates)
-                if same_month:
-                    days_str = ".".join(d.split('/')[1] for d in stopped_dates)
-                    note_parts.append(f"{first_month}/{days_str}停診")
-                else:
-                    note_parts.append(".".join(stopped_dates) + "停診")
-            else:
-                note_parts.append(f"近期停診({stopped_dates[0]}等{len(stopped_dates)}診)")
+            # 依使用者需求全面完整列出所有具體停診日期，取消等N診之縮寫
+            note_parts.append(".".join(stopped_dates) + "停診")
 
         final_note = " ".join(note_parts)
 

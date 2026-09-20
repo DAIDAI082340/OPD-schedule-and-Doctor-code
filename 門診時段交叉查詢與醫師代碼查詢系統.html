@@ -41,7 +41,7 @@
       background-attachment: fixed;
       color: var(--text);
       line-height: 1.6;
-      padding-bottom: 280px; /* 充足空間防止選單開到底部 */
+      padding-bottom: 540px; /* 充足空間防止下拉選單因視窗底部空間不足而強制向上彈出展開 */
       -webkit-font-smoothing: antialiased;
     }
 
@@ -1342,7 +1342,7 @@
       { dept_code: "60", dept_name: "中醫科", doctor: "張煒東", weekday: 2, slot: "下午", room: "35診", note: "" },
       { dept_code: "08", dept_name: "泌尿科", doctor: "林憲治", weekday: 4, slot: "上午", room: "18診", note: "" },
       { dept_code: "07", dept_name: "神經外科/脊椎外科(微創)", doctor: "張昕煥", weekday: 5, slot: "下午", room: "38診", note: "9/25.10/23停診" },
-      { dept_code: "40", dept_name: "牙科", doctor: "黃惠娟", weekday: 2, slot: "下午", room: "23診", note: "近期停診(9/22等5診)" },
+      { dept_code: "40", dept_name: "牙科", doctor: "黃惠娟", weekday: 2, slot: "下午", room: "23診", note: "9/22.9/29.10/6.10/13.10/20停診" },
       { dept_code: "05", dept_name: "婦產科", doctor: "林茂", weekday: 3, slot: "下午", room: "29診", note: "" },
       { dept_code: "13", dept_name: "精神科", doctor: "王鴻松", weekday: 6, slot: "上午", room: "26診", note: "" },
       { dept_code: "AC", dept_name: "胸腔內科", doctor: "林澤宏", weekday: 1, slot: "夜診", room: "5診", note: "" },
@@ -1552,7 +1552,7 @@
       { dept_code: "AH03", dept_name: "M痘疫苗特診", doctor: "莊佳慧", weekday: 1, slot: "上午", room: "96診", note: "" },
       { dept_code: "11", dept_name: "皮膚科", doctor: "郭峰昇", weekday: 1, slot: "夜診", room: "61診", note: "10/5停診" },
       { dept_code: "07", dept_name: "神經外科/脊椎外科(微創)", doctor: "賴肇康", weekday: 1, slot: "上午", room: "38診", note: "10/19停診" },
-      { dept_code: "40", dept_name: "牙科", doctor: "鍾先揚", weekday: 5, slot: "上午", room: "21診", note: "近期停診(9/25等4診)" },
+      { dept_code: "40", dept_name: "牙科", doctor: "鍾先揚", weekday: 5, slot: "上午", room: "21診", note: "9/25.10/2.10/9.10/16停診" },
       { dept_code: "4001", dept_name: "無障礙牙科特診", doctor: "鍾先揚", weekday: 4, slot: "上午", room: "60診", note: "" },
       { dept_code: "08", dept_name: "泌尿科", doctor: "林憲治", weekday: 2, slot: "上午", room: "18診", note: "" },
       { dept_code: "01", dept_name: "家醫科", doctor: "郭馨鎂", weekday: 1, slot: "下午", room: "8診", note: "" },
@@ -1702,10 +1702,13 @@
       selects.forEach(sel => {
         const ensureSpace = () => {
           const rect = sel.getBoundingClientRect();
-          const spaceBelow = window.innerHeight - rect.bottom;
-          const requiredSpace = 380; // 確保有足夠展開高度，強制瀏覽器一律向下展開
-          if (spaceBelow < requiredSpace) {
-            const scrollNeeded = requiredSpace - spaceBelow + 25;
+          const vh = window.innerHeight;
+          const spaceBelow = vh - rect.bottom;
+          // Chromium 原生 <select> 40科別選項展開約需 480~520px
+          // 確保選單下方留有至少 540px 且下方空間大於上方空間，強制瀏覽器一律向下展開
+          const targetSpace = Math.max(540, Math.floor(vh * 0.60));
+          if (spaceBelow < targetSpace) {
+            const scrollNeeded = targetSpace - spaceBelow + 25;
             window.scrollBy({ top: scrollNeeded, behavior: "instant" });
           }
         };
@@ -1826,6 +1829,20 @@
       renderCrossTargetTags();
       if (crossBaseDoctorKey) {
         runCrossSearch();
+        // 選定基準醫師後，平滑滾動引導至第 2 步比對選單，使比對選單置於視窗上半部最佳視角
+        // 確保點開時下方擁有 >650px 極充裕空間，100% 絕對向下展開
+        setTimeout(() => {
+          const targetDeptEl = document.getElementById("cross-target-dept-select");
+          if (targetDeptEl) {
+            const rect = targetDeptEl.getBoundingClientRect();
+            if (rect.top > 240) {
+              window.scrollTo({
+                top: window.scrollY + rect.top - 170,
+                behavior: "smooth"
+              });
+            }
+          }
+        }, 120);
       }
     }function onCrossTargetDeptChanged() {
       const deptCode = document.getElementById("cross-target-dept-select").value;
