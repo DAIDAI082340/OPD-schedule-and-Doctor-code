@@ -934,73 +934,89 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.25);
     }
 
-    /* 頂部近期門診停診／異動快訊卡片 */
+    /* 頂部近期門診停診／異動快訊卡片（緊湊精巧版） */
     .suspension-alert-banner {
-      background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
-      border: 1.5px solid #f97316;
-      border-left: 5px solid #ea580c;
-      border-radius: 10px;
-      padding: 14px 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.12);
+      background: linear-gradient(135deg, #fffaf5 0%, #fff3e6 100%);
+      border: 1px solid #f97316;
+      border-left: 4px solid #ea580c;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 5px rgba(234, 88, 12, 0.08);
     }
     .suspension-alert-header {
       font-weight: 800;
       color: #9a3412;
-      font-size: 1.05rem;
+      font-size: 0.96rem;
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: 6px;
+      margin-bottom: 6px;
     }
 
-    /* 近期停診異動整合表格（同醫師集中於同一表格區塊內） */
+    /* 近期停診異動整合表格（小巧精緻版） */
     .suspension-table {
       width: 100%;
       border-collapse: collapse;
       background: #ffffff;
-      border-radius: 8px;
+      border-radius: 6px;
       overflow: hidden;
-      box-shadow: 0 1px 4px rgba(234, 88, 12, 0.08);
-      border: 1.5px solid #fed7aa;
+      box-shadow: 0 1px 3px rgba(234, 88, 12, 0.06);
+      border: 1px solid #fed7aa;
     }
     .suspension-table th {
       background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
       color: #9a3412;
       font-weight: 800;
-      font-size: 0.94rem;
-      padding: 9px 14px;
+      font-size: 0.86rem;
+      padding: 5px 10px;
       text-align: left;
-      border-bottom: 2px solid #fdba74;
+      border-bottom: 1.5px solid #fdba74;
     }
     .suspension-table td {
-      padding: 9px 14px;
-      font-size: 0.92rem;
+      padding: 5px 10px;
+      font-size: 0.85rem;
       border-bottom: 1px solid #ffedd5;
       vertical-align: middle;
+      line-height: 1.35;
     }
     .suspension-table tr.doc-group-last td {
-      border-bottom: 2px solid #fdba74;
+      border-bottom: 1.5px solid #fdba74;
     }
     .suspension-table tr:hover td {
       background-color: #fffaf5;
     }
     .suspension-doc-cell {
       background: #fffcf8 !important;
-      border-right: 2px solid #fdba74 !important;
+      border-right: 1.5px solid #fdba74 !important;
+    }
+    .suspension-doc-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .suspension-doc-pill:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
     }
     .suspension-date-tag {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       background: #fee2e2;
       border: 1px solid #fca5a5;
       color: #b91c1c;
-      padding: 3px 9px;
-      border-radius: 6px;
+      padding: 2px 6px;
+      border-radius: 4px;
       font-weight: 700;
-      font-size: 0.88rem;
-      box-shadow: 0 1px 2px rgba(185, 28, 28, 0.1);
+      font-size: 0.80rem;
+      box-shadow: 0 1px 2px rgba(185, 28, 28, 0.08);
     }
 </style>
 </head>
@@ -1808,7 +1824,7 @@
         crossBaseDoctorKey = "";
       }
       renderCrossTargetTags();
-      if (crossSelectedTargets.size > 0 && crossBaseDoctorKey) {
+      if (crossBaseDoctorKey) {
         runCrossSearch();
       }
     }function onCrossTargetDeptChanged() {
@@ -1953,19 +1969,14 @@
       const docSlots = schedules.filter(s => s.dept_code === deptCode && s.doctor === docName);
       const docCode = findDocCode(docName);
 
-      if (crossSelectedTargets.size === 0) {
-        resultArea.innerHTML = `<div class="card" style="border-left:4px solid var(--warn-border);">
-          請在上方選擇欲比對之目標科別或醫師，並點選「＋ 加入比對名單」。
-        </div>`;
-        return;
-      }
-
-      let html = `<div class="card" style="background:linear-gradient(135deg, #fbf9f6 0%, #f5f0e8 100%); border:1.5px solid #ded4c6; margin-bottom:14px; padding:16px 20px;">
-        <div style="font-size:1.06rem; font-weight:700; color:#3d2f27;">
+      const hasTargets = crossSelectedTargets.size > 0;
+      let html = `<div class="card" style="background:linear-gradient(135deg, #fbf9f6 0%, #f5f0e8 100%); border:1.5px solid #ded4c6; margin-bottom:12px; padding:13px 18px;">
+        <div style="font-size:1.05rem; font-weight:700; color:#3d2f27;">
           查詢基準：<span style="color:#6e5240;">[${deptCode}] ${docName} 醫師</span> ${docCode ? `<span class="doc-code" style="font-size:0.92rem; padding:2px 8px;">${docCode}</span>` : ''}（每週門診 <strong>${docSlots.length}</strong> 診次）
         </div>
-        <div style="font-size:0.92rem; color:#78695d; margin-top:6px; display:flex; align-items:center; gap:6px;">
-          <span style="color:#8c6d58;">✦</span> 點擊任何醫師標籤膠囊，皆可即時彈出查看該醫師每週完整門診表。
+        <div style="font-size:0.90rem; color:#78695d; margin-top:5px; display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
+          <span><span style="color:#8c6d58;">✦</span> 點擊任何醫師標籤膠囊，皆可即時彈出查看該醫師每週完整門診表。</span>
+          ${!hasTargets ? `<span style="color:#8c6d58; font-weight:600;">（💡 目前僅呈現基準醫師門診排班；如需跨科比對，可隨時於第 2 步驟選擇科別或醫師加入名單）</span>` : ''}
         </div>
       </div>`;
 
@@ -2080,11 +2091,11 @@
             if (idx === 0) {
               tableRowsHtml += `
                 <td rowspan="${rowCount}" class="suspension-doc-cell" style="vertical-align:middle;">
-                  <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-start;">
-                    <span class="matrix-doc-pill clickable" style="background:${docPal.bg}; border:1.5px solid ${docPal.border}; color:${docPal.text}; box-shadow:0 2px 5px ${docPal.shadow};" onclick="showDoctorScheduleModal('${group.doctor}', '${group.dept_code}', '${group.dept}', '${findDocCode(group.doctor) || ''}')" title="點擊查看 ${group.doctor} 醫師每週門診表">
+                  <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">
+                    <span class="suspension-doc-pill" style="background:${docPal.bg}; border:1px solid ${docPal.border}; color:${docPal.text}; box-shadow:0 1px 4px ${docPal.shadow};" onclick="showDoctorScheduleModal('${group.doctor}', '${group.dept_code}', '${group.dept}', '${findDocCode(group.doctor) || ''}')" title="點擊查看 ${group.doctor} 醫師每週門診表">
                       ${group.doctor} ${group.isBase ? '(基準)' : ''}
                     </span>
-                    <span style="font-size:0.86rem; color:#78695d; font-weight:700; margin-left:4px;">[${group.dept}]</span>
+                    <span style="font-size:0.80rem; color:#78695d; font-weight:700; margin-left:2px;">[${group.dept}]</span>
                   </div>
                 </td>
               `;
@@ -2092,9 +2103,9 @@
 
             tableRowsHtml += `
               <td style="font-weight:600; color:#433422;">
-                <span style="display:inline-block; min-width:62px; font-weight:800; color:#5c4333;">${item.weekday}</span>
+                <span style="display:inline-block; min-width:52px; font-weight:800; color:#5c4333;">${item.weekday}</span>
                 <span style="color:#8c6d58; font-weight:700; margin-right:4px;">${item.slot}</span>
-                <span style="font-size:0.86rem; color:#78695d;">（${item.room}）</span>
+                <span style="font-size:0.84rem; color:#78695d;">（${item.room}）</span>
               </td>
               <td>
                 <span class="suspension-date-tag">⚠️ ${item.note}</span>
@@ -2107,15 +2118,15 @@
           <div class="suspension-alert-banner">
             <div class="suspension-alert-header">
               <span>📢 近期門診停診／異動提醒</span>
-              <span style="font-size:0.88rem; font-weight:600; color:#c2410c;">（比對範圍內共 ${suspensionAlerts.length} 診次異動，就診前請特別留意）</span>
+              <span style="font-size:0.82rem; font-weight:600; color:#c2410c;">（共 ${suspensionAlerts.length} 診次異動，就診前請特別留意）</span>
             </div>
-            <div style="overflow-x:auto; margin-top:10px;">
+            <div style="overflow-x:auto; margin-top:6px;">
               <table class="suspension-table">
                 <thead>
                   <tr>
-                    <th style="width:26%; min-width:140px;">科別與醫師</th>
-                    <th style="width:34%; min-width:160px;">異動看診時段</th>
-                    <th style="width:40%; min-width:180px;">停診／異動日期標註</th>
+                    <th style="width:24%; min-width:110px;">科別與醫師</th>
+                    <th style="width:36%; min-width:140px;">異動看診時段</th>
+                    <th style="width:40%; min-width:160px;">停診／異動日期標註</th>
                   </tr>
                 </thead>
                 <tbody>
