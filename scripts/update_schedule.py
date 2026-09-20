@@ -59,9 +59,12 @@ def get_official_suspension_notice():
     seen_urls = set()
     for img_path, img_title in img_matches:
         full_url = "https://www.chhw.mohw.gov.tw" + img_path
+        clean_title = re.sub(r'\(另開新視窗\s*\)', '', img_title).strip()
+        # 排除非公告公文大圖之小圖標 (如純數字標題或小圖標)
+        if re.match(r'^\d+$', clean_title) or len(clean_title) < 3 or '0d49156d349d7fa0e223d371cc3cba4a' in img_path:
+            continue
         if full_url not in seen_urls:
             seen_urls.add(full_url)
-            clean_title = re.sub(r'\(另開新視窗\s*\)', '', img_title).strip()
             images.append({
                 "title": clean_title,
                 "url": full_url

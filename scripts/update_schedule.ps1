@@ -1,4 +1,4 @@
-﻿param (
+param (
     [switch]$CheckLastDay,
     [switch]$DryRun
 )
@@ -43,6 +43,9 @@ try {
         $fullUrl = "https://www.chhw.mohw.gov.tw" + $rawPath
         $rawT = $im.Groups[2].Value -replace '\(另開新視窗\s*\)', ''
         $rawT = $rawT.Trim()
+        if ($rawT -match '^\d+$' -or $rawT.Length -lt 3 -or $rawPath.Contains('0d49156d349d7fa0e223d371cc3cba4a')) {
+            continue
+        }
         if (-not $seenUrls.ContainsKey($fullUrl)) {
             $seenUrls[$fullUrl] = $true
             $noticeImages += [PSCustomObject]@{
