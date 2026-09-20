@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -6,27 +6,29 @@
   <title>門診時段交叉查詢與醫師代碼查詢系統</title>
   <style>
     :root {
-      --primary: #0284c7;
-      --primary-dark: #0369a1;
-      --primary-darker: #0c4a6e;
-      --primary-light: #e0f2fe;
-      --primary-surface: #f0f9ff;
-      --success-bg: #ecfdf5;
-      --success-border: #10b981;
-      --success-text: #065f46;
-      --warn-bg: #fffbeb;
-      --warn-border: #f59e0b;
-      --warn-text: #92400e;
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #cbd5e1;
-      --border-subtle: #e2e8f0;
+      --primary: #8c6d58;
+      --primary-dark: #6e5240;
+      --primary-darker: #4a372b;
+      --primary-light: #ede6dd;
+      --primary-surface: #fbf9f6;
+      --accent-champagne: #b99a68;
+      --accent-gold: #d4b572;
+      --success-bg: #f5f8f2;
+      --success-border: #8ba67d;
+      --success-text: #3c5432;
+      --warn-bg: #fdfbf7;
+      --warn-border: #d4b572;
+      --warn-text: #7c5c24;
+      --bg: #f5f2ed;
+      --card: #fcfaf7;
+      --text: #382e28;
+      --muted: #78695d;
+      --border: #ded5c8;
+      --border-subtle: #eae3d8;
       --radius: 12px;
-      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
-      --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
-      --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+      --shadow-sm: 0 1px 3px rgba(56, 46, 40, 0.05);
+      --shadow-md: 0 4px 10px -1px rgba(56, 46, 40, 0.07), 0 2px 4px -2px rgba(56, 46, 40, 0.04);
+      --shadow-lg: 0 10px 25px -4px rgba(56, 46, 40, 0.09), 0 4px 8px -2px rgba(56, 46, 40, 0.04);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,132 +36,133 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
       font-size: 16.5px;
       background-color: var(--bg);
-      background-image: radial-gradient(at 50% 0%, #edf4fc 0%, #f8fafc 55%);
+      background-image: radial-gradient(at 50% 0%, #fcfbf9 0%, #f5f2ed 65%);
       background-repeat: no-repeat;
       background-attachment: fixed;
       color: var(--text);
       line-height: 1.6;
-      padding-bottom: 70px;
+      padding-bottom: 280px; /* 充足空間防止選單開到底部 */
       -webkit-font-smoothing: antialiased;
     }
 
     header {
-      background: linear-gradient(135deg, #0b132b 0%, #172554 55%, #1e3a8a 100%);
+      background: linear-gradient(180deg, #534237 0%, #3e3027 100%);
       color: white;
-      padding: 24px 16px 20px 16px;
+      padding: 22px 16px 18px 16px;
       text-align: center;
-      box-shadow: 0 4px 20px -2px rgba(11, 19, 43, 0.35);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 18px rgba(45, 33, 26, 0.28);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
       position: relative;
     }
     .header-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 14px;
+      padding: 3px 14px;
       background: rgba(255, 255, 255, 0.12);
       border: 1px solid rgba(255, 255, 255, 0.22);
       border-radius: 20px;
       font-size: 0.84rem;
       font-weight: 600;
       letter-spacing: 0.06em;
-      color: #bae6fd;
-      margin-bottom: 8px;
+      color: #ede2d6;
+      margin-bottom: 6px;
       backdrop-filter: blur(4px);
     }
     header h1 {
       font-size: 1.55rem;
       font-weight: 800;
       letter-spacing: 0.03em;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     }
     header p {
       font-size: 0.92rem;
-      color: #93c5fd;
+      color: #d4c5b9;
       letter-spacing: 0.04em;
-      margin-top: 5px;
+      margin-top: 4px;
       opacity: 0.95;
     }
 
     .container {
       max-width: 990px;
-      margin: 18px auto;
+      margin: 16px auto;
       padding: 0 14px;
     }
 
     /* 頁籤 */
     .nav-tabs {
       display: flex;
-      background: #e2e8f0;
-      border: 1px solid #cbd5e1;
+      background: #e5ded5;
+      border: 1px solid #d8cfc3;
       border-radius: var(--radius);
       padding: 5px;
       gap: 6px;
-      margin-bottom: 18px;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.03);
+      margin-bottom: 16px;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
     }
     .nav-tab {
       flex: 1;
-      padding: 12px 10px;
+      padding: 11px 10px;
       border: none;
       background: transparent;
       font-size: 1.02rem;
       font-weight: 700;
-      color: #475569;
+      color: #6d5d52;
       border-radius: 9px;
       cursor: pointer;
       text-align: center;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .nav-tab:hover:not(.active) {
-      background: rgba(255, 255, 255, 0.6);
-      color: #0f172a;
+      background: rgba(255, 255, 255, 0.45);
+      color: #382e28;
     }
     .nav-tab.active {
       background: #ffffff;
-      color: var(--primary-dark);
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+      color: #3d2f27;
+      box-shadow: 0 2px 8px rgba(60, 45, 35, 0.12), 0 1px 2px rgba(60, 45, 35, 0.05);
     }
 
     .card {
       background: var(--card);
       border-radius: 14px;
-      padding: 22px 24px;
+      padding: 20px 22px;
       box-shadow: var(--shadow-lg);
-      border: 1px solid #e2e8f0;
-      margin-bottom: 20px;
+      border: 1.5px solid var(--border);
+      margin-bottom: 18px;
       transition: box-shadow 0.2s ease;
     }
 
     .card-title {
-      font-size: 1.22rem;
+      font-size: 1.20rem;
       font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 18px;
+      color: #3d2f27;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ded5c8;
       display: flex;
       align-items: center;
-      gap: 10px;
-      border-bottom: 2px solid #e0f2fe;
-      padding-bottom: 11px;
-      letter-spacing: 0.01em;
+      gap: 8px;
     }
 
-    .form-group { margin-bottom: 16px; }
+    .form-group {
+      margin-bottom: 14px;
+    }
     label {
       display: block;
       font-size: 1.02rem;
       font-weight: 700;
-      color: #1e293b;
+      color: #3d2f27;
       margin-bottom: 8px;
     }
 
     input[type="text"], select {
       width: 100%;
       padding: 11px 14px;
-      border: 1.5px solid var(--border);
+      border: 1.5px solid #cfc5b8;
       border-radius: 9px;
       font-size: 1.04rem;
-      background: white;
+      background: #ffffff;
       outline: none;
       color: var(--text);
       transition: all 0.2s ease;
@@ -167,8 +170,8 @@
       min-height: 46px;
     }
     input[type="text"]:focus, select:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3.5px rgba(2, 132, 199, 0.15);
+      border-color: #8c6d58;
+      box-shadow: 0 0 0 3.5px rgba(140, 109, 88, 0.18);
     }
 
     .grid-2 {
@@ -205,7 +208,7 @@
       padding: 10px;
       border: 1.5px solid var(--border);
       border-radius: 10px;
-      background: #f8fafc;
+      background: #fbf9f6;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
@@ -216,7 +219,7 @@
       gap: 6px;
       padding: 7px 16px;
       background: white;
-      border: 1px solid #cbd5e1;
+      border: 1px solid #cfc5b8;
       border-radius: 20px;
       font-size: 0.94rem;
       cursor: pointer;
@@ -225,8 +228,8 @@
       box-shadow: 0 1px 2px rgba(0,0,0,0.03);
     }
     .chip:hover {
-      border-color: #94a3b8;
-      background: #f1f5f9;
+      border-color: #8c6d58;
+      background: #f7f3ee;
     }
     .chip input[type="checkbox"] {
       width: 17px;
@@ -234,37 +237,37 @@
       cursor: pointer;
     }
     .chip.selected {
-      background: #e0f2fe;
-      border-color: #0284c7;
-      color: #0369a1;
+      background: #ede6dd;
+      border-color: #8c6d58;
+      color: #4a372b;
       font-weight: 700;
     }
 
     .btn-main {
       width: 100%;
-      background: linear-gradient(135deg, #0284c7, #0369a1);
+      background: linear-gradient(135deg, #5c4738 0%, #443327 100%);
       color: white;
-      border: none;
+      border: 1px solid #38291f;
       padding: 13px 16px;
       border-radius: 9px;
       font-size: 1.05rem;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+      box-shadow: 0 3px 10px rgba(68, 51, 39, 0.24);
       transition: all 0.2s ease;
       min-height: 48px;
     }
     .btn-main:hover {
-      background: linear-gradient(135deg, #0369a1, #075985);
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+      background: linear-gradient(135deg, #4d3a2d 0%, #36271e 100%);
+      box-shadow: 0 5px 14px rgba(68, 51, 39, 0.32);
       transform: translateY(-1px);
     }
     .btn-main:active { transform: translateY(0); }
 
     .btn-add {
-      background: linear-gradient(135deg, #0284c7, #0369a1);
+      background: linear-gradient(135deg, #8c6d58 0%, #6e5240 100%);
       color: white;
-      border: none;
+      border: 1px solid #5e4536;
       padding: 12px 18px;
       border-radius: 9px;
       font-size: 1.04rem;
@@ -272,22 +275,22 @@
       cursor: pointer;
       width: 100%;
       margin-bottom: 14px;
-      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+      box-shadow: 0 3px 8px rgba(90, 65, 50, 0.22);
       transition: all 0.2s ease;
       min-height: 46px;
     }
     .btn-add:hover {
-      background: linear-gradient(135deg, #0369a1, #075985);
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+      background: linear-gradient(135deg, #7c5f4c 0%, #5f4433 100%);
+      box-shadow: 0 5px 14px rgba(90, 65, 50, 0.30);
       transform: translateY(-1px);
     }
     .btn-add:active { transform: translateY(0); }
 
     .btn-reset {
       white-space: nowrap;
-      background: #f8fafc;
-      color: #334155;
-      border: 1.5px solid #cbd5e1;
+      background: #ede6dd;
+      color: #5c4c40;
+      border: 1.5px solid #cfc5b8;
       padding: 11px 18px;
       border-radius: 9px;
       font-size: 0.96rem;
@@ -296,83 +299,86 @@
       transition: all 0.2s ease;
     }
     .btn-reset:hover {
-      background: #f1f5f9;
-      color: #0f172a;
-      border-color: #94a3b8;
+      background: #e2d9cd;
+      color: #382e28;
+      border-color: #b8ad9e;
     }
 
     /* 已選取標籤清單 */
     .selected-docs-list {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 8px;
-      min-height: 48px;
-      padding: 10px 14px;
-      background: #f8fafc;
-      border-radius: 10px;
-      border: 1.5px dashed #cbd5e1;
+      min-height: 56px;
+      padding: 12px 14px;
+      background: #fbf9f6;
+      border-radius: 12px;
+      border: 1.5px dashed #c5baa9;
       margin-bottom: 14px;
-      align-items: center;
     }
     .selected-tag {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      background: linear-gradient(135deg, #0284c7, #0369a1);
-      color: white;
-      border-radius: 20px;
-      font-size: 0.94rem;
+      justify-content: space-between;
+      padding: 8px 18px;
+      border-radius: 25px;
+      font-size: 1.02rem;
       font-weight: 700;
-      box-shadow: 0 2px 5px rgba(2, 132, 199, 0.25);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      transition: all 0.2s ease;
     }
-    .selected-tag.base {
-      background: linear-gradient(135deg, #0f766e, #115e59);
-      box-shadow: 0 2px 5px rgba(15, 118, 110, 0.25);
+    .selected-tag:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
     }
     .selected-tag span.close-btn {
       cursor: pointer;
       font-weight: bold;
-      margin-left: 5px;
-      background: rgba(255,255,255,0.25);
+      margin-left: 10px;
+      background: rgba(255,255,255,0.28);
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-size: 0.82rem;
-      transition: background 0.15s;
+      transition: all 0.15s;
+      flex-shrink: 0;
     }
-    .selected-tag span.close-btn:hover { background: rgba(255,255,255,0.5); }
+    .selected-tag span.close-btn:hover {
+      background: rgba(255,255,255,0.5);
+      transform: scale(1.12);
+    }
 
     /* 結果卡片 */
     .result-section { margin-top: 18px; }
     .day-block {
       background: white;
       border-radius: 12px;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #ded5c8;
       margin-bottom: 14px;
       overflow: hidden;
       box-shadow: var(--shadow-sm);
     }
     .day-header {
-      background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
+      background: linear-gradient(180deg, #f7f3ee 0%, #ede6dd 100%);
       padding: 12px 16px;
       font-weight: 800;
       font-size: 1.02rem;
-      color: #1e293b;
+      color: #3d2f27;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1.5px solid #e2e8f0;
+      border-bottom: 1.5px solid #ded5c8;
     }
     .day-body { padding: 14px 16px; }
 
     .slot-group {
       margin-bottom: 12px;
       padding-bottom: 12px;
-      border-bottom: 1px dashed #e2e8f0;
+      border-bottom: 1px dashed #ded5c8;
     }
     .slot-group:last-child {
       margin-bottom: 0;
@@ -399,8 +405,8 @@
       font-weight: 700;
     }
     .badge-diff-time {
-      background: #f8fafc;
-      border: 1px solid #cbd5e1;
+      background: #fbf9f6;
+      border: 1px solid #ded5c8;
       color: var(--muted);
       padding: 3px 11px;
       border-radius: 12px;
@@ -413,22 +419,22 @@
       padding: 7px 12px;
       border-radius: 7px;
       font-size: 0.94rem;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
+      background: #fbf9f6;
+      border: 1px solid #ded5c8;
       box-shadow: 0 1px 2px rgba(0,0,0,0.03);
     }
     .doc-tag.match {
-      background: #f0fdf4;
-      border-color: #86efac;
-      color: #14532d;
+      background: #f5f8f2;
+      border-color: #8ba67d;
+      color: #3c5432;
       font-weight: 700;
     }
     .doc-tag.match-diff {
       background: #ffffff;
-      border-color: #fcd34d;
-      color: #92400e;
+      border-color: #d4b572;
+      color: #7c5c24;
       font-weight: 700;
-      box-shadow: 0 1px 3px rgba(245, 158, 11, 0.08);
+      box-shadow: 0 1px 3px rgba(212, 181, 114, 0.12);
     }
     .doc-tag.clickable {
       cursor: pointer;
@@ -449,12 +455,12 @@
       margin-bottom: 0;
     }
     .same-time-box {
-      background: #f0fdf4;
-      border: 1.5px solid #86efac;
+      background: #f5f8f2;
+      border: 1.5px solid #8ba67d;
     }
     .diff-time-box {
-      background: #fffbeb;
-      border: 1.5px solid #fde68a;
+      background: #fdfbf7;
+      border: 1.5px solid #d4b572;
     }
     .cross-section-title {
       font-weight: 700;
@@ -466,7 +472,7 @@
       flex-wrap: wrap;
     }
     .badge-same-time-lg {
-      background: #059669;
+      background: #5a7d4d;
       color: white;
       padding: 4px 13px;
       border-radius: 20px;
@@ -475,10 +481,10 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      box-shadow: 0 2px 5px rgba(5, 150, 105, 0.2);
+      box-shadow: 0 2px 5px rgba(90, 125, 77, 0.25);
     }
     .badge-diff-time-lg {
-      background: #d97706;
+      background: #a17036;
       color: white;
       padding: 4px 13px;
       border-radius: 20px;
@@ -487,12 +493,12 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      box-shadow: 0 2px 5px rgba(217, 119, 6, 0.2);
+      box-shadow: 0 2px 5px rgba(161, 112, 54, 0.25);
     }
     .slot-sub-header {
       font-weight: 700;
       font-size: 0.92rem;
-      color: #92400e;
+      color: #7c5c24;
       margin: 10px 0 6px 0;
       display: flex;
       align-items: center;
@@ -504,9 +510,9 @@
       overflow-x: auto;
       margin-top: 14px;
       border-radius: 12px;
-      border: 2px solid #94a3b8;
+      border: 2px solid #bdafa0;
       background: #ffffff;
-      box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.08);
+      box-shadow: 0 4px 14px -2px rgba(65, 48, 38, 0.08);
     }
     .cross-matrix-table {
       width: 100%;
@@ -515,14 +521,14 @@
       background: #ffffff;
     }
     .cross-matrix-table th {
-      background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
-      color: #1e293b;
+      background: linear-gradient(180deg, #ede7de 0%, #e2d9cd 100%);
+      color: #3e3027;
       font-weight: 800;
       font-size: 1.08rem;
       padding: 13px 10px;
       text-align: center;
-      border-bottom: 2.5px solid #64748b;
-      border-right: 1.5px solid #94a3b8;
+      border-bottom: 2.5px solid #a89988;
+      border-right: 1.5px solid #cfc4b6;
       letter-spacing: 0.02em;
     }
     .cross-matrix-table th:last-child {
@@ -531,13 +537,13 @@
     .cross-matrix-table td {
       padding: 10px 8px;
       vertical-align: top;
-      border-bottom: 1.5px solid #cbd5e1;
-      border-right: 1.5px solid #94a3b8;
+      border-bottom: 1.5px solid #ded5c8;
+      border-right: 1.5px solid #cfc4b6;
       background: #ffffff;
       transition: background-color 0.15s ease;
     }
     .cross-matrix-table tbody tr:hover td:not(.matrix-weekday-cell) {
-      background-color: rgba(248, 250, 252, 0.7);
+      background-color: rgba(251, 249, 246, 0.7);
     }
     .cross-matrix-table tr:last-child td {
       border-bottom: none;
@@ -546,15 +552,15 @@
       border-right: none;
     }
     .matrix-weekday-cell {
-      background: #f8fafc !important;
+      background: #f7f3ee !important;
       font-weight: 800;
-      color: #1e293b;
+      color: #43352b;
       text-align: center;
       vertical-align: middle !important;
       width: 14%;
       min-width: 75px;
       font-size: 1.10rem;
-      border-right: 2.5px solid #94a3b8 !important;
+      border-right: 2.5px solid #bdafa0 !important;
       letter-spacing: 0.02em;
     }
     .matrix-slot-cell {
@@ -571,41 +577,41 @@
       align-items: center;
       justify-content: center;
       padding: 7px 14px;
-      border-radius: 8px;
+      border-radius: 20px;
       font-size: 1.00rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
       text-align: center;
       line-height: 1.45;
       word-break: break-word;
     }
     .matrix-doc-pill:hover {
       transform: translateY(-2px);
-      box-shadow: 0 5px 12px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.4);
     }
     .matrix-doc-pill:active {
       transform: translateY(0);
-      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     }
     .base-doc-pill {
-      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+      background: linear-gradient(135deg, #5b4638 0%, #3e2d24 100%) !important;
       color: #ffffff !important;
-      border: 2px solid #075985 !important;
+      border: 1.5px solid #36261d !important;
       font-weight: 800;
-      box-shadow: 0 2px 5px rgba(2, 132, 199, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+      box-shadow: 0 2px 6px rgba(62, 45, 36, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
     }
     .base-doc-pill:hover {
-      box-shadow: 0 5px 14px rgba(2, 132, 199, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+      box-shadow: 0 5px 14px rgba(62, 45, 36, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
     }
     .matrix-legend-bar {
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
+      background: #fcfaf7;
+      border: 1.5px solid #ded5c8;
       border-radius: 10px;
       padding: 13px 18px;
       margin-bottom: 14px;
-      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+      box-shadow: 0 2px 6px rgba(56, 46, 40, 0.04);
     }
 
     /* 彈窗內矩陣表格樣式 */
@@ -613,20 +619,20 @@
       width: 100%;
       border-collapse: collapse;
       background: #ffffff;
-      border: 2px solid #94a3b8;
+      border: 2px solid #bdafa0;
       border-radius: 10px;
       overflow: hidden;
       margin-top: 10px;
     }
     .modal-matrix-table th {
-      background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
-      color: #1e293b;
+      background: linear-gradient(180deg, #ede7de 0%, #e2d9cd 100%);
+      color: #3e3027;
       font-weight: 800;
       font-size: 1.04rem;
       padding: 10px 8px;
       text-align: center;
-      border-bottom: 2px solid #64748b;
-      border-right: 1.5px solid #94a3b8;
+      border-bottom: 2px solid #a89988;
+      border-right: 1.5px solid #cfc4b6;
     }
     .modal-matrix-table th:last-child {
       border-right: none;
@@ -634,8 +640,8 @@
     .modal-matrix-table td {
       padding: 8px 6px;
       vertical-align: middle;
-      border-bottom: 1.5px solid #cbd5e1;
-      border-right: 1.5px solid #94a3b8;
+      border-bottom: 1.5px solid #ded5c8;
+      border-right: 1.5px solid #cfc4b6;
       text-align: center;
     }
     .modal-matrix-table tr:last-child td {
@@ -645,12 +651,12 @@
       border-right: none;
     }
     .modal-weekday-cell {
-      background: #f8fafc;
+      background: #f7f3ee;
       font-weight: 800;
-      color: #334155;
+      color: #43352b;
       font-size: 1.04rem;
       width: 15%;
-      border-right: 2px solid #94a3b8 !important;
+      border-right: 2px solid #bdafa0 !important;
     }
     .modal-slot-card {
       border-radius: 8px;
@@ -663,25 +669,25 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.7);
     }
     .slot-morning {
-      background: #f0f9ff;
-      border: 1.5px solid #7dd3fc;
-      color: #0369a1;
+      background: #f7f3ee;
+      border: 1.5px solid #cfc5b8;
+      color: #5c4738;
     }
     .slot-afternoon {
-      background: #fffbeb;
-      border: 1.5px solid #fcd34d;
-      color: #b45309;
+      background: #fdfbf7;
+      border: 1.5px solid #d4b572;
+      color: #7c5c24;
     }
     .slot-night {
-      background: #f5f3ff;
-      border: 1.5px solid #c4b5fd;
-      color: #6d28d9;
+      background: #f4ede6;
+      border: 1.5px solid #b58855;
+      color: #4a372b;
     }
 
     .dept-code {
       display: inline-block;
-      background: #e0e7ff;
-      color: #3730a3;
+      background: #ede6dd;
+      color: #5c4738;
       padding: 2px 7px;
       border-radius: 5px;
       font-size: 0.84rem;
@@ -691,8 +697,8 @@
     }
     .doc-code-tag {
       display: inline-block;
-      background: #dbeafe;
-      color: #1e40af;
+      background: #ede6dd;
+      color: #5c4738;
       padding: 2px 7px;
       border-radius: 5px;
       font-size: 0.84rem;
@@ -708,21 +714,21 @@
       justify-content: space-between;
       margin-top: 14px;
       padding: 14px 20px;
-      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-      border: 1.5px solid #bae6fd;
+      background: linear-gradient(135deg, #f7f3ee 0%, #ede6dd 100%);
+      border: 1.5px solid #cfc5b8;
       border-radius: 10px;
-      box-shadow: 0 1px 3px rgba(2, 132, 199, 0.06);
+      box-shadow: 0 2px 6px rgba(56, 46, 40, 0.05);
     }
-    .dept-title { font-size: 1.12rem; font-weight: 800; color: #0369a1; }
+    .dept-title { font-size: 1.15rem; font-weight: 800; color: #3d2f27; }
     .dept-code-tag-big {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 1.06rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #0284c7, #0369a1);
+      background: linear-gradient(135deg, #8c6d58 0%, #6e5240 100%);
       color: #ffffff;
-      padding: 4px 12px;
+      padding: 4px 14px;
       border-radius: 7px;
-      box-shadow: 0 2px 5px rgba(2, 132, 199, 0.25);
+      box-shadow: 0 2px 5px rgba(90, 65, 50, 0.25);
     }
     .doctor-grid {
       display: grid;
@@ -732,36 +738,36 @@
     }
     .doc-item {
       background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-left: 4px solid #0284c7;
+      border: 1px solid #ded5c8;
+      border-left: 4.5px solid #8c6d58;
       padding: 13px 18px;
       border-radius: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+      box-shadow: 0 2px 6px rgba(56, 46, 40, 0.04);
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .doc-item:hover {
-      background: #f0f9ff;
-      border-color: #7dd3fc;
-      border-left-color: #0369a1;
-      box-shadow: 0 8px 18px -2px rgba(2, 132, 199, 0.15);
+      background: #fbf9f6;
+      border-color: #cfc5b8;
+      border-left-color: #6e5240;
+      box-shadow: 0 8px 18px -2px rgba(90, 65, 50, 0.15);
       transform: translateY(-2px);
     }
-    .doc-name { font-weight: 700; color: #1e293b; font-size: 1.06rem; }
+    .doc-name { font-weight: 700; color: #3d2f27; font-size: 1.06rem; }
     .doc-code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-weight: 800;
-      background: #e0f2fe;
-      color: #0369a1;
+      background: #ede6dd;
+      color: #5c4738;
       padding: 3px 10px;
       border-radius: 6px;
       font-size: 1.08rem;
-      border: 1px solid #bae6fd;
+      border: 1px solid #cfc5b8;
     }
-    .doc-code.empty { background: #f1f5f9; color: #94a3b8; border-color: #e2e8f0; font-size: 0.88rem; }
+    .doc-code.empty { background: #f4ede6; color: #a19285; border-color: #ded5c8; font-size: 0.88rem; }
 
     .empty-tip {
       text-align: center;
@@ -778,7 +784,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(11, 19, 43, 0.65);
+      background: rgba(45, 33, 26, 0.65);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       z-index: 1000;
@@ -794,7 +800,7 @@
       width: 100%;
       max-width: 660px;
       border-radius: 14px;
-      box-shadow: 0 25px 50px -12px rgba(11, 19, 43, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 25px 50px -12px rgba(45, 33, 26, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15);
       overflow: hidden;
       animation: modalFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
       max-height: 85vh;
@@ -806,7 +812,7 @@
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
     .modal-header {
-      background: linear-gradient(135deg, #0b132b 0%, #172554 60%, #1e3a8a 100%);
+      background: linear-gradient(135deg, #4f3f35 0%, #3a2e26 100%);
       color: white;
       padding: 16px 22px;
       display: flex;
@@ -820,8 +826,8 @@
       letter-spacing: 0.02em;
     }
     .modal-close-btn {
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       color: white;
       width: 32px;
       height: 32px;
@@ -834,7 +840,7 @@
       transition: all 0.2s ease;
     }
     .modal-close-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.35);
       transform: rotate(90deg);
     }
     .modal-body {
@@ -844,27 +850,27 @@
     }
     .modal-footer {
       padding: 12px 22px;
-      background: #f8fafc;
-      border-top: 1px solid #e2e8f0;
+      background: #fcfaf7;
+      border-top: 1px solid #ded5c8;
       text-align: right;
     }
     .btn-modal-close {
-      background: linear-gradient(135deg, #0284c7, #0369a1);
+      background: linear-gradient(135deg, #8c6d58 0%, #6e5240 100%);
       color: white;
-      border: none;
+      border: 1px solid #5e4536;
       padding: 10px 24px;
       border-radius: 8px;
       font-weight: 700;
       font-size: 0.98rem;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+      box-shadow: 0 2px 6px rgba(90, 65, 50, 0.25);
       transition: all 0.2s ease;
     }
     .btn-modal-close:hover {
-      background: linear-gradient(135deg, #0369a1, #075985);
+      background: linear-gradient(135deg, #7c5f4c 0%, #5f4433 100%);
       transform: translateY(-1px);
     }
-  </style>
+</style>
 </head>
 <body>
 
@@ -1367,6 +1373,76 @@
     const weekdayMap = { 1: "星期一", 2: "星期二", 3: "星期三", 4: "星期四", 5: "星期五", 6: "星期六" };
     const slotRank = { "上午": 1, "下午": 2, "夜診": 3 };
 
+    // 柔和金屬棕／香檳金色系色彩池 (Color Array，依使用者加入名單順序動態分配，絕不綁定特定醫師)
+    const metallicColorPalette = [
+      { id: "espresso",   bg: "linear-gradient(135deg, #5b4638 0%, #3e2d24 100%)", border: "#36261d", text: "#ffffff", shadow: "rgba(62, 45, 36, 0.35)" }, // 1. 深培濃縮棕 (基準醫師)
+      { id: "caramel",    bg: "linear-gradient(135deg, #ab8967 0%, #8f6e4d 100%)", border: "#7d5e3f", text: "#ffffff", shadow: "rgba(143, 110, 77, 0.35)" }, // 2. 焦糖暖金棕
+      { id: "rosebronze", bg: "linear-gradient(135deg, #9e6962 0%, #824f48 100%)", border: "#70403a", text: "#ffffff", shadow: "rgba(130, 79, 72, 0.35)" },  // 3. 玫瑰金屬褐
+      { id: "olivetaupe", bg: "linear-gradient(135deg, #7c735d 0%, #635b47 100%)", border: "#524b3a", text: "#ffffff", shadow: "rgba(99, 91, 71, 0.35)" },   // 4. 橄欖金屬灰褐
+      { id: "cognac",     bg: "linear-gradient(135deg, #a15f48 0%, #834431 100%)", border: "#713524", text: "#ffffff", shadow: "rgba(131, 68, 49, 0.35)" },   // 5. 干邑琥珀棕
+      { id: "slate",      bg: "linear-gradient(135deg, #6e6766 0%, #544d4c 100%)", border: "#453e3d", text: "#ffffff", shadow: "rgba(84, 77, 76, 0.35)" },    // 6. 錫灰古銅褐
+      { id: "champagne",  bg: "linear-gradient(135deg, #b99a68 0%, #9e7f4e 100%)", border: "#886c3d", text: "#ffffff", shadow: "rgba(158, 127, 78, 0.35)" }, // 7. 香檳古銅金
+      { id: "walnut",     bg: "linear-gradient(135deg, #6c534e 0%, #4f3935 100%)", border: "#402c29", text: "#ffffff", shadow: "rgba(79, 57, 53, 0.35)" },    // 8. 深胡桃可可棕
+      { id: "brass",      bg: "linear-gradient(135deg, #b58855 0%, #976b3b 100%)", border: "#805628", text: "#ffffff", shadow: "rgba(151, 107, 59, 0.35)" },  // 9. 暖黃銅赭
+      { id: "copper",     bg: "linear-gradient(135deg, #8b5344 0%, #6d392c 100%)", border: "#5a2b20", text: "#ffffff", shadow: "rgba(109, 57, 44, 0.35)" }   // 10. 燻銅深赤褐
+    ];
+
+    // 動態色彩分配管理：依照「加入比對名單的順序」依序賦予顏色，超過自動循環
+    function getDynamicColorAssignment() {
+      const docColorMap = new Map();
+      const tagColorMap = new Map();
+      let colorIndex = 0;
+
+      // 1. 基準醫師固定分配第 1 位色彩 (espresso 深培濃縮棕)
+      if (crossBaseDoctorKey) {
+        const baseColor = metallicColorPalette[0];
+        docColorMap.set(crossBaseDoctorKey, baseColor);
+        colorIndex = 1;
+      }
+
+      // 2. 依序為比對目標分配色彩池
+      crossSelectedTargets.forEach(key => {
+        const pal = metallicColorPalette[colorIndex % metallicColorPalette.length];
+        tagColorMap.set(key, pal);
+        colorIndex++;
+
+        if (key.startsWith("DOC_")) {
+          const docKey = key.replace("DOC_", "");
+          docColorMap.set(docKey, pal);
+        } else if (key.startsWith("DEPT_")) {
+          const deptCode = key.replace("DEPT_", "");
+          const deptDocs = getDocsByDept(deptCode);
+          deptDocs.forEach(d => {
+            const dk = `${deptCode}___${d}`;
+            if (!docColorMap.has(dk)) {
+              docColorMap.set(dk, pal);
+            }
+          });
+        }
+      });
+
+      return { docColorMap, tagColorMap };
+    }
+
+    // 防止下拉選單因視窗底部空間不足而強制向上彈出展開
+    function initAntiUpwardDropdowns() {
+      const selects = document.querySelectorAll("select");
+      selects.forEach(sel => {
+        const ensureSpace = () => {
+          const rect = sel.getBoundingClientRect();
+          const spaceBelow = window.innerHeight - rect.bottom;
+          const requiredSpace = 380; // 確保有足夠展開高度，強制瀏覽器一律向下展開
+          if (spaceBelow < requiredSpace) {
+            const scrollNeeded = requiredSpace - spaceBelow + 25;
+            window.scrollBy({ top: scrollNeeded, behavior: "instant" });
+          }
+        };
+        sel.addEventListener("pointerdown", ensureSpace, { passive: true });
+        sel.addEventListener("mousedown", ensureSpace, { passive: true });
+        sel.addEventListener("focus", ensureSpace, { passive: true });
+      });
+    }
+
     function getAllDepts() {
       const map = new Map();
       schedules.forEach(s => {
@@ -1399,6 +1475,7 @@
     function initApp() {
       initCrossTab();
       initCodeSearchModule();
+      initAntiUpwardDropdowns();
     }
 
     // ==================== 功能 1: 某科別醫師門診時段 vs 其他科別同時段醫師查詢 ====================
@@ -1509,40 +1586,51 @@
       document.getElementById("cross-result-area").innerHTML = "";
     }
 
-    function renderCrossTargetTags() {
+        function renderCrossTargetTags() {
       const container = document.getElementById("cross-selected-tags");
       if (!crossBaseDoctorKey && crossSelectedTargets.size === 0) {
-        container.innerHTML = `<span style="color:#94a3b8; font-size:0.85rem;">尚未加入比對名單</span>`;
+        container.innerHTML = `<span style="color:#8c7e72; font-size:0.95rem;">尚未加入比對名單</span>`;
         return;
       }
       container.innerHTML = "";
       const allDepts = getAllDepts();
+      const { docColorMap, tagColorMap } = getDynamicColorAssignment();
 
-      // 基準醫師標籤
+      // 1. 基準醫師標籤 (第 1 位固定使用色彩池第 1 色深培濃縮棕)
       if (crossBaseDoctorKey) {
         const [bCode, bDoc] = crossBaseDoctorKey.split("___");
         const bDocCode = findDocCode(bDoc);
+        const baseColor = metallicColorPalette[0];
         const baseTag = document.createElement("div");
-        baseTag.className = "selected-tag base";
-        baseTag.innerHTML = `[基準醫師] [${bCode}] ${bDoc} ${bDocCode ? `(${bDocCode})` : ''} <span class="close-btn" onclick="clearCrossBaseDoctor()">✕</span>`;
+        baseTag.className = "selected-tag";
+        baseTag.style.background = baseColor.bg;
+        baseTag.style.border = `1.5px solid ${baseColor.border}`;
+        baseTag.style.color = baseColor.text;
+        baseTag.style.boxShadow = `0 2px 6px ${baseColor.shadow}`;
+        baseTag.innerHTML = `<span>[基準醫師] [${bCode}] ${bDoc} ${bDocCode ? `(${bDocCode})` : ''}</span><span class="close-btn" onclick="clearCrossBaseDoctor()" title="移除基準醫師">✕</span>`;
         container.appendChild(baseTag);
       }
 
-      // 所有比對目標標籤
+      // 2. 所有比對目標標籤 (依使用者加入順序動態分配色彩池第 2 色、第 3 色……，超過循環)
       crossSelectedTargets.forEach(key => {
+        const pal = tagColorMap.get(key) || metallicColorPalette[1];
         const tag = document.createElement("div");
         tag.className = "selected-tag";
+        tag.style.background = pal.bg;
+        tag.style.border = `1.5px solid ${pal.border}`;
+        tag.style.color = pal.text;
+        tag.style.boxShadow = `0 2px 6px ${pal.shadow}`;
 
         if (key.startsWith("DEPT_")) {
           const code = key.replace("DEPT_", "");
           const dObj = allDepts.find(d => d.code === code);
           const name = dObj ? dObj.name : code;
-          tag.innerHTML = `[比對科別] [${code}] ${name} <span class="close-btn" onclick="removeCrossTarget('${key}')">✕</span>`;
+          tag.innerHTML = `<span>[比對科別] [${code}] ${name}</span><span class="close-btn" onclick="removeCrossTarget('${key}')" title="移除比對科別">✕</span>`;
         } else {
           const docStr = key.replace("DOC_", "");
           const [code, doc] = docStr.split("___");
           const docCode = findDocCode(doc);
-          tag.innerHTML = `[比對醫師] [${code}] ${doc} ${docCode ? `(${docCode})` : ''} <span class="close-btn" onclick="removeCrossTarget('${key}')">✕</span>`;
+          tag.innerHTML = `<span>[比對醫師] [${code}] ${doc} ${docCode ? `(${docCode})` : ''}</span><span class="close-btn" onclick="removeCrossTarget('${key}')" title="移除比對醫師">✕</span>`;
         }
         container.appendChild(tag);
       });
@@ -1554,7 +1642,7 @@
       document.getElementById("cross-result-area").innerHTML = "";
     }
 
-    function runCrossSearch() {
+        function runCrossSearch() {
       if (!crossBaseDoctorKey) {
         const docSelect = document.getElementById("cross-base-doc-select");
         if (docSelect) crossBaseDoctorKey = docSelect.value;
@@ -1577,12 +1665,12 @@
         return;
       }
 
-      let html = `<div class="card" style="background:linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%); border:1px solid #bae6fd; margin-bottom:14px; padding:16px 20px;">
-        <div style="font-size:1.06rem; font-weight:700; color:#0f172a;">
-          查詢基準：<span style="color:#0369a1;">[${deptCode}] ${docName} 醫師</span> ${docCode ? `<span class="doc-code-tag" style="font-size:0.92rem;">${docCode}</span>` : ''}（每週門診 <strong>${docSlots.length}</strong> 診次）
+      let html = `<div class="card" style="background:linear-gradient(135deg, #fbf9f6 0%, #f5f0e8 100%); border:1.5px solid #ded4c6; margin-bottom:14px; padding:16px 20px;">
+        <div style="font-size:1.06rem; font-weight:700; color:#3d2f27;">
+          查詢基準：<span style="color:#6e5240;">[${deptCode}] ${docName} 醫師</span> ${docCode ? `<span class="doc-code" style="font-size:0.92rem; padding:2px 8px;">${docCode}</span>` : ''}（每週門診 <strong>${docSlots.length}</strong> 診次）
         </div>
-        <div style="font-size:0.92rem; color:#64748b; margin-top:6px; display:flex; align-items:center; gap:6px;">
-          <span style="color:#0284c7;">✦</span> 點擊任何醫師標籤膠囊，皆可即時彈出查看該醫師每週完整門診表。
+        <div style="font-size:0.92rem; color:#78695d; margin-top:6px; display:flex; align-items:center; gap:6px;">
+          <span style="color:#8c6d58;">✦</span> 點擊任何醫師標籤膠囊，皆可即時彈出查看該醫師每週完整門診表。
         </div>
       </div>`;
 
@@ -1600,9 +1688,14 @@
         return false;
       });
 
-      // 取得所有出現在比對結果中的獨立醫師清單（供指派個別專屬顏色，查詢超過3位以上顏色皆有區分）
+      // 取得動態分配色彩池 (上方已加入標籤與下方比對結果嚴格連動同一組動態顏色)
+      const { docColorMap } = getDynamicColorAssignment();
+
+      // 取得所有出現在比對結果中的獨立醫師清單
       const targetDoctorList = [];
       const seenTargetDocs = new Set();
+      let extraColorIdx = crossSelectedTargets.size + 1;
+
       allTargetSchedules.forEach(s => {
         const key = `${s.dept_code}___${s.doctor}`;
         if (!seenTargetDocs.has(key)) {
@@ -1613,25 +1706,12 @@
             dept_name: s.dept_name,
             docCode: findDocCode(s.doctor) || ""
           });
+          // 若為整科匯入而尚未有專屬顏色，依序自色彩池延續指派
+          if (!docColorMap.has(key)) {
+            docColorMap.set(key, metallicColorPalette[extraColorIdx % metallicColorPalette.length]);
+            extraColorIdx++;
+          }
         }
-      });
-
-      // 專屬調色盤庫（各大色相互斥，絕不撞色；邊框 2px 飽和高對比）
-      const targetPalettes = [
-        { bg: "#ecfdf5", border: "#059669", text: "#064e3b" }, // 1. 正翡翠綠
-        { bg: "#fff7ed", border: "#ea580c", text: "#7c2d12" }, // 2. 活力亮橙
-        { bg: "#faf5ff", border: "#9333ea", text: "#581c87" }, // 3. 皇家深紫
-        { bg: "#fff1f2", border: "#e11d48", text: "#881337" }, // 4. 石榴鮮紅
-        { bg: "#fefce8", border: "#854d0e", text: "#422006" }, // 5. 焦糖深棕（大地色，徹底區隔綠/紫）
-        { bg: "#f1f5f9", border: "#334155", text: "#0f172a" }, // 6. 沉穩碳黑（黑墨邊框，極致高反差）
-        { bg: "#ecfeff", border: "#0891b2", text: "#164e63" }, // 7. 電光天青（亮水青）
-        { bg: "#fdf4ff", border: "#c026d3", text: "#701a75" }  // 8. 鮮亮洋紅（芭比桃紅）
-      ];
-
-      const doctorColorMap = new Map();
-      targetDoctorList.forEach((td, idx) => {
-        const pal = targetPalettes[idx % targetPalettes.length];
-        doctorColorMap.set(`${td.dept_code}___${td.doctor}`, pal);
       });
 
       // 檢查哪些星期有門診（無門診不用呈現：只顯示基準醫師或比對目標有出診的星期）
@@ -1645,27 +1725,29 @@
       }
 
       if (activeWeekdays.length === 0) {
-        html += `<div style="color: #64748b; font-size: 0.9rem; padding: 20px; text-align: center; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1;">
+        html += `<div style="color: #78695d; font-size: 0.9rem; padding: 20px; text-align: center; background: #fbf9f6; border-radius: 8px; border: 1.5px dashed #ded5c8;">
           所選比對目標與基準醫師在全週各時段均無出診記錄。
         </div>`;
         resultArea.innerHTML = html;
         return;
       }
 
-      // 頂部醫師色彩圖例列（純色呈現，無圖案）
+      const baseColor = metallicColorPalette[0];
+
+      // 頂部醫師色彩圖例列
       html += `<div class="matrix-legend-bar">
-        <div style="font-size:0.98rem; font-weight:800; color:#1e293b; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-          <span style="display:inline-block; width:4px; height:15px; background:#0284c7; border-radius:2px;"></span>
+        <div style="font-size:0.98rem; font-weight:800; color:#3d2f27; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+          <span style="display:inline-block; width:4px; height:15px; background:#8c6d58; border-radius:2px;"></span>
           醫師專屬色彩圖例：
         </div>
         <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
-          <span class="matrix-doc-pill base-doc-pill clickable" onclick="showDoctorScheduleModal('${docName}', '${deptCode}', '${masterData.find(m=>m.deptCode===deptCode)?.dept || ''}', '${docCode || ''}')" title="點擊查看 ${docName} 醫師門診表">
+          <span class="matrix-doc-pill base-doc-pill clickable" style="background:${baseColor.bg}; border:1.5px solid ${baseColor.border}; color:${baseColor.text}; box-shadow:0 2px 6px ${baseColor.shadow};" onclick="showDoctorScheduleModal('${docName}', '${deptCode}', '${masterData.find(m=>m.deptCode===deptCode)?.dept || ''}', '${docCode || ''}')" title="點擊查看 ${docName} 醫師門診表">
             ${docName} (基準)
           </span>`;
 
       targetDoctorList.forEach(td => {
-        const pal = doctorColorMap.get(`${td.dept_code}___${td.doctor}`);
-        html += `<span class="matrix-doc-pill clickable" style="background:${pal.bg}; border:2px solid ${pal.border}; color:${pal.text};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${td.docCode}')" title="點擊查看 ${td.doctor} 醫師門診表">
+        const pal = docColorMap.get(`${td.dept_code}___${td.doctor}`) || metallicColorPalette[1];
+        html += `<span class="matrix-doc-pill clickable" style="background:${pal.bg}; border:1.5px solid ${pal.border}; color:${pal.text}; box-shadow:0 2px 6px ${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${td.docCode}')" title="點擊查看 ${td.doctor} 醫師門診表">
           ${td.doctor}
         </span>`;
       });
@@ -1692,30 +1774,26 @@
           <td class="matrix-weekday-cell">${weekdayMap[w]}</td>`;
 
         slots.forEach(sl => {
-          // 基準醫師在此時段的排班
           const baseMatch = docSlots.find(s => s.weekday === w && (s.slot === sl || (sl === "夜診" && s.slot.includes("夜"))));
-          
-          // 比對目標醫師在此時段的排班
           const targetMatches = allTargetSchedules.filter(s => s.weekday === w && (s.slot === sl || (sl === "夜診" && s.slot.includes("夜"))));
 
           html += `<td class="matrix-slot-cell"><div class="matrix-pills-wrap">`;
 
-          // 若有基準醫師，放於頂部（深藍純色膠囊）
+          // 若有基準醫師，放於頂部（第 1 位濃縮深棕）
           if (baseMatch) {
-            html += `<span class="matrix-doc-pill base-doc-pill clickable" onclick="showDoctorScheduleModal('${docName}', '${deptCode}', '${masterData.find(m=>m.deptCode===deptCode)?.dept || ''}', '${docCode || ''}')" title="點擊查看 ${docName} 醫師每週門診表">
+            html += `<span class="matrix-doc-pill base-doc-pill clickable" style="background:${baseColor.bg}; border:1.5px solid ${baseColor.border}; color:${baseColor.text}; box-shadow:0 2px 6px ${baseColor.shadow};" onclick="showDoctorScheduleModal('${docName}', '${deptCode}', '${masterData.find(m=>m.deptCode===deptCode)?.dept || ''}', '${docCode || ''}')" title="點擊查看 ${docName} 醫師每週門診表">
               ${docName} (${baseMatch.room || "診間"}${baseMatch.note ? " / " + baseMatch.note : ""})
             </span>`;
           }
 
-          // 比對醫師依序放於下方（各自專屬純色膠囊）
+          // 比對醫師依序放於下方（使用同一組動態分配色彩池）
           targetMatches.forEach(td => {
-            const pal = doctorColorMap.get(`${td.dept_code}___${td.doctor}`) || targetPalettes[0];
-            html += `<span class="matrix-doc-pill clickable" style="background:${pal.bg}; border:2px solid ${pal.border}; color:${pal.text};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
+            const pal = docColorMap.get(`${td.dept_code}___${td.doctor}`) || metallicColorPalette[1];
+            html += `<span class="matrix-doc-pill clickable" style="background:${pal.bg}; border:1.5px solid ${pal.border}; color:${pal.text}; box-shadow:0 2px 6px ${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
               ${td.doctor} (${td.room || "診間"}${td.note ? " / " + td.note : ""})
             </span>`;
           });
 
-          // 若皆無門診，乾淨留白，不呈現任何字樣
           html += `</div></td>`;
         });
 
@@ -1727,8 +1805,7 @@
       resultArea.innerHTML = html;
     }
 
-
-    // ==================== 功能 2: 醫師/科別代碼速查模組 ====================
+        // ==================== 功能 2: 醫師/科別代碼速查模組 ====================
     function initCodeSearchModule() {
       const codeDeptSelect = document.getElementById("codeDeptSelect");
       const doctorContainer = document.getElementById("doctorContainer");
@@ -1740,15 +1817,19 @@
 
       const deptMap = new Map();
       masterData.forEach(item => {
-        if (!deptMap.has(item.dept)) {
-          deptMap.set(item.dept, item.deptCode);
+        if (!deptMap.has(item.deptCode)) {
+          deptMap.set(item.deptCode, { code: item.deptCode, name: item.dept });
         }
       });
 
-      deptMap.forEach((code, dept) => {
+      // 依科別代碼按數字及英文字母排序（與門診比對下拉選單順序完全一致：01, 0202, 03... AA, AB...）
+      const sortedDepts = Array.from(deptMap.values()).sort((a, b) => a.code.localeCompare(b.code));
+
+      codeDeptSelect.innerHTML = '<option value="">-- 請選擇科別 --</option>';
+      sortedDepts.forEach(d => {
         const opt = document.createElement("option");
-        opt.value = dept;
-        opt.textContent = `[${code}] ${dept}`;
+        opt.value = d.name;
+        opt.textContent = `[${d.code}] ${d.name}`;
         codeDeptSelect.appendChild(opt);
       });
 
@@ -1779,11 +1860,11 @@
         <div class="doc-item" onclick="showDoctorScheduleModal('${item.doc}', '${item.deptCode}', '${item.dept}', '${item.docCode || ''}')">
           <div>
             <span class="doc-name">${item.doc}</span>
-            <div style="font-size: 0.86rem; color: #64748b; margin-top: 3px;">${item.dept} (${item.deptCode})</div>
+            <div style="font-size: 0.86rem; color: #78695d; margin-top: 3px;">${item.dept} (${item.deptCode})</div>
           </div>
           <div style="text-align: right;">
             ${item.docCode ? `<span class="doc-code">${item.docCode}</span>` : `<span class="doc-code empty">無代碼</span>`}
-            <div style="font-size: 0.82rem; color: #0284c7; margin-top: 5px; font-weight: 700;">📅 查看門診 ❯</div>
+            <div style="font-size: 0.82rem; color: #8c6d58; margin-top: 5px; font-weight: 700;">📅 查看門診 ❯</div>
           </div>
         </div>
       `).join("");
@@ -1831,12 +1912,12 @@
       const docSlots = schedules.filter(s => s.doctor === docName && (deptCode ? s.dept_code === deptCode : true));
 
       let bodyHtml = `
-        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%); padding: 14px 18px; border-radius: 10px; margin-bottom: 14px; border: 1.5px solid #bae6fd;">
+        <div style="background: linear-gradient(135deg, #f7f3ee 0%, #ede6dd 100%); padding: 14px 18px; border-radius: 10px; margin-bottom: 14px; border: 1.5px solid #ded4c6;">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <strong style="color: #0f172a; font-size: 1.18rem; letter-spacing: 0.02em;">${docName} 醫師</strong>
+            <strong style="color: #3d2f27; font-size: 1.18rem; letter-spacing: 0.02em;">${docName} 醫師</strong>
             <div>
-              <span style="font-size: 0.88rem; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; padding: 4px 12px; border-radius: 14px; font-weight: 700; box-shadow: 0 1px 3px rgba(2, 132, 199, 0.2);">[${deptCode}] ${deptName}</span>
-              <span style="font-size: 0.92rem; background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 14px; font-weight: 800; font-family: ui-monospace, SFMono-Regular, monospace; margin-left: 6px; border: 1px solid #bae6fd;">${codeText}</span>
+              <span style="font-size: 0.88rem; background: linear-gradient(135deg, #8c6d58, #6e5240); color: white; padding: 4px 12px; border-radius: 14px; font-weight: 700; box-shadow: 0 1px 3px rgba(90, 65, 50, 0.25);">[${deptCode}] ${deptName}</span>
+              <span style="font-size: 0.92rem; background: #e5ded5; color: #5c4738; padding: 4px 12px; border-radius: 14px; font-weight: 800; font-family: ui-monospace, SFMono-Regular, monospace; margin-left: 6px; border: 1px solid #cfc5b8;">${codeText}</span>
             </div>
           </div>
         </div>
