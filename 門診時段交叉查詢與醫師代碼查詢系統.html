@@ -922,6 +922,8 @@
     .pill-suspension-badge {
       display: inline-flex;
       align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 3px;
       background: #b91c1c;
       color: #ffffff;
@@ -931,7 +933,14 @@
       font-weight: 800;
       margin-left: 6px;
       letter-spacing: 0;
+      word-break: normal;
       box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    }
+
+    /* 原子日期單元：內部絕對禁止斷字折行，換行一律整組完整落於同行 */
+    .date-atomic {
+      white-space: nowrap;
+      display: inline-block;
     }
 
     /* 頂部近期門診停診／異動快訊卡片（緊湊精巧版） */
@@ -1171,6 +1180,15 @@
       if (!slot) return "";
       if (slot.includes("夜診")) return "夜診";
       return slot.endsWith("診") ? slot : (slot + "診");
+    }
+
+    // 停診日期字串安全原子化（防止 10/20 等日期數字在換行時被切開，如 1 與 0/20 分離）
+    function formatSuspensionNoteHtml(note) {
+      if (!note) return "";
+      // 將停診字串中的各個獨立日期（如 10/20、10/20停診）以 .date-atomic (white-space: nowrap) 包裹
+      // 並在點號後加上 <wbr> 安全換行點，保證各日期內部絕對不折行，換行時整組日期完整落於同行
+      return note.replace(/(\d{1,2}\/\d{1,2}(?:[^\d\.\s\/]+)?)/g, '<span class="date-atomic">$1</span>')
+                 .replace(/\.(?=<span)/g, '.<wbr>');
     }
 
     // 樣式更新輔助函數
@@ -2125,7 +2143,7 @@
                 <span style="font-size:0.84rem; color:#78695d;">（${item.room}）</span>
               </td>
               <td>
-                <span class="suspension-date-tag">⚠️ ${item.note}</span>
+                <span class="suspension-date-tag">⚠️ ${formatSuspensionNoteHtml(item.note)}</span>
               </td>
             </tr>`;
           });
@@ -2224,7 +2242,7 @@
           if (baseMatch) {
             const hasStop = baseMatch.note && baseMatch.note.includes("停診");
             html += `<span class="matrix-doc-pill base-doc-pill clickable" style="background:${baseColor.bg}; border:1.5px solid ${baseColor.border}; color:${baseColor.text}; box-shadow:0 2px 6px ${baseColor.shadow};" onclick="showDoctorScheduleModal('${docName}', '${deptCode}', '${masterData.find(m=>m.deptCode===deptCode)?.dept || ''}', '${docCode || ''}')" title="點擊查看 ${docName} 醫師每週門診表">
-              ${docName} (${baseMatch.room || "診間"}${baseMatch.note && !hasStop ? " / " + baseMatch.note : ""})${hasStop ? `<span class="pill-suspension-badge">⚠️ ${baseMatch.note}</span>` : ""}
+              ${docName} (${baseMatch.room || "診間"}${baseMatch.note && !hasStop ? " / " + baseMatch.note : ""})${hasStop ? `<span class="pill-suspension-badge">⚠️ ${formatSuspensionNoteHtml(baseMatch.note)}</span>` : ""}
             </span>`;
           }
 
@@ -2233,7 +2251,7 @@
             const pal = docColorMap.get(`${td.dept_code}___${td.doctor}`) || metallicColorPalette[1];
             const hasStop = td.note && td.note.includes("停診");
             html += `<span class="matrix-doc-pill clickable" style="background:${pal.bg}; border:1.5px solid ${pal.border}; color:${pal.text}; box-shadow:0 2px 6px ${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
-              ${td.doctor} (${td.room || "診間"}${td.note && !hasStop ? " / " + td.note : ""})${hasStop ? `<span class="pill-suspension-badge">⚠️ ${td.note}</span>` : ""}
+              ${td.doctor} (${td.room || "診間"}${td.note && !hasStop ? " / " + td.note : ""})${hasStop ? `<span class="pill-suspension-badge">⚠️ ${formatSuspensionNoteHtml(td.note)}</span>` : ""}
             </span>`;
           });
 
@@ -2415,7 +2433,7 @@
                   <span style="font-size: 0.88rem; font-weight: 700; letter-spacing: 0.04em; color: #ffffff; opacity: 0.95;">${slotLabel}</span>
                   <strong style="font-size: 1.08rem; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.25);">${m.room || "看診中"}</strong>
                   ${m.note ? (hasStop ? 
-                    `<span style="font-size: 0.82rem; background: #b91c1c; color: #ffffff; padding: 2px 8px; border-radius: 6px; font-weight: 800; margin-top: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.3);">⚠️ ${m.note}</span>` :
+                    `<span style="font-size: 0.82rem; background: #b91c1c; color: #ffffff; padding: 2px 8px; border-radius: 6px; font-weight: 800; margin-top: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.3); word-break: normal;">⚠️ ${formatSuspensionNoteHtml(m.note)}</span>` :
                     `<span style="font-size: 0.80rem; background: rgba(255,255,255,0.25); color: #ffffff; padding: 2px 7px; border-radius: 4px; font-weight: 700; margin-top: 3px; border: 1px solid rgba(255,255,255,0.35);">${m.note}</span>`
                   ) : ""}
                 </div>`;

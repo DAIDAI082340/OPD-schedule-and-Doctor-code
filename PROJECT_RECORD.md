@@ -9,7 +9,7 @@
 | **專案名稱** | 門診時段交叉查詢與醫師代碼查詢系統 (Outpatient Clinic Schedule Cross-Query & Doctor Code Assistant) |
 | **專案代號** | `Clinic-Schedule-CrossQuery` |
 | **建立日期** | 2026-09-18 |
-| **目前版本** | `v0.7.3` (下拉式選單一律向下展開優化、停診日期全面完整列出無縮寫) |
+| **目前版本** | `v0.7.4` (停診日期原子換行優化、防止日期數字被截斷拆散、下拉選單向下展開優化) |
 | **主要目標使用者** | 臨床醫師、門診跟診護理師、轉診中心個案管理師、批價掛號櫃檯人員、專科護理師 (NP)、各科行政秘書 |
 | **運作環境** | 現代網頁瀏覽器 (Chrome, Edge, Safari, Firefox)、支援行動裝置 (RWD)、純前端零依賴離線運作 (Zero-dependency Web App) |
 | **GitHub 倉庫** | `https://github.com/DAIDAI082340/OPD-schedule-and-Doctor-code` |
@@ -190,6 +190,14 @@ flowchart TD
     - 徹底解決「深靛藍 vs 薰衣紫」偏紫藍撞色問題（改為碳黑 vs 正紫）。
     - 徹底解決「高劍虹 vs 余養豪」青綠撞色問題（改為焦糖深棕 vs 正綠）。
     - 將醫師膠囊標籤邊框全面加粗至 `2px solid`，提升色彩邊界飽和度，在任何螢幕上皆能一眼分明。
+
+- **v0.7.4 (2026-09-20)**:
+  - **🛡️ 停診日期原子換行保護機制 (Atomic Date Token Line-Breaking)**:
+    - 解決連續日期在空間不足折行時將日期數字拆半（如 `10/20` 被截斷為第一行 `1`、第二行 `0/20停診`）的問題。
+    - 建立 `formatSuspensionNoteHtml()` 函式，將各個獨立日期（如 `10/20停診`）包裹於 `.date-atomic`（`white-space: nowrap; display: inline-block;`），並在點號後插入語意化安全換行點 `<wbr>`。
+    - 遇折行時一律精確在日期分隔點換行，將整顆日期完整落於下一行，確保所有日期 100% 完整無損呈現。
+    - 全面套用於排班時刻表膠囊、頂部停診提醒表格與醫師門診彈窗。
+  - **雙生檔案一致性保證**：確保 `index.html` 與 `門診時段交叉查詢與醫師代碼查詢系統.html` 維持 100% SHA-256 雜湊值一致。
 
 - **v0.7.3 (2026-09-20)**:
   - **🔽 下拉式選單一律向下展開優化 (Enforce Downward Dropdown Expansion)**:
