@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -658,30 +658,41 @@
       width: 15%;
       border-right: 2px solid #bdafa0 !important;
     }
+    /* 彈窗時段卡片高反差鮮明金屬色彩 (上午/下午/晚上明顯區隔) */
     .modal-slot-card {
-      border-radius: 8px;
-      padding: 8px 6px;
+      border-radius: 10px;
+      padding: 9px 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.7);
+      gap: 4px;
+      transition: all 0.2s ease;
+      color: #ffffff !important;
     }
+    .modal-slot-card:hover {
+      transform: translateY(-2px);
+    }
+    /* 上午診：香檳金屬古金 (Champagne Gold) */
     .slot-morning {
-      background: #f7f3ee;
-      border: 1.5px solid #cfc5b8;
-      color: #5c4738;
+      background: linear-gradient(135deg, #c49d5c 0%, #9e793b 100%) !important;
+      border: 1.5px solid #84632a !important;
+      color: #ffffff !important;
+      box-shadow: 0 3px 8px rgba(158, 121, 59, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
     }
+    /* 下午診：干邑赤銅紅褐 (Cognac Amber Bronze) */
     .slot-afternoon {
-      background: #fdfbf7;
-      border: 1.5px solid #d4b572;
-      color: #7c5c24;
+      background: linear-gradient(135deg, #a15f48 0%, #7e3e29 100%) !important;
+      border: 1.5px solid #692e1c !important;
+      color: #ffffff !important;
+      box-shadow: 0 3px 8px rgba(126, 62, 41, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
     }
+    /* 夜診/晚上：深焙黑曜濃縮棕 (Deep Obsidian Mocha) */
     .slot-night {
-      background: #f4ede6;
-      border: 1.5px solid #b58855;
-      color: #4a372b;
+      background: linear-gradient(135deg, #4f392e 0%, #291c14 100%) !important;
+      border: 1.5px solid #1c120c !important;
+      color: #ffffff !important;
+      box-shadow: 0 3px 8px rgba(41, 28, 20, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     }
 
     .dept-code {
@@ -1387,7 +1398,7 @@
       { id: "copper",     bg: "linear-gradient(135deg, #8b5344 0%, #6d392c 100%)", border: "#5a2b20", text: "#ffffff", shadow: "rgba(109, 57, 44, 0.35)" }   // 10. 燻銅深赤褐
     ];
 
-    // 動態色彩分配管理：依照「加入比對名單的順序」依序賦予顏色，超過自動循環
+    // 動態色彩分配管理：依照加入順序依序賦予顏色；全科比對時，該科底下每一位個別醫師皆分配互不相同的色彩
     function getDynamicColorAssignment() {
       const docColorMap = new Map();
       const tagColorMap = new Map();
@@ -1402,20 +1413,25 @@
 
       // 2. 依序為比對目標分配色彩池
       crossSelectedTargets.forEach(key => {
-        const pal = metallicColorPalette[colorIndex % metallicColorPalette.length];
-        tagColorMap.set(key, pal);
+        const tagPal = metallicColorPalette[colorIndex % metallicColorPalette.length];
+        tagColorMap.set(key, tagPal);
         colorIndex++;
 
         if (key.startsWith("DOC_")) {
           const docKey = key.replace("DOC_", "");
-          docColorMap.set(docKey, pal);
+          if (!docColorMap.has(docKey)) {
+            docColorMap.set(docKey, tagPal);
+          }
         } else if (key.startsWith("DEPT_")) {
           const deptCode = key.replace("DEPT_", "");
           const deptDocs = getDocsByDept(deptCode);
+          // 關鍵修正：該科底下的「每一位個別醫師」，各自依序獲得不同顏色，絕不全科同色！
           deptDocs.forEach(d => {
             const dk = `${deptCode}___${d}`;
             if (!docColorMap.has(dk)) {
-              docColorMap.set(dk, pal);
+              const docPal = metallicColorPalette[colorIndex % metallicColorPalette.length];
+              docColorMap.set(dk, docPal);
+              colorIndex++;
             }
           });
         }
@@ -1482,36 +1498,56 @@
     let crossBaseDoctorKey = ""; // 儲存基準醫師 key
     let crossSelectedTargets = new Set(); // 儲存目標 "DEPT_08" 或 "DOC_08___林憲治"
 
-    function initCrossTab() {
+        function initCrossTab() {
       const depts = getAllDepts();
 
-      // 基準科別
+      // 基準科別：預設為空「-- 請選擇科別 --」
       const baseDeptSelect = document.getElementById("cross-base-dept-select");
-      baseDeptSelect.innerHTML = "";
+      baseDeptSelect.innerHTML = '<option value="">-- 請選擇科別 --</option>';
       depts.forEach(d => {
         const opt = document.createElement("option");
         opt.value = d.code;
         opt.textContent = `[${d.code}] ${d.name}`;
         baseDeptSelect.appendChild(opt);
       });
-      onCrossBaseDeptChanged();
+      baseDeptSelect.value = "";
 
-      // 比對目標科別
+      const baseDocSelect = document.getElementById("cross-base-doc-select");
+      baseDocSelect.innerHTML = '<option value="">-- 請先選擇科別 --</option>';
+      crossBaseDoctorKey = "";
+
+      // 比對目標科別：預設為空「-- 請選擇科別 --」
       const targetDeptSelect = document.getElementById("cross-target-dept-select");
-      targetDeptSelect.innerHTML = "";
+      targetDeptSelect.innerHTML = '<option value="">-- 請選擇科別 --</option>';
       depts.forEach(d => {
         const opt = document.createElement("option");
         opt.value = d.code;
         opt.textContent = `[${d.code}] ${d.name}`;
         targetDeptSelect.appendChild(opt);
       });
-      onCrossTargetDeptChanged();
-    }
+      targetDeptSelect.value = "";
 
-    function onCrossBaseDeptChanged() {
+      const targetDocSelect = document.getElementById("cross-target-doc-select");
+      targetDocSelect.innerHTML = '<option value="">-- 全科所有醫師 --</option>';
+
+      renderCrossTargetTags();
+    }    function onCrossBaseDeptChanged() {
       const deptCode = document.getElementById("cross-base-dept-select").value;
       const docSelect = document.getElementById("cross-base-doc-select");
       docSelect.innerHTML = "";
+
+      if (!deptCode) {
+        docSelect.innerHTML = '<option value="">-- 請先選擇科別 --</option>';
+        crossBaseDoctorKey = "";
+        renderCrossTargetTags();
+        return;
+      }
+
+      const optDefault = document.createElement("option");
+      optDefault.value = "";
+      optDefault.textContent = "-- 請選擇醫師 --";
+      docSelect.appendChild(optDefault);
+
       const docs = getDocsByDept(deptCode);
       docs.forEach(doc => {
         const docCode = findDocCode(doc);
@@ -1520,21 +1556,22 @@
         opt.textContent = docCode ? `${doc} (${docCode})` : doc;
         docSelect.appendChild(opt);
       });
-      onCrossBaseDocSelected();
-    }
 
-    function onCrossBaseDocSelected() {
+      docSelect.value = "";
+      crossBaseDoctorKey = "";
+      renderCrossTargetTags();
+    }    function onCrossBaseDocSelected() {
       const docSelect = document.getElementById("cross-base-doc-select");
-      if (docSelect) {
+      if (docSelect && docSelect.value) {
         crossBaseDoctorKey = docSelect.value;
+      } else {
+        crossBaseDoctorKey = "";
       }
       renderCrossTargetTags();
-      if (crossSelectedTargets.size > 0) {
+      if (crossSelectedTargets.size > 0 && crossBaseDoctorKey) {
         runCrossSearch();
       }
-    }
-
-    function onCrossTargetDeptChanged() {
+    }function onCrossTargetDeptChanged() {
       const deptCode = document.getElementById("cross-target-dept-select").value;
       const docSelect = document.getElementById("cross-target-doc-select");
       docSelect.innerHTML = "";
@@ -1555,7 +1592,7 @@
     }
 
     // 基準醫師及選擇比對目標選好後，按「＋ 加入比對名單」後一起帶入已加入之比對名單
-    function addCrossAllSelectedFromDropdown() {
+        function addCrossAllSelectedFromDropdown() {
       const baseDocKey = document.getElementById("cross-base-doc-select").value;
       if (baseDocKey) {
         crossBaseDoctorKey = baseDocKey;
@@ -1563,6 +1600,16 @@
 
       const deptCode = document.getElementById("cross-target-dept-select").value;
       const docKey = document.getElementById("cross-target-doc-select").value;
+
+      if (!crossBaseDoctorKey) {
+        alert("請先於第 1 步驟選擇基準醫師！");
+        return;
+      }
+
+      if (!deptCode) {
+        alert("請先於第 2 步驟選擇比對科別或醫師！");
+        return;
+      }
 
       if (!docKey) {
         crossSelectedTargets.add(`DEPT_${deptCode}`);
@@ -1572,9 +1619,7 @@
 
       renderCrossTargetTags();
       runCrossSearch();
-    }
-
-    function removeCrossTarget(key) {
+    }function removeCrossTarget(key) {
       crossSelectedTargets.delete(key);
       renderCrossTargetTags();
       runCrossSearch();
@@ -1636,13 +1681,23 @@
       });
     }
 
-    function clearCrossTargets() {
+        function clearCrossTargets() {
       crossSelectedTargets.clear();
+      crossBaseDoctorKey = "";
+
+      const baseDept = document.getElementById("cross-base-dept-select");
+      if (baseDept) baseDept.value = "";
+      const baseDoc = document.getElementById("cross-base-doc-select");
+      if (baseDoc) baseDoc.innerHTML = '<option value="">-- 請先選擇科別 --</option>';
+
+      const targetDept = document.getElementById("cross-target-dept-select");
+      if (targetDept) targetDept.value = "";
+      const targetDoc = document.getElementById("cross-target-doc-select");
+      if (targetDoc) targetDoc.innerHTML = '<option value="">-- 全科所有醫師 --</option>';
+
       renderCrossTargetTags();
       document.getElementById("cross-result-area").innerHTML = "";
-    }
-
-        function runCrossSearch() {
+    }function runCrossSearch() {
       if (!crossBaseDoctorKey) {
         const docSelect = document.getElementById("cross-base-doc-select");
         if (docSelect) crossBaseDoctorKey = docSelect.value;
@@ -1968,9 +2023,9 @@
                 }
 
                 bodyHtml += `<div class="modal-slot-card ${slotClass}">
-                  <span style="font-size: 0.86rem; font-weight: 700;">${slotLabel}</span>
-                  <strong style="font-size: 1.02rem;">${m.room || "看診中"}</strong>
-                  ${m.note ? `<span style="font-size: 0.80rem; background: #fee2e2; color: #b91c1c; padding: 2px 6px; border-radius: 4px; font-weight: 600; margin-top: 2px;">${m.note}</span>` : ""}
+                  <span style="font-size: 0.88rem; font-weight: 700; letter-spacing: 0.04em; color: #ffffff; opacity: 0.95;">${slotLabel}</span>
+                  <strong style="font-size: 1.08rem; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.25);">${m.room || "看診中"}</strong>
+                  ${m.note ? `<span style="font-size: 0.80rem; background: rgba(255,255,255,0.25); color: #ffffff; padding: 2px 7px; border-radius: 4px; font-weight: 700; margin-top: 3px; border: 1px solid rgba(255,255,255,0.35);">${m.note}</span>` : ""}
                 </div>`;
               });
             }
