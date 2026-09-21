@@ -6,11 +6,11 @@
   <title>門診時段交叉查詢與醫師代碼查詢系統</title>
   <style>
     :root {
-      --primary: #558E9B;
-      --primary-dark: #3f6e79;
-      --primary-darker: #2d5059;
-      --primary-light: #e6f0f2;
-      --primary-surface: #f4f8f9;
+      --primary: #1E3545;
+      --primary-dark: #152733;
+      --primary-darker: #0d1a22;
+      --primary-light: #e8eef3;
+      --primary-surface: #f3f6f9;
       --accent-champagne: #7BB2BA;
       --accent-gold: #E7C676;
       --success-bg: #f3f7f4;
@@ -170,8 +170,8 @@
       min-height: 46px;
     }
     input[type="text"]:focus, select:focus {
-      border-color: #558E9B;
-      box-shadow: 0 0 0 3.5px rgba(85, 142, 155, 0.20);
+      border-color: #1E3545;
+      box-shadow: 0 0 0 3.5px rgba(30, 53, 69, 0.20);
     }
 
     .grid-2 {
@@ -228,7 +228,7 @@
       box-shadow: 0 1px 2px rgba(0,0,0,0.03);
     }
     .chip:hover {
-      border-color: #558E9B;
+      border-color: #1E3545;
       background: #f0f5f7;
     }
     .chip input[type="checkbox"] {
@@ -238,8 +238,8 @@
     }
     .chip.selected {
       background: #e2edf1;
-      border-color: #558E9B;
-      color: #203e45;
+      border-color: #1E3545;
+      color: #152733;
       font-weight: 700;
     }
 
@@ -265,9 +265,9 @@
     .btn-main:active { transform: translateY(0); }
 
     .btn-add {
-      background: linear-gradient(135deg, #558E9B 0%, #3d6e79 100%);
+      background: linear-gradient(135deg, #1E3545 0%, #152733 100%);
       color: white;
-      border: 1px solid #335c65;
+      border: 1px solid #132430;
       padding: 12px 18px;
       border-radius: 9px;
       font-size: 1.04rem;
@@ -275,13 +275,13 @@
       cursor: pointer;
       width: 100%;
       margin-bottom: 14px;
-      box-shadow: 0 3px 8px rgba(61, 110, 121, 0.25);
+      box-shadow: 0 3px 8px rgba(30, 53, 69, 0.25);
       transition: all 0.2s ease;
       min-height: 46px;
     }
     .btn-add:hover {
-      background: linear-gradient(135deg, #477c88 0%, #325b64 100%);
-      box-shadow: 0 5px 14px rgba(61, 110, 121, 0.32);
+      background: linear-gradient(135deg, #2a475d 0%, #1a303f 100%);
+      box-shadow: 0 5px 14px rgba(30, 53, 69, 0.32);
       transform: translateY(-1px);
     }
     .btn-add:active { transform: translateY(0); }
@@ -324,19 +324,22 @@
       border-radius: 25px;
       font-size: 1.02rem;
       font-weight: 700;
-      color: #ffffff;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      color: #0E4369;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.4);
       transition: all 0.2s ease;
+    }
+    .selected-tag.base-tag {
+      color: #ffffff !important;
     }
     .selected-tag:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.14);
     }
     .selected-tag span.close-btn {
       cursor: pointer;
       font-weight: bold;
       margin-left: 10px;
-      background: rgba(255,255,255,0.28);
+      background: rgba(14, 67, 105, 0.15);
       border-radius: 50%;
       width: 22px;
       height: 22px;
@@ -347,9 +350,15 @@
       transition: all 0.15s;
       flex-shrink: 0;
     }
+    .selected-tag.base-tag span.close-btn {
+      background: rgba(255, 255, 255, 0.28);
+    }
     .selected-tag span.close-btn:hover {
-      background: rgba(255,255,255,0.5);
+      background: rgba(14, 67, 105, 0.3);
       transform: scale(1.12);
+    }
+    .selected-tag.base-tag span.close-btn:hover {
+      background: rgba(255, 255, 255, 0.5);
     }
 
     /* 結果卡片 */
@@ -571,6 +580,7 @@
       display: flex;
       flex-direction: column;
       gap: 7px;
+      align-items: center;
     }
     .matrix-doc-pill {
       display: inline-flex;
@@ -584,24 +594,28 @@
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-      text-align: left;
+      text-align: center;
       line-height: 1.35;
       word-break: normal;
+      box-sizing: border-box;
+      max-width: 100%;
     }
     .matrix-doc-info {
-      display: inline-flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      column-gap: 4px;
-      row-gap: 2px;
-      text-align: left;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       line-height: 1.25;
+      width: 100%;
     }
     .matrix-doc-pill.has-suspension .matrix-doc-info {
-      display: inline-flex;
+      display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      text-align: left;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
     }
     .matrix-doc-name {
       white-space: nowrap;
@@ -609,10 +623,11 @@
       letter-spacing: 0.02em;
     }
     .matrix-doc-room {
-      white-space: nowrap;
+      white-space: normal;
       font-size: 0.90em;
       opacity: 0.95;
       font-weight: 600;
+      text-align: center;
     }
     .matrix-doc-pill:hover {
       transform: translateY(-2px);
@@ -623,14 +638,14 @@
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     }
     .base-doc-pill {
-      background: #558E9B !important;
+      background: #1E3545 !important;
       color: #ffffff !important;
-      border: 1.5px solid #3d6e79 !important;
+      border: 1.5px solid #132430 !important;
       font-weight: 800;
-      box-shadow: 0 2px 6px rgba(85, 142, 155, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+      box-shadow: 0 2px 6px rgba(30, 53, 69, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
     }
     .base-doc-pill:hover {
-      box-shadow: 0 5px 14px rgba(85, 142, 155, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+      box-shadow: 0 5px 14px rgba(30, 53, 69, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
     }
     .matrix-legend-bar {
       background: #ffffff;
@@ -700,12 +715,12 @@
     .modal-slot-card:hover {
       transform: translateY(-2px);
     }
-    /* 上午診：湖水藍青 (Spring Lake Teal) */
+    /* 上午診：深墨海藍 (Deep Slate Navy) */
     .slot-morning {
-      background: linear-gradient(135deg, #558E9B 0%, #3f6e79 100%) !important;
-      border: 1.5px solid #2d5059 !important;
+      background: linear-gradient(135deg, #1E3545 0%, #152733 100%) !important;
+      border: 1.5px solid #132430 !important;
       color: #ffffff !important;
-      box-shadow: 0 3px 8px rgba(61, 110, 121, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      box-shadow: 0 3px 8px rgba(30, 53, 69, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
     }
     /* 下午診：珊瑚赤褐 (Coral Terracotta) */
     .slot-afternoon {
@@ -762,11 +777,11 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 1.06rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #558E9B 0%, #3f6e79 100%);
+      background: linear-gradient(135deg, #1E3545 0%, #152733 100%);
       color: #ffffff;
       padding: 4px 14px;
       border-radius: 7px;
-      box-shadow: 0 2px 5px rgba(61, 110, 121, 0.25);
+      box-shadow: 0 2px 5px rgba(30, 53, 69, 0.25);
     }
     .doctor-grid {
       display: grid;
@@ -777,7 +792,7 @@
     .doc-item {
       background: #ffffff;
       border: 1px solid #cbd5e1;
-      border-left: 4.5px solid #558E9B;
+      border-left: 4.5px solid #1E3545;
       padding: 13px 18px;
       border-radius: 10px;
       display: flex;
@@ -790,8 +805,8 @@
     .doc-item:hover {
       background: #f8fafc;
       border-color: #94a3b8;
-      border-left-color: #3f6e79;
-      box-shadow: 0 8px 18px -2px rgba(85, 142, 155, 0.2);
+      border-left-color: #152733;
+      box-shadow: 0 8px 18px -2px rgba(30, 53, 69, 0.2);
       transform: translateY(-2px);
     }
     .doc-name { font-weight: 700; color: #34495e; font-size: 1.06rem; }
@@ -893,19 +908,19 @@
       text-align: right;
     }
     .btn-modal-close {
-      background: linear-gradient(135deg, #558E9B 0%, #3f6e79 100%);
+      background: linear-gradient(135deg, #1E3545 0%, #152733 100%);
       color: white;
-      border: 1px solid #2d5059;
+      border: 1px solid #132430;
       padding: 10px 24px;
       border-radius: 8px;
       font-weight: 700;
       font-size: 0.98rem;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(61, 110, 121, 0.25);
+      box-shadow: 0 2px 6px rgba(30, 53, 69, 0.25);
       transition: all 0.2s ease;
     }
     .btn-modal-close:hover {
-      background: linear-gradient(135deg, #477c88 0%, #325b64 100%);
+      background: linear-gradient(135deg, #2a475d 0%, #1a303f 100%);
       transform: translateY(-1px);
     }
 
@@ -1005,15 +1020,16 @@
       color: #9a3412;
       font-weight: 800;
       font-size: 0.86rem;
-      padding: 5px 10px;
-      text-align: left;
+      padding: 6px 8px;
+      text-align: center;
       border-bottom: 1.5px solid #fdba74;
     }
     .suspension-table td {
-      padding: 5px 10px;
+      padding: 6px 8px;
       font-size: 0.85rem;
       border-bottom: 1px solid #ffedd5;
       vertical-align: middle;
+      text-align: center;
       line-height: 1.35;
     }
     .suspension-table tr.doc-group-last td {
@@ -1025,21 +1041,71 @@
     .suspension-doc-cell {
       background: #fffcf8 !important;
       border-right: 1.5px solid #fdba74 !important;
+      text-align: center !important;
     }
     .suspension-doc-pill {
       display: inline-flex;
+      flex-direction: column;
       align-items: center;
-      gap: 4px;
-      padding: 2px 8px;
+      justify-content: center;
+      gap: 2px;
+      padding: 4px 10px;
       border-radius: 12px;
       font-weight: 700;
-      font-size: 0.84rem;
+      font-size: 0.86rem;
       cursor: pointer;
       transition: all 0.2s ease;
+      line-height: 1.25;
+      text-align: center;
     }
     .suspension-doc-pill:hover {
       transform: translateY(-1px);
       filter: brightness(1.08);
+    }
+    .suspension-base-sub {
+      display: block;
+      font-size: 0.78em;
+      font-weight: 800;
+      opacity: 0.95;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+    .suspension-tag-stack {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      width: 100%;
+    }
+    .suspension-tag-warning {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+      color: #991b1b;
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-weight: 800;
+      font-size: 0.82rem;
+      white-space: nowrap;
+      box-shadow: 0 1px 2px rgba(153, 27, 27, 0.08);
+    }
+    .suspension-tag-dates {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      color: #be123c;
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      box-shadow: 0 1px 2px rgba(190, 18, 60, 0.06);
     }
     .suspension-date-tag {
       display: inline-flex;
@@ -1195,7 +1261,7 @@
         <!-- Dynamic official notice content -->
       </div>
       <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-        <a id="noticeOfficialLink" href="https://www.chhw.mohw.gov.tw/?aid=320&page_name=detail&iid=15" target="_blank" rel="noopener noreferrer" style="color:#558E9B; font-weight:700; text-decoration:none; font-size:0.95rem;">🌐 前往彰化醫院官方公告專區 ↗</a>
+        <a id="noticeOfficialLink" href="https://www.chhw.mohw.gov.tw/?aid=320&page_name=detail&iid=15" target="_blank" rel="noopener noreferrer" style="color:#1E3545; font-weight:700; text-decoration:none; font-size:0.95rem;">🌐 前往彰化醫院官方公告專區 ↗</a>
         <button type="button" class="btn-modal-close" onclick="closeNoticeModal()">關閉</button>
       </div>
     </div>
@@ -1216,6 +1282,34 @@
       // 並在點號後加上 <wbr> 安全換行點，保證各日期內部絕對不折行，換行時整組日期完整落於同行
       return note.replace(/(\d{1,2}\/\d{1,2}(?:[^\d\.\s\/]+)?)/g, '<span class="date-atomic">$1</span>')
                  .replace(/\.(?=<span)/g, '.<wbr>');
+    }
+
+    // 停診提醒表格專用：若備註中同時包含「網掛不開放」與停診日期，結構化拆為兩行獨立膠囊並居中
+    function formatSuspensionTableCellNote(note) {
+      if (!note) return "";
+      const isWebClosed = note.includes("網掛不開放");
+      const datePart = note.replace("網掛不開放", "").trim();
+
+      if (isWebClosed && datePart) {
+        return `
+          <div class="suspension-tag-stack">
+            <span class="suspension-tag-warning">⚠️ 網掛不開放</span>
+            <span class="suspension-tag-dates">${formatSuspensionNoteHtml(datePart)}</span>
+          </div>
+        `;
+      } else if (isWebClosed) {
+        return `
+          <div class="suspension-tag-stack">
+            <span class="suspension-tag-warning">⚠️ 網掛不開放</span>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="suspension-tag-stack">
+            <span class="suspension-tag-dates">⚠️ ${formatSuspensionNoteHtml(note)}</span>
+          </div>
+        `;
+      }
     }
 
     // 樣式更新輔助函數
@@ -1682,39 +1776,38 @@
     const weekdayMap = { 1: "星期一", 2: "星期二", 3: "星期三", 4: "星期四", 5: "星期五", 6: "星期六" };
     const slotRank = { "上午": 1, "下午": 2, "夜診": 3 };
 
-    // 基準醫師專屬色：深海藍湖水色 #558E9B，固定較深色底、純白色字體
+    // 基準醫師專屬色：深墨海藍 #1E3545，固定較深色底、高對比純白色字體
     const baseDoctorColor = {
-      id: "baseTeal",
-      bg: "#558E9B",
-      border: "#3d6e79",
+      id: "baseNavy",
+      bg: "#1E3545",
+      border: "#132430",
       text: "#ffffff",
-      shadow: "rgba(85, 142, 155, 0.40)"
+      shadow: "rgba(30, 53, 69, 0.45)"
     };
 
-    // 「Spring Meadow」自然草甸色彩池陣列 (12 色動態分配，依使用者加入名單順序輪流指派，絕不綁定特定醫師)
-    // 嚴格採用指定之 12 色，深淺兼具並符合 WCAG AA 4.5:1 無障礙閱讀標準
-    const springMeadowPalette = [
-      { id: "coral",       bg: "#C96349", border: "#9b432e", text: "#ffffff", shadow: "rgba(201, 99, 73, 0.35)" }, // 1. 磚紅珊瑚
-      { id: "sage",        bg: "#84A48B", border: "#63856b", text: "#ffffff", shadow: "rgba(132, 164, 139, 0.35)" }, // 2. 鼠尾草綠
-      { id: "lilac",       bg: "#A386A9", border: "#806486", text: "#ffffff", shadow: "rgba(163, 134, 169, 0.35)" }, // 3. 紫丁香粉紫
-      { id: "olive",       bg: "#88895B", border: "#686940", text: "#ffffff", shadow: "rgba(136, 137, 91, 0.35)" }, // 4. 橄欖苔綠
-      { id: "warmpeach",   bg: "#E89B88", border: "#cb7965", text: "#2c3e50", shadow: "rgba(232, 155, 136, 0.35)" }, // 5. 蜜桃珊瑚粉
-      { id: "springlake",  bg: "#7BB2BA", border: "#56959e", text: "#2c3e50", shadow: "rgba(123, 178, 186, 0.35)" }, // 6. 柔湖水藍
-      { id: "rosewood",    bg: "#A36361", border: "#7f4644", text: "#ffffff", shadow: "rgba(163, 99, 97, 0.35)" }, // 7. 暖赤褐
-      { id: "duskyheather",bg: "#C6B3CA", border: "#a691ab", text: "#2c3e50", shadow: "rgba(198, 179, 202, 0.35)" }, // 8. 粉紫灰
-      { id: "softamber",   bg: "#E7C676", border: "#c6a34e", text: "#2c3e50", shadow: "rgba(231, 198, 118, 0.35)" }, // 9. 秋麥金黃
-      { id: "celadonmint", bg: "#AECBB8", border: "#8ba996", text: "#2c3e50", shadow: "rgba(174, 203, 184, 0.35)" }, // 10. 薄荷清綠
-      { id: "oatmilk",     bg: "#D1A996", border: "#b28773", text: "#2c3e50", shadow: "rgba(209, 169, 150, 0.35)" }, // 11. 燕麥奶褐
-      { id: "softapricot", bg: "#F79E70", border: "#d87b4b", text: "#2c3e50", shadow: "rgba(247, 158, 112, 0.35)" }  // 12. 暖杏橙
+    // 科別專屬淡雅自然色彩池陣列 (10 組淡彩，全面改用最新色卡，納入 Morning Sky 與 Ocean Mist，嚴格剔除相近暗綠)
+    // 所有比對目標醫師文字顏色統一採用第 2 張圖片之深藍石墨色 #0E4369
+    const departmentPalette = [
+      { id: "morningsky",  name: "晨曦澄空藍", bg: "#D6E4FA", border: "#9ebfe8", text: "#0E4369", shadow: "rgba(214, 228, 250, 0.45)" }, // 1. Morning Sky
+      { id: "oceanmist",   name: "清透湖水霧青", bg: "#B7DCD6", border: "#7ebfb4", text: "#0E4369", shadow: "rgba(183, 220, 214, 0.45)" }, // 2. Ocean Mist
+      { id: "sage",        name: "柔和鼠尾草綠", bg: "#D6EAD4", border: "#9ec79b", text: "#0E4369", shadow: "rgba(214, 234, 212, 0.45)" }, // 3. Sage
+      { id: "blush",       name: "柔雅櫻花淡粉", bg: "#F7E1E6", border: "#e8aebc", text: "#0E4369", shadow: "rgba(247, 225, 230, 0.45)" }, // 4. Blush
+      { id: "peach",       name: "蜜桃暖粉橘",   bg: "#FFD6A5", border: "#f4ab59", text: "#0E4369", shadow: "rgba(255, 214, 165, 0.45)" }, // 5. Peach
+      { id: "lilac",       name: "丁香柔紫",     bg: "#E6D6F7", border: "#b997e3", text: "#0E4369", shadow: "rgba(230, 214, 247, 0.45)" }, // 6. Lilac
+      { id: "lemoncream",  name: "檸檬奶黃",     bg: "#FFF6D6", border: "#e8d47b", text: "#0E4369", shadow: "rgba(255, 246, 214, 0.45)" }, // 7. Lemon Cream
+      { id: "coralreef",   name: "珊瑚橘粉",     bg: "#FFB5A7", border: "#f28572", text: "#0E4369", shadow: "rgba(255, 181, 167, 0.45)" }, // 8. Coral Reef
+      { id: "goldendune",  name: "金沙暖黃",     bg: "#F4D9A6", border: "#dcaf54", text: "#0E4369", shadow: "rgba(244, 217, 166, 0.45)" }, // 9. Golden Dune
+      { id: "sand",        name: "燕麥奶茶沙色", bg: "#EAD8B0", border: "#c9af79", text: "#0E4369", shadow: "rgba(234, 216, 176, 0.45)" }  // 10. Sand
     ];
 
-    // 動態色彩分配管理：依照加入順序依序賦予顏色；全科比對時，該科底下每一位個別醫師皆分配互不相同的色彩
+    // 動態色彩分配管理：依照加入順序以「科別」為單位分配代表色；同科底下所有醫師統一共用該科專屬代表色
     function getDynamicColorAssignment() {
       const docColorMap = new Map();
       const tagColorMap = new Map();
+      const deptColorMap = new Map();
       let colorIndex = 0;
 
-      // 1. 基準醫師/科別固定使用 baseDoctorColor (#558E9B，深海藍湖水色，深色底白字)
+      // 1. 基準醫師/科別固定使用 baseDoctorColor (#1E3545，深墨海藍，深色底純白字)
       if (crossBaseDoctorKey) {
         if (crossBaseDoctorKey.startsWith("DEPT_")) {
           const deptCode = crossBaseDoctorKey.replace("DEPT_", "");
@@ -1727,32 +1820,40 @@
         }
       }
 
-      // 2. 依序為比對目標分配 Spring Meadow 色彩池
-      crossSelectedTargets.forEach(key => {
-        const tagPal = springMeadowPalette[colorIndex % springMeadowPalette.length];
-        tagColorMap.set(key, tagPal);
-        colorIndex++;
+      function getColorForDept(deptCode) {
+        if (!deptColorMap.has(deptCode)) {
+          const pal = departmentPalette[colorIndex % departmentPalette.length];
+          deptColorMap.set(deptCode, pal);
+          colorIndex++;
+        }
+        return deptColorMap.get(deptCode);
+      }
 
+      // 2. 依序為比對目標分配科別代表色（同科別共用同一顏色）
+      crossSelectedTargets.forEach(key => {
         if (key.startsWith("DOC_")) {
           const docKey = key.replace("DOC_", "");
+          const [deptCode] = docKey.split("___");
+          const deptPal = getColorForDept(deptCode);
+          tagColorMap.set(key, deptPal);
           if (!docColorMap.has(docKey)) {
-            docColorMap.set(docKey, tagPal);
+            docColorMap.set(docKey, deptPal);
           }
         } else if (key.startsWith("DEPT_")) {
           const deptCode = key.replace("DEPT_", "");
+          const deptPal = getColorForDept(deptCode);
+          tagColorMap.set(key, deptPal);
           const deptDocs = getDocsByDept(deptCode);
           deptDocs.forEach(d => {
             const dk = `${deptCode}___${d}`;
             if (!docColorMap.has(dk)) {
-              const docPal = springMeadowPalette[colorIndex % springMeadowPalette.length];
-              docColorMap.set(dk, docPal);
-              colorIndex++;
+              docColorMap.set(dk, deptPal);
             }
           });
         }
       });
 
-      return { docColorMap, tagColorMap };
+      return { docColorMap, tagColorMap, getColorForDept };
     }
 
     // 防止下拉選單因視窗底部空間不足而強制向上彈出展開
@@ -1987,10 +2088,10 @@
       const allDepts = getAllDepts();
       const { tagColorMap } = getDynamicColorAssignment();
 
-      // 1. 基準醫師/科別標籤 (固定使用 baseDoctorColor #558E9B，深海藍湖水色，深色底純白字)
+      // 1. 基準醫師/科別標籤 (固定使用 baseDoctorColor #1E3545，深墨海藍，深色底純白字)
       if (crossBaseDoctorKey) {
         const baseTag = document.createElement("div");
-        baseTag.className = "selected-tag";
+        baseTag.className = "selected-tag base-tag";
         baseTag.style.background = baseDoctorColor.bg;
         baseTag.style.border = `1.5px solid ${baseDoctorColor.border}`;
         baseTag.style.color = baseDoctorColor.text;
@@ -2009,9 +2110,9 @@
         container.appendChild(baseTag);
       }
 
-      // 2. 所有比對目標標籤 (依使用者加入順序動態分配 Spring Meadow 12 色彩池)
+      // 2. 所有比對目標標籤 (依使用者加入順序動態分配科別專屬代表色)
       crossSelectedTargets.forEach(key => {
-        const pal = tagColorMap.get(key) || springMeadowPalette[0];
+        const pal = tagColorMap.get(key) || departmentPalette[0];
         const tag = document.createElement("div");
         tag.className = "selected-tag";
         tag.style.background = pal.bg;
@@ -2081,13 +2182,13 @@
         const bDeptName = dObj ? dObj.name : bCode;
         docSlots = schedules.filter(s => s.dept_code === bCode);
         baseDoctorNames = getDocsByDept(bCode);
-        baseTitleHtml = `查詢基準：<span style="color:#558E9B; font-weight:800;">[${bCode}] ${bDeptName} 全科所有醫師</span>（共 <strong>${baseDoctorNames.length}</strong> 位醫師，每週門診 <strong>${docSlots.length}</strong> 診次）`;
+        baseTitleHtml = `查詢基準：<span style="color:#1E3545; font-weight:800;">[${bCode}] ${bDeptName} 全科所有醫師</span>（共 <strong>${baseDoctorNames.length}</strong> 位醫師，每週門診 <strong>${docSlots.length}</strong> 診次）`;
       } else {
         const [deptCode, docName] = crossBaseDoctorKey.split("___");
         docSlots = schedules.filter(s => s.dept_code === deptCode && s.doctor === docName);
         const docCode = findDocCode(docName);
         baseDoctorNames = [docName];
-        baseTitleHtml = `查詢基準：<span style="color:#558E9B; font-weight:800;">[${deptCode}] ${docName} 醫師</span> ${docCode ? `<span class="doc-code" style="font-size:0.92rem; padding:2px 8px;">${docCode}</span>` : ''}（每週門診 <strong>${docSlots.length}</strong> 診次）`;
+        baseTitleHtml = `查詢基準：<span style="color:#1E3545; font-weight:800;">[${deptCode}] ${docName} 醫師</span> ${docCode ? `<span class="doc-code" style="font-size:0.92rem; padding:2px 8px;">${docCode}</span>` : ''}（每週門診 <strong>${docSlots.length}</strong> 診次）`;
       }
 
       const hasTargets = crossSelectedTargets.size > 0;
@@ -2096,8 +2197,8 @@
           ${baseTitleHtml}
         </div>
         <div style="font-size:0.90rem; color:#5d6d7e; margin-top:5px; display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
-          <span><span style="color:#558E9B;">✦</span> 點擊任何醫師標籤膠囊，皆可即時彈出查看該醫師每週完整門診表。</span>
-          ${!hasTargets ? `<span style="color:#558E9B; font-weight:600;">（💡 目前僅呈現基準門診排班；如需跨科比對，可隨時於第 2 步驟選擇科別或醫師加入名單）</span>` : ''}
+          <span><span style="color:#1E3545;">✦</span> 點擊任何醫師標籤膠囊，皆可即時彈出查看該醫師每週完整門診表。</span>
+          ${!hasTargets ? `<span style="color:#1E3545; font-weight:600;">（💡 目前僅呈現基準門診排班；如需跨科比對，可隨時於第 2 步驟選擇科別或醫師加入名單）</span>` : ''}
         </div>
       </div>`;
 
@@ -2115,13 +2216,12 @@
         return false;
       });
 
-      // 取得動態分配色彩池 (上方已加入標籤與下方比對結果嚴格連動同一組動態顏色)
-      const { docColorMap } = getDynamicColorAssignment();
+      // 取得動態分配色彩池 (上方已加入標籤與下方比對結果嚴格連動科別代表色)
+      const { docColorMap, getColorForDept } = getDynamicColorAssignment();
 
       // 取得所有出現在比對結果中的獨立醫師清單
       const targetDoctorList = [];
       const seenTargetDocs = new Set();
-      let extraColorIdx = crossSelectedTargets.size;
 
       allTargetSchedules.forEach(s => {
         const key = `${s.dept_code}___${s.doctor}`;
@@ -2133,10 +2233,9 @@
             dept_name: s.dept_name,
             docCode: findDocCode(s.doctor) || ""
           });
-          // 若為整科匯入而尚未有專屬顏色，依序自 Spring Meadow 色彩池延續指派
+          // 若為整科匯入而尚未有專屬顏色，指派該科別專屬代表色
           if (!docColorMap.has(key)) {
-            docColorMap.set(key, springMeadowPalette[extraColorIdx % springMeadowPalette.length]);
-            extraColorIdx++;
+            docColorMap.set(key, getColorForDept(s.dept_code));
           }
         }
       });
@@ -2198,7 +2297,7 @@
         const docGroups = Array.from(doctorSuspensionMap.values());
 
         docGroups.forEach(group => {
-          const docPal = group.isBase ? baseDoctorColor : (docColorMap.get(`${group.dept_code}___${group.doctor}`) || springMeadowPalette[0]);
+          const docPal = group.isBase ? baseDoctorColor : (docColorMap.get(`${group.dept_code}___${group.doctor}`) || departmentPalette[0]);
           // 依看診星期與午別排序
           group.items.sort((x, y) => (x.weekdayNum - y.weekdayNum) || (x.slotRank - y.slotRank));
           const rowCount = group.items.length;
@@ -2210,26 +2309,28 @@
             tableRowsHtml += `<tr ${rowClass}>`;
 
             if (idx === 0) {
+              const showBaseBadge = (group.isBase && !isBaseDept);
               tableRowsHtml += `
-                <td rowspan="${rowCount}" class="suspension-doc-cell" style="vertical-align:middle;">
-                  <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">
+                <td rowspan="${rowCount}" class="suspension-doc-cell" style="vertical-align:middle; text-align:center;">
+                  <div style="display:flex; flex-direction:column; gap:4px; align-items:center; justify-content:center;">
                     <span class="suspension-doc-pill" style="background:${docPal.bg}; border:1px solid ${docPal.border}; color:${docPal.text}; box-shadow:0 1px 4px ${docPal.shadow};" onclick="showDoctorScheduleModal('${group.doctor}', '${group.dept_code}', '${group.dept}', '${findDocCode(group.doctor) || ''}')" title="點擊查看 ${group.doctor} 醫師每週門診表">
-                      ${group.doctor} ${group.isBase ? '<span style="white-space: nowrap;">(基準)</span>' : ''}
+                      <span style="white-space: nowrap;">${group.doctor}</span>
+                      ${showBaseBadge ? '<span class="suspension-base-sub">(基準)</span>' : ''}
                     </span>
-                    <span style="font-size:0.80rem; color:#5d6d7e; font-weight:700; margin-left:2px;">[${group.dept}]</span>
+                    <span style="font-size:0.80rem; color:#5d6d7e; font-weight:700;">[${group.dept}]</span>
                   </div>
                 </td>
               `;
             }
 
             tableRowsHtml += `
-              <td style="font-weight:600; color:#34495e;">
-                <span style="display:inline-block; min-width:52px; font-weight:800; color:#34495e;">${item.weekday}</span>
-                <span style="color:#558E9B; font-weight:700; margin-right:4px;">${item.slot}</span>
+              <td style="font-weight:600; color:#34495e; text-align:center; vertical-align:middle;">
+                <span style="font-weight:800; color:#34495e;">${item.weekday}</span>
+                <span style="color:#1E3545; font-weight:700; margin-left:4px; margin-right:4px;">${item.slot}</span>
                 <span style="font-size:0.84rem; color:#5d6d7e; white-space: nowrap;">（${item.room}）</span>
               </td>
-              <td>
-                <span class="suspension-date-tag">⚠️ ${formatSuspensionNoteHtml(item.note)}</span>
+              <td style="text-align:center; vertical-align:middle;">
+                ${formatSuspensionTableCellNote(item.note)}
               </td>
             </tr>`;
           });
@@ -2277,11 +2378,11 @@
         return;
       }
 
-      // 頂部醫師色彩圖例列
+      // 頂部醫師及科別代表色圖例列
       html += `<div class="matrix-legend-bar">
         <div style="font-size:0.98rem; font-weight:800; color:#34495e; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-          <span style="display:inline-block; width:4px; height:15px; background:#558E9B; border-radius:2px;"></span>
-          醫師專屬色彩圖例：
+          <span style="display:inline-block; width:4px; height:15px; background:#1E3545; border-radius:2px;"></span>
+          醫師及科別代表色圖例：
         </div>
         <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">`;
 
@@ -2292,7 +2393,7 @@
         baseDoctorNames.forEach(bd => {
           const bdCode = findDocCode(bd);
           html += `<span class="matrix-doc-pill base-doc-pill clickable" style="background:${baseDoctorColor.bg}; border:1.5px solid ${baseDoctorColor.border}; color:${baseDoctorColor.text}; box-shadow:0 2px 6px ${baseDoctorColor.shadow};" onclick="showDoctorScheduleModal('${bd}', '${bCode}', '${bDeptName}', '${bdCode || ''}')" title="點擊查看 ${bd} 醫師門診表">
-            ${bd} <span style="white-space: nowrap;">(基準)</span>
+            ${bd}
           </span>`;
         });
       } else {
@@ -2305,7 +2406,7 @@
       }
 
       targetDoctorList.forEach(td => {
-        const pal = docColorMap.get(`${td.dept_code}___${td.doctor}`) || springMeadowPalette[0];
+        const pal = docColorMap.get(`${td.dept_code}___${td.doctor}`) || departmentPalette[0];
         html += `<span class="matrix-doc-pill clickable" style="background:${pal.bg}; border:1.5px solid ${pal.border}; color:${pal.text}; box-shadow:0 2px 6px ${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${td.docCode}')" title="點擊查看 ${td.doctor} 醫師門診表">
           ${td.doctor}
         </span>`;
@@ -2338,7 +2439,7 @@
 
           html += `<td class="matrix-slot-cell"><div class="matrix-pills-wrap">`;
 
-          // 若有基準醫師/科別出診，放於頂部（深海藍湖水色 #558E9B，白字）
+          // 若有基準醫師/科別出診，放於頂部（深墨海藍 #1E3545，白字）
           baseMatches.forEach(bm => {
             const hasStop = bm.note && bm.note.includes("停診");
             const roomText = `(${bm.room || "診間"}${bm.note && !hasStop ? " / " + bm.note : ""})`;
@@ -2352,9 +2453,9 @@
             </span>`;
           });
 
-          // 比對醫師依序放於下方（使用 Spring Meadow 色彩池）
+          // 比對醫師依序放於下方（使用科別色彩池）
           targetMatches.forEach(td => {
-            const pal = docColorMap.get(`${td.dept_code}___${td.doctor}`) || springMeadowPalette[0];
+            const pal = docColorMap.get(`${td.dept_code}___${td.doctor}`) || departmentPalette[0];
             const hasStop = td.note && td.note.includes("停診");
             const roomText = `(${td.room || "診間"}${td.note && !hasStop ? " / " + td.note : ""})`;
             html += `<span class="matrix-doc-pill clickable ${hasStop ? 'has-suspension' : ''}" style="background:${pal.bg}; border:1.5px solid ${pal.border}; color:${pal.text}; box-shadow:0 2px 6px ${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
@@ -2436,7 +2537,7 @@
           </div>
           <div style="text-align: right;">
             ${item.docCode ? `<span class="doc-code">${item.docCode}</span>` : `<span class="doc-code empty">無代碼</span>`}
-            <div style="font-size: 0.82rem; color: #558E9B; margin-top: 5px; font-weight: 700;">📅 查看門診 ❯</div>
+            <div style="font-size: 0.82rem; color: #1E3545; margin-top: 5px; font-weight: 700;">📅 查看門診 ❯</div>
           </div>
         </div>
       `).join("");
@@ -2488,7 +2589,7 @@
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
             <strong style="color: #34495e; font-size: 1.18rem; letter-spacing: 0.02em;">${docName} 醫師</strong>
             <div>
-              <span style="font-size: 0.88rem; background: linear-gradient(135deg, #558E9B, #3f6e79); color: white; padding: 4px 12px; border-radius: 14px; font-weight: 700; box-shadow: 0 1px 3px rgba(61, 110, 121, 0.25);">[${deptCode}] ${deptName}</span>
+              <span style="font-size: 0.88rem; background: linear-gradient(135deg, #1E3545, #152733); color: white; padding: 4px 12px; border-radius: 14px; font-weight: 700; box-shadow: 0 1px 3px rgba(30, 53, 69, 0.25);">[${deptCode}] ${deptName}</span>
               <span style="font-size: 0.92rem; background: #e2edf1; color: #203e45; padding: 4px 12px; border-radius: 14px; font-weight: 800; font-family: ui-monospace, SFMono-Regular, monospace; margin-left: 6px; border: 1px solid #cbd5e1;">${codeText}</span>
             </div>
           </div>
@@ -2558,7 +2659,7 @@
 
         bodyHtml += `</tbody></table></div>
           <div style="margin-top: 14px; text-align: right; font-size: 0.96rem; color: #5d6d7e; font-weight: 600;">
-            每週門診總計：<strong style="color: #558E9B; font-size: 1.12rem;">${docSlots.length}</strong> 個時段
+            每週門診總計：<strong style="color: #1E3545; font-size: 1.12rem;">${docSlots.length}</strong> 個時段
           </div>
         `;
       }
@@ -2598,7 +2699,7 @@
               <div style="font-size: 1.05rem; font-weight: 800; color: #34495e;">🏥 衛生福利部彰化醫院 官方醫師停診、代診最新公告</div>
               <div style="font-size: 0.88rem; color: #5d6d7e; margin-top: 4px;">更新時間：${officialNotice.updateTime || "每月底自動更新"}（資料來源：彰化醫院官方公告專區）</div>
             </div>
-            <a href="${officialNotice.sourceUrl || 'https://www.chhw.mohw.gov.tw/?aid=320&page_name=detail&iid=15'}" target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem; background: #558E9B; color: #ffffff; padding: 6px 14px; border-radius: 20px; text-decoration: none; font-weight: 700; box-shadow: 0 2px 6px rgba(61, 110, 121, 0.3);">開啟官方公告頁面 ↗</a>
+            <a href="${officialNotice.sourceUrl || 'https://www.chhw.mohw.gov.tw/?aid=320&page_name=detail&iid=15'}" target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem; background: #1E3545; color: #ffffff; padding: 6px 14px; border-radius: 20px; text-decoration: none; font-weight: 700; box-shadow: 0 2px 6px rgba(30, 53, 69, 0.3);">開啟官方公告頁面 ↗</a>
           </div>
         `;
 
@@ -2618,7 +2719,7 @@
               <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 16px; box-shadow: 0 4px 12px rgba(52, 73, 94, 0.08);">
                 <div style="font-size: 1.02rem; font-weight: 800; color: #34495e; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
                   <span>📌 ${img.title || "醫師停代診公告"}</span>
-                  <a href="${img.url}" target="_blank" rel="noopener noreferrer" style="font-size: 0.85rem; color: #558E9B; text-decoration: underline;">檢視原解析度大圖 ↗</a>
+                  <a href="${img.url}" target="_blank" rel="noopener noreferrer" style="font-size: 0.85rem; color: #1E3545; text-decoration: underline;">檢視原解析度大圖 ↗</a>
                 </div>
                 <div style="text-align: center; background: #f8fafc; border-radius: 8px; padding: 8px; border: 1px solid #e2e8f0;">
                   <a href="${img.url}" target="_blank" rel="noopener noreferrer" title="點擊檢視原圖">
