@@ -321,15 +321,18 @@
       align-items: center;
       justify-content: space-between;
       padding: 8px 18px;
+      border: none !important;
       border-radius: 25px;
       font-size: 1.02rem;
-      font-weight: 700;
+      font-weight: 800;
       color: #0E4369;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06);
       transition: all 0.2s ease;
     }
     .selected-tag.base-tag {
       color: #ffffff !important;
+      background: #558E9B !important;
+      box-shadow: 0 3px 8px rgba(45, 90, 100, 0.28), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1px 2px rgba(0, 0, 0, 0.15) !important;
     }
     .selected-tag:hover {
       transform: translateY(-1px);
@@ -588,13 +591,14 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 6px 8px;
-      border-radius: 10px;
+      padding: 7px 10px;
+      border: none !important;
+      border-radius: 20px;
       font-size: 0.98rem;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06);
       text-align: center;
       line-height: 1.35;
       word-break: normal;
@@ -619,33 +623,33 @@
     }
     .matrix-doc-name {
       white-space: nowrap;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.02em;
     }
     .matrix-doc-room {
       white-space: normal;
       font-size: 0.90em;
-      opacity: 0.95;
-      font-weight: 600;
+      opacity: 1;
+      font-weight: 800;
       text-align: center;
     }
     .matrix-doc-pill:hover {
       transform: translateY(-2px);
-      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.14), inset 0 1px 1.5px rgba(255, 255, 255, 0.85);
     }
     .matrix-doc-pill:active {
       transform: translateY(0);
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     }
     .base-doc-pill {
-      background: #1E3545 !important;
+      background: #558E9B !important;
       color: #ffffff !important;
-      border: 1.5px solid #132430 !important;
+      border: none !important;
       font-weight: 800;
-      box-shadow: 0 2px 6px rgba(30, 53, 69, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+      box-shadow: 0 3px 8px rgba(45, 90, 100, 0.28), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1px 2px rgba(0, 0, 0, 0.15) !important;
     }
     .base-doc-pill:hover {
-      box-shadow: 0 5px 14px rgba(30, 53, 69, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+      box-shadow: 0 5px 14px rgba(45, 90, 100, 0.38), inset 0 1px 1.5px rgba(255, 255, 255, 0.6) !important;
     }
     .matrix-legend-bar {
       display: none !important;
@@ -695,9 +699,10 @@
       width: 15%;
       border-right: 2px solid #cbd5e1 !important;
     }
-    /* 彈窗時段卡片高反差鮮明色彩 (上午/下午/晚上改為色卡 3 前 3 個顏色，字體深藍石墨色 #0E4369) */
+    /* 彈窗時段卡片依色卡-3 紅筆 1~3 順序 (上午 Golden Dune, 下午 Coral Reef, 夜診 Ocean Mist)，字體深藍石墨色 #0E4369 加粗無邊框 */
     .modal-slot-card {
-      border-radius: 10px;
+      border: none !important;
+      border-radius: 14px;
       padding: 9px 8px;
       display: flex;
       flex-direction: column;
@@ -706,30 +711,31 @@
       gap: 4px;
       transition: all 0.2s ease;
       color: #0E4369 !important;
+      font-weight: 800;
     }
     .modal-slot-card:hover {
       transform: translateY(-2px);
     }
-    /* 上午診：色卡 3 第 1 色 Lemon Cream 檸檬奶黃 */
+    /* 上午診：色卡 3 紅筆 1 Golden Dune 金沙暖黃 */
     .slot-morning {
-      background: linear-gradient(135deg, #FFF6D6 0%, #fbeebf 100%) !important;
-      border: 1.5px solid #ecd88c !important;
+      background: linear-gradient(135deg, #F4D9A6 0%, #edd09b 100%) !important;
+      border: none !important;
       color: #0E4369 !important;
-      box-shadow: 0 2px 6px rgba(236, 216, 140, 0.35);
+      box-shadow: 0 3px 8px rgba(244, 217, 166, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06);
     }
-    /* 下午診：色卡 3 第 2 色 Coral Reef 珊瑚橘粉 */
+    /* 下午診：色卡 3 紅筆 2 Coral Reef 珊瑚橘粉 */
     .slot-afternoon {
       background: linear-gradient(135deg, #FFB5A7 0%, #fca292 100%) !important;
-      border: 1.5px solid #f28572 !important;
+      border: none !important;
       color: #0E4369 !important;
-      box-shadow: 0 2px 6px rgba(242, 133, 114, 0.35);
+      box-shadow: 0 3px 8px rgba(255, 181, 167, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06);
     }
-    /* 夜診/晚上：色卡 3 第 3 色 Ocean Mist 清透湖水霧青 */
+    /* 夜診/晚上：色卡 3 紅筆 3 Ocean Mist 清透湖水霧青 */
     .slot-night {
       background: linear-gradient(135deg, #B7DCD6 0%, #9fcbc4 100%) !important;
-      border: 1.5px solid #7ebfb4 !important;
+      border: none !important;
       color: #0E4369 !important;
-      box-shadow: 0 2px 6px rgba(126, 191, 180, 0.35);
+      box-shadow: 0 3px 8px rgba(183, 220, 214, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06);
     }
 
     .dept-code {
@@ -1050,14 +1056,16 @@
       align-items: center;
       justify-content: center;
       gap: 2px;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.86rem;
+      padding: 5px 12px;
+      border: none !important;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 0.88rem;
       cursor: pointer;
       transition: all 0.2s ease;
       line-height: 1.25;
       text-align: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.65);
     }
     .suspension-doc-pill:hover {
       transform: translateY(-1px);
@@ -1791,31 +1799,23 @@
     const weekdayMap = { 1: "星期一", 2: "星期二", 3: "星期三", 4: "星期四", 5: "星期五", 6: "星期六" };
     const slotRank = { "上午": 1, "下午": 2, "夜診": 3 };
 
-    // 基準醫師專屬色：深墨海藍 #1E3545，固定較深色底、高對比純白色字體
+    // 基準醫師專屬色：色卡標注之 Horizon #558E9B，純白粗體字，輕微圓形浮凸感無邊框
     const baseDoctorColor = {
-      id: "baseNavy",
-      bg: "#1E3545",
-      border: "#132430",
+      id: "baseHorizon",
+      bg: "#558E9B",
+      border: "none",
       text: "#ffffff",
-      shadow: "rgba(30, 53, 69, 0.45)"
+      shadow: "0 3px 8px rgba(45, 90, 100, 0.28), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1px 2px rgba(0, 0, 0, 0.15)"
     };
 
-    // 科別專屬淡雅色彩池陣列：嚴格限定使用「色卡 (Spring Meadow)」第三、四行與「色卡 3 (Botanical Stories)」顏色
-    // 比對醫師文字顏色全面採用第 2 張圖片之深藍石墨色 #0E4369
+    // 科別專屬色彩池陣列：嚴格依照「色卡.jpg」紅筆手繪標注 1~5 順序
+    // 文字顏色統一採用深藍石墨色 #0E4369，粗體無邊框，輕微圓形浮凸感
     const departmentPalette = [
-      { id: "morningsky",      name: "晨曦澄空藍 (Morning Sky)",       bg: "#D6E4FA", border: "#9ebfe8", text: "#0E4369", shadow: "rgba(214, 228, 250, 0.45)" }, // 色卡 3
-      { id: "oceanmist",       name: "清透湖水青霧 (Ocean Mist)",      bg: "#B7DCD6", border: "#7ebfb4", text: "#0E4369", shadow: "rgba(183, 220, 214, 0.45)" }, // 色卡 3
-      { id: "sweetmint",       name: "薄荷清綠 (Sweet Mint)",          bg: "#AECBB8", border: "#88ab93", text: "#0E4369", shadow: "rgba(174, 203, 184, 0.45)" }, // 色卡 第3行
-      { id: "dewpoint",        name: "晨露天青 (Dewpoint)",            bg: "#C1DBDF", border: "#94b9bf", text: "#0E4369", shadow: "rgba(193, 219, 223, 0.45)" }, // 色卡 第3行
-      { id: "fairytaledream",  name: "童話夢境粉 (Fairytale Dream)",   bg: "#F9D0CD", border: "#df9d98", text: "#0E4369", shadow: "rgba(249, 208, 205, 0.45)" }, // 色卡 第3行
-      { id: "atomictangerine", name: "暖杏橙 (Atomic Tangerine)",      bg: "#F79E70", border: "#dc7d4c", text: "#0E4369", shadow: "rgba(247, 158, 112, 0.45)" }, // 色卡 第3行
-      { id: "buttercup",       name: "秋麥金黃 (Buttercup)",           bg: "#E7C676", border: "#caa447", text: "#0E4369", shadow: "rgba(231, 198, 118, 0.45)" }, // 色卡 第4行
-      { id: "pancake",         name: "焦糖烤餅 (Pancake)",             bg: "#FBD487", border: "#dcb059", text: "#0E4369", shadow: "rgba(251, 212, 135, 0.45)" }, // 色卡 第4行
-      { id: "wisteriapurple",  name: "紫藤柔紫 (Wisteria Purple)",     bg: "#C6B3CA", border: "#a58ca9", text: "#0E4369", shadow: "rgba(198, 179, 202, 0.45)" }, // 色卡 第4行
-      { id: "tumbleweed",      name: "風滾草褐沙 (Tumbleweed)",        bg: "#D1A996", border: "#b5846e", text: "#0E4369", shadow: "rgba(209, 169, 150, 0.45)" }, // 色卡 第4行
-      { id: "lemoncream",      name: "檸檬奶黃 (Lemon Cream)",         bg: "#FFF6D6", border: "#ecd88c", text: "#0E4369", shadow: "rgba(255, 246, 214, 0.45)" }, // 色卡 3
-      { id: "coralreef",       name: "珊瑚橘粉 (Coral Reef)",          bg: "#FFB5A7", border: "#f28572", text: "#0E4369", shadow: "rgba(255, 181, 167, 0.45)" }, // 色卡 3
-      { id: "goldendune",      name: "金沙暖黃 (Golden Dune)",         bg: "#F4D9A6", border: "#d6ab48", text: "#0E4369", shadow: "rgba(244, 217, 166, 0.45)" }  // 色卡 3
+      { id: "buttercup",       name: "秋麥金黃 (Buttercup)",         bg: "#E7C676", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(231, 198, 118, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06)" }, // 紅筆 1
+      { id: "wisteriapurple",  name: "紫藤柔紫 (Wisteria Purple)",   bg: "#C6B3CA", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(198, 179, 202, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06)" }, // 紅筆 2
+      { id: "rose",            name: "珊瑚玫瑰粉 (Rose)",            bg: "#E89B88", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(232, 155, 136, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06)" }, // 紅筆 3
+      { id: "fairytaledream",  name: "童話夢境粉 (Fairytale Dream)", bg: "#F9D0CD", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(249, 208, 205, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06)" }, // 紅筆 4
+      { id: "tumbleweed",      name: "風滾草褐沙 (Tumbleweed)",      bg: "#D1A996", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(209, 169, 150, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06)" }  // 紅筆 5
     ];
 
     // 動態色彩分配管理：依照加入順序以「科別」為單位分配代表色；同科底下所有醫師統一共用該科專屬代表色
@@ -2106,14 +2106,14 @@
       const allDepts = getAllDepts();
       const { tagColorMap } = getDynamicColorAssignment();
 
-      // 1. 基準醫師/科別標籤 (固定使用 baseDoctorColor #1E3545，深墨海藍，深色底純白字)
+      // 1. 基準醫師/科別標籤 (固定使用 baseDoctorColor Horizon #558E9B，純白粗體字無邊框)
       if (crossBaseDoctorKey) {
         const baseTag = document.createElement("div");
         baseTag.className = "selected-tag base-tag";
         baseTag.style.background = baseDoctorColor.bg;
-        baseTag.style.border = `1.5px solid ${baseDoctorColor.border}`;
+        baseTag.style.border = "none";
         baseTag.style.color = baseDoctorColor.text;
-        baseTag.style.boxShadow = `0 2px 6px ${baseDoctorColor.shadow}`;
+        baseTag.style.boxShadow = baseDoctorColor.shadow;
 
         if (crossBaseDoctorKey.startsWith("DEPT_")) {
           const bCode = crossBaseDoctorKey.replace("DEPT_", "");
@@ -2128,15 +2128,15 @@
         container.appendChild(baseTag);
       }
 
-      // 2. 所有比對目標標籤 (依使用者加入順序動態分配科別專屬代表色)
+      // 2. 所有比對目標標籤 (依使用者加入順序動態分配科別專屬代表色，無邊框浮凸感)
       crossSelectedTargets.forEach(key => {
         const pal = tagColorMap.get(key) || departmentPalette[0];
         const tag = document.createElement("div");
         tag.className = "selected-tag";
         tag.style.background = pal.bg;
-        tag.style.border = `1.5px solid ${pal.border}`;
+        tag.style.border = "none";
         tag.style.color = pal.text;
-        tag.style.boxShadow = `0 2px 6px ${pal.shadow}`;
+        tag.style.boxShadow = pal.shadow;
 
         if (key.startsWith("DEPT_")) {
           const code = key.replace("DEPT_", "");
@@ -2331,18 +2331,18 @@
               tableRowsHtml += `
                 <td rowspan="${rowCount}" class="suspension-doc-cell" style="vertical-align:middle; text-align:center;">
                   <div style="display:flex; flex-direction:column; gap:4px; align-items:center; justify-content:center;">
-                    <span class="suspension-doc-pill" style="background:${docPal.bg}; border:1px solid ${docPal.border}; color:${docPal.text}; box-shadow:0 1px 4px ${docPal.shadow};" onclick="showDoctorScheduleModal('${group.doctor}', '${group.dept_code}', '${group.dept}', '${findDocCode(group.doctor) || ''}')" title="點擊查看 ${group.doctor} 醫師每週門診表">
+                    <span class="suspension-doc-pill" style="background:${docPal.bg}; border:none; color:${docPal.text}; box-shadow:${docPal.shadow};" onclick="showDoctorScheduleModal('${group.doctor}', '${group.dept_code}', '${group.dept}', '${findDocCode(group.doctor) || ''}')" title="點擊查看 ${group.doctor} 醫師每週門診表">
                       <span style="white-space: nowrap;">${group.doctor}</span>
                       ${showBaseBadge ? '<span class="suspension-base-sub">(基準)</span>' : ''}
                     </span>
-                    <span style="font-size:0.80rem; color:#5d6d7e; font-weight:700;">[${group.dept}]</span>
+                    <span style="font-size:0.80rem; color:#5d6d7e; font-weight:800;">[${group.dept}]</span>
                   </div>
                 </td>
               `;
             }
 
             tableRowsHtml += `
-              <td style="font-weight:600; color:#34495e; text-align:center; vertical-align:middle;">
+              <td style="font-weight:800; color:#34495e; text-align:center; vertical-align:middle;">
                 <span style="font-weight:800; color:#34495e;">${item.weekday}</span>
                 <span style="color:#1E3545; font-weight:700; margin-left:4px; margin-right:4px;">${item.slot}</span>
                 <span style="font-size:0.84rem; color:#5d6d7e; white-space: nowrap;">（${item.room}）</span>
@@ -2421,12 +2421,12 @@
 
           html += `<td class="matrix-slot-cell"><div class="matrix-pills-wrap">`;
 
-          // 若有基準醫師/科別出診，放於頂部（深墨海藍 #1E3545，白字）
+          // 若有基準醫師/科別出診，放於頂部（Horizon #558E9B，白字加粗無邊框）
           baseMatches.forEach(bm => {
             const hasStop = bm.note && bm.note.includes("停診");
             const roomText = `(${bm.room || "診間"}${bm.note && !hasStop ? " / " + bm.note : ""})`;
             const dObj = masterData.find(m => m.deptCode === bm.dept_code);
-            html += `<span class="matrix-doc-pill base-doc-pill clickable ${hasStop ? 'has-suspension' : ''}" style="background:${baseDoctorColor.bg}; border:1.5px solid ${baseDoctorColor.border}; color:${baseDoctorColor.text}; box-shadow:0 2px 6px ${baseDoctorColor.shadow};" onclick="showDoctorScheduleModal('${bm.doctor}', '${bm.dept_code}', '${dObj ? dObj.dept : ''}', '${findDocCode(bm.doctor) || ''}')" title="點擊查看 ${bm.doctor} 醫師每週門診表">
+            html += `<span class="matrix-doc-pill base-doc-pill clickable ${hasStop ? 'has-suspension' : ''}" style="background:${baseDoctorColor.bg}; border:none; color:${baseDoctorColor.text}; box-shadow:${baseDoctorColor.shadow};" onclick="showDoctorScheduleModal('${bm.doctor}', '${bm.dept_code}', '${dObj ? dObj.dept : ''}', '${findDocCode(bm.doctor) || ''}')" title="點擊查看 ${bm.doctor} 醫師每週門診表">
               <span class="matrix-doc-info">
                 <span class="matrix-doc-name">${bm.doctor}</span>
                 <span class="matrix-doc-room">${roomText}</span>
@@ -2435,12 +2435,12 @@
             </span>`;
           });
 
-          // 比對醫師依序放於下方（使用科別色彩池）
+          // 比對醫師依序放於下方（使用科別色彩池 1~5，無邊框浮凸感）
           targetMatches.forEach(td => {
             const pal = docColorMap.get(`${td.dept_code}___${td.doctor}`) || departmentPalette[0];
             const hasStop = td.note && td.note.includes("停診");
             const roomText = `(${td.room || "診間"}${td.note && !hasStop ? " / " + td.note : ""})`;
-            html += `<span class="matrix-doc-pill clickable ${hasStop ? 'has-suspension' : ''}" style="background:${pal.bg}; border:1.5px solid ${pal.border}; color:${pal.text}; box-shadow:0 2px 6px ${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
+            html += `<span class="matrix-doc-pill clickable ${hasStop ? 'has-suspension' : ''}" style="background:${pal.bg}; border:none; color:${pal.text}; box-shadow:${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
               <span class="matrix-doc-info">
                 <span class="matrix-doc-name">${td.doctor}</span>
                 <span class="matrix-doc-room">${roomText}</span>
@@ -2624,11 +2624,11 @@
 
                 const hasStop = m.note && m.note.includes("停診");
                 bodyHtml += `<div class="modal-slot-card ${slotClass}" style="${hasStop ? 'border: 2px solid #ef4444; position:relative;' : ''}">
-                  <span style="font-size: 0.88rem; font-weight: 700; letter-spacing: 0.04em; color: #0E4369; opacity: 0.95;">${slotLabel}</span>
-                  <strong style="font-size: 1.08rem; color: #0E4369;">${m.room || "看診中"}</strong>
+                  <span style="font-size: 0.88rem; font-weight: 800; letter-spacing: 0.04em; color: #0E4369;">${slotLabel}</span>
+                  <strong style="font-size: 1.08rem; color: #0E4369; font-weight: 800;">${m.room || "看診中"}</strong>
                   ${m.note ? (hasStop ? 
                     `<span style="font-size: 0.82rem; background: #b91c1c; color: #ffffff; padding: 2px 8px; border-radius: 6px; font-weight: 800; margin-top: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.3); word-break: normal;">${renderSuspensionPillBadgeHtml(m.note)}</span>` :
-                    `<span style="font-size: 0.80rem; background: rgba(14,67,105,0.08); color: #0E4369; padding: 2px 7px; border-radius: 4px; font-weight: 700; margin-top: 3px; border: 1px solid rgba(14,67,105,0.18);">${m.note}</span>`
+                    `<span style="font-size: 0.80rem; background: rgba(14,67,105,0.08); color: #0E4369; padding: 2px 7px; border-radius: 4px; font-weight: 800; margin-top: 3px;">${m.note}</span>`
                   ) : ""}
                 </div>`;
               });
