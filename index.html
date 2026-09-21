@@ -592,9 +592,10 @@
     }
     .matrix-doc-pill {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 3px;
       padding: 8px 10px;
       border: none !important;
       border-radius: 20px;
@@ -612,18 +613,22 @@
     }
     .matrix-doc-info {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
       justify-content: center;
+      gap: 4px;
       text-align: center;
       line-height: 1.25;
+      flex-wrap: wrap;
     }
     .matrix-doc-pill.has-suspension .matrix-doc-info {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
       justify-content: center;
+      gap: 4px;
       text-align: center;
+      flex-wrap: wrap;
     }
     .matrix-doc-name {
       white-space: nowrap;
@@ -632,9 +637,9 @@
       font-size: 1.08rem;
     }
     .matrix-doc-room {
-      white-space: normal;
+      white-space: nowrap;
       font-size: 0.96em;
-      opacity: 1;
+      opacity: 0.95;
       font-weight: 800;
       text-align: center;
     }
@@ -1043,23 +1048,28 @@
       50% { transform: scale(1.25); opacity: 0.75; }
     }
 
-    /* 門診膠囊停診高亮標籤 */
+    /* 門診膠囊停診高亮標籤：置於姓名與診間下方並水平居中 */
     .pill-suspension-badge {
       display: inline-flex;
       align-items: center;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 3px;
+      gap: 2px 4px;
       background: #b91c1c;
       color: #ffffff;
-      padding: 2px 7px;
+      padding: 2.5px 8px;
       border-radius: 6px;
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       font-weight: 800;
-      margin-left: 6px;
+      margin-top: 3px;
+      margin-left: 0 !important;
       letter-spacing: 0;
       word-break: normal;
       box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+      max-width: 96%;
+      line-height: 1.25;
+      text-align: center;
+      box-sizing: border-box;
     }
 
     /* 原子日期單元：內部絕對禁止斷字折行，換行一律整組完整落於同行 */
@@ -1113,6 +1123,13 @@
       text-align: center;
       border-bottom: 1.5px solid #fdba74;
     }
+    .suspension-table th:nth-child(2) {
+      text-align: center !important;
+    }
+    .suspension-table th:nth-child(3) {
+      text-align: left !important;
+      padding-left: 16px !important;
+    }
     .suspension-table td {
       padding: 6px 8px;
       font-size: 0.85rem;
@@ -1120,6 +1137,13 @@
       vertical-align: middle;
       text-align: center;
       line-height: 1.35;
+    }
+    .suspension-table td:nth-child(2) {
+      text-align: center !important;
+    }
+    .suspension-table td:nth-child(3) {
+      text-align: left !important;
+      padding-left: 16px !important;
     }
     .suspension-table tr.doc-group-last td {
       border-bottom: 1.5px solid #fdba74;
@@ -1164,7 +1188,7 @@
     .suspension-tag-stack {
       display: inline-flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       gap: 4px;
       width: 100%;
@@ -2429,7 +2453,7 @@
                 <span style="color:#1E3545; font-weight:700; margin-left:4px; margin-right:4px;">${item.slot}</span>
                 <span style="font-size:0.84rem; color:#5d6d7e; white-space: nowrap;">（${item.room}）</span>
               </td>
-              <td style="text-align:center; vertical-align:middle;">
+              <td style="text-align:left; vertical-align:middle; padding-left:16px;">
                 ${formatSuspensionTableCellNote(item.note)}
               </td>
             </tr>`;
@@ -2446,9 +2470,9 @@
               <table class="suspension-table">
                 <thead>
                   <tr>
-                    <th style="width:24%; min-width:110px;">科別與醫師</th>
-                    <th style="width:36%; min-width:140px;">異動看診時段</th>
-                    <th style="width:40%; min-width:160px;">停診／異動日期標註</th>
+                    <th style="width:24%; min-width:110px; text-align:center;">科別與醫師</th>
+                    <th style="width:36%; min-width:140px; text-align:center;">異動看診時段</th>
+                    <th style="width:40%; min-width:160px; text-align:left; padding-left:16px;">停診／異動日期標註</th>
                   </tr>
                 </thead>
                 <tbody>

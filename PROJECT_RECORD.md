@@ -9,7 +9,7 @@
 | **專案名稱** | 門診時段交叉查詢與醫師代碼查詢系統 (Outpatient Clinic Schedule Cross-Query & Doctor Code Assistant) |
 | **專案代號** | `Clinic-Schedule-CrossQuery` |
 | **建立日期** | 2026-09-18 |
-| **目前版本** | `v0.9.3` (字體改為思源黑體Noto Sans TC、字體再稍微放大、修復手機版時刻表彈窗停診日期截斷與擠壓跑掉) |
+| **目前版本** | `v0.9.4` (停診表格異動時段置中對齊&停診日期靠左對齊、大課表膠囊診間在姓名旁邊同一行置中&紅色停診框放下方居中) |
 | **主要目標使用者** | 臨床醫師、門診跟診護理師、轉診中心個案管理師、批價掛號櫃檯人員、專科護理師 (NP)、各科行政秘書 |
 | **運作環境** | 現代網頁瀏覽器 (Chrome, Edge, Safari, Firefox)、支援行動裝置 (RWD)、純前端零依賴離線運作 (Zero-dependency Web App) |
 | **GitHub 倉庫** | `https://github.com/DAIDAI082340/OPD-schedule-and-Doctor-code` |
@@ -188,6 +188,17 @@ flowchart TD
   - **🎨 多醫師大色相互斥調色盤升級（徹底解決相近色混淆）**：
     - 全面剔除相鄰色，改採 8 大互斥色系（翡翠綠、活力橙、皇家深紫、石榴紅、焦糖棕、沉穩碳黑、電光天青、鮮亮洋紅）。
     - 徹底解決「深靛藍 vs 薰衣紫」偏紫藍撞色問題（改為碳黑 vs 正紫）。
+- **v0.9.4 (2026-09-21)**:
+  - **🩺 大課表膠囊排版升級：診間在姓名旁邊同一行置中、紅色停診框居中放下方 (Pill Name-Room Inline & Stacked Stop Badge)**:
+    - **診間在姓名旁邊**：`.matrix-doc-info` 改為 `flex-direction: row`，姓名與診間並排於同一行水平置中（如：`黃耀宣 (88診)`、`蔡旻叡 (88診)`、`黃伊文 (5診)`）。
+    - **紅色框字放下面**：`.matrix-doc-pill` 改為縱向堆疊（`flex-direction: column`），若有停診（`hasStop`），紅色停診框（`.pill-suspension-badge`）直接落於下方居中（`margin-top: 3px; margin-left: 0;`）。
+    - **視覺對稱平衡**：徹底消除先前橫向並排時姓名被往左推擠、各格長寬參差不齊的痛點。所有膠囊中心軸線一致對齊，即使無停診的診次外觀也完全和諧。
+  - **📐 停診／異動提醒表格欄位精準對齊 (Suspension Table Column Alignments)**:
+    - **欄位 2（異動看診時段）**：表頭與所有單元格全面 **水平置中對齊**（`text-align: center`）。
+    - **欄位 3（停診／異動日期標註）**：表頭與所有單元格全面 **靠左對齊**（`text-align: left; padding-left: 16px;`），標籤堆疊器設為 `align-items: flex-start;`，多行警告標籤整齊靠左排列，結構清晰分明。
+  - **🔒 雙生檔案 SHA-256 100% 位元級同步**：
+    - `index.html` 與 `門診時段交叉查詢與醫師代碼查詢系統.html` 之 SHA-256 雜湊值維持 100% 完全相同。
+
 - **v0.9.3 (2026-09-21)**:
   - **🔤 字體全面改用思源黑體 (Noto Sans TC Integration)**:
     - 引入 Google Fonts 官方繁體中文 `Noto Sans TC`（支援 400, 500, 700, 800, 900 多重字重），並將全域首選字型設為 `'Noto Sans TC'`。
