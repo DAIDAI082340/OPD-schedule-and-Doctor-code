@@ -576,16 +576,43 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 7px 14px;
-      border-radius: 20px;
-      font-size: 1.00rem;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 18px;
+      font-size: 0.98rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-      text-align: center;
-      line-height: 1.45;
-      word-break: break-word;
+      text-align: left;
+      line-height: 1.35;
+      word-break: normal;
+    }
+    .matrix-doc-info {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      column-gap: 4px;
+      row-gap: 2px;
+      text-align: left;
+      line-height: 1.25;
+    }
+    .matrix-doc-pill.has-suspension .matrix-doc-info {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+    .matrix-doc-name {
+      white-space: nowrap;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .matrix-doc-room {
+      white-space: nowrap;
+      font-size: 0.90em;
+      opacity: 0.95;
+      font-weight: 600;
     }
     .matrix-doc-pill:hover {
       transform: translateY(-2px);
@@ -1714,6 +1741,10 @@
 
     // 防止下拉選單因視窗底部空間不足而強制向上彈出展開
     function initAntiUpwardDropdowns() {
+      // 觸控／行動裝置（手機與平板）原生喚起系統底部輪盤選單 (Bottom Sheet/Dialog)，絕無向上遮蔽標題問題，嚴禁干預視窗滾動
+      const isTouch = window.matchMedia("(pointer: coarse)").matches || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+      if (isTouch) return;
+
       const selects = document.querySelectorAll("select");
       selects.forEach(sel => {
         const ensureSpace = () => {
@@ -1728,9 +1759,7 @@
             window.scrollBy({ top: scrollNeeded, behavior: "instant" });
           }
         };
-        sel.addEventListener("pointerdown", ensureSpace, { passive: true });
         sel.addEventListener("mousedown", ensureSpace, { passive: true });
-        sel.addEventListener("focus", ensureSpace, { passive: true });
       });
     }
 
@@ -1845,20 +1874,6 @@
       renderCrossTargetTags();
       if (crossBaseDoctorKey) {
         runCrossSearch();
-        // 選定基準醫師後，平滑滾動引導至第 2 步比對選單，使比對選單置於視窗上半部最佳視角
-        // 確保點開時下方擁有 >650px 極充裕空間，100% 絕對向下展開
-        setTimeout(() => {
-          const targetDeptEl = document.getElementById("cross-target-dept-select");
-          if (targetDeptEl) {
-            const rect = targetDeptEl.getBoundingClientRect();
-            if (rect.top > 240) {
-              window.scrollTo({
-                top: window.scrollY + rect.top - 170,
-                behavior: "smooth"
-              });
-            }
-          }
-        }, 120);
       }
     }function onCrossTargetDeptChanged() {
       const deptCode = document.getElementById("cross-target-dept-select").value;
@@ -2126,7 +2141,7 @@
                 <td rowspan="${rowCount}" class="suspension-doc-cell" style="vertical-align:middle;">
                   <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">
                     <span class="suspension-doc-pill" style="background:${docPal.bg}; border:1px solid ${docPal.border}; color:${docPal.text}; box-shadow:0 1px 4px ${docPal.shadow};" onclick="showDoctorScheduleModal('${group.doctor}', '${group.dept_code}', '${group.dept}', '${findDocCode(group.doctor) || ''}')" title="點擊查看 ${group.doctor} 醫師每週門診表">
-                      ${group.doctor} ${group.isBase ? '(基準)' : ''}
+                      ${group.doctor} ${group.isBase ? '<span style="white-space: nowrap;">(基準)</span>' : ''}
                     </span>
                     <span style="font-size:0.80rem; color:#78695d; font-weight:700; margin-left:2px;">[${group.dept}]</span>
                   </div>
@@ -2138,7 +2153,7 @@
               <td style="font-weight:600; color:#433422;">
                 <span style="display:inline-block; min-width:52px; font-weight:800; color:#5c4333;">${item.weekday}</span>
                 <span style="color:#8c6d58; font-weight:700; margin-right:4px;">${item.slot}</span>
-                <span style="font-size:0.84rem; color:#78695d;">（${item.room}）</span>
+                <span style="font-size:0.84rem; color:#78695d; white-space: nowrap;">（${item.room}）</span>
               </td>
               <td>
                 <span class="suspension-date-tag">⚠️ ${formatSuspensionNoteHtml(item.note)}</span>
@@ -2199,7 +2214,7 @@
         </div>
         <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
           <span class="matrix-doc-pill base-doc-pill clickable" style="background:${baseColor.bg}; border:1.5px solid ${baseColor.border}; color:${baseColor.text}; box-shadow:0 2px 6px ${baseColor.shadow};" onclick="showDoctorScheduleModal('${docName}', '${deptCode}', '${masterData.find(m=>m.deptCode===deptCode)?.dept || ''}', '${docCode || ''}')" title="點擊查看 ${docName} 醫師門診表">
-            ${docName} (基準)
+            ${docName} <span style="white-space: nowrap;">(基準)</span>
           </span>`;
 
       targetDoctorList.forEach(td => {
@@ -2239,8 +2254,13 @@
           // 若有基準醫師，放於頂部（第 1 位濃縮深棕）
           if (baseMatch) {
             const hasStop = baseMatch.note && baseMatch.note.includes("停診");
-            html += `<span class="matrix-doc-pill base-doc-pill clickable" style="background:${baseColor.bg}; border:1.5px solid ${baseColor.border}; color:${baseColor.text}; box-shadow:0 2px 6px ${baseColor.shadow};" onclick="showDoctorScheduleModal('${docName}', '${deptCode}', '${masterData.find(m=>m.deptCode===deptCode)?.dept || ''}', '${docCode || ''}')" title="點擊查看 ${docName} 醫師每週門診表">
-              ${docName} (${baseMatch.room || "診間"}${baseMatch.note && !hasStop ? " / " + baseMatch.note : ""})${hasStop ? `<span class="pill-suspension-badge">⚠️ ${formatSuspensionNoteHtml(baseMatch.note)}</span>` : ""}
+            const roomText = `(${baseMatch.room || "診間"}${baseMatch.note && !hasStop ? " / " + baseMatch.note : ""})`;
+            html += `<span class="matrix-doc-pill base-doc-pill clickable ${hasStop ? 'has-suspension' : ''}" style="background:${baseColor.bg}; border:1.5px solid ${baseColor.border}; color:${baseColor.text}; box-shadow:0 2px 6px ${baseColor.shadow};" onclick="showDoctorScheduleModal('${docName}', '${deptCode}', '${masterData.find(m=>m.deptCode===deptCode)?.dept || ''}', '${docCode || ''}')" title="點擊查看 ${docName} 醫師每週門診表">
+              <span class="matrix-doc-info">
+                <span class="matrix-doc-name">${docName}</span>
+                <span class="matrix-doc-room">${roomText}</span>
+              </span>
+              ${hasStop ? `<span class="pill-suspension-badge">⚠️ ${formatSuspensionNoteHtml(baseMatch.note)}</span>` : ""}
             </span>`;
           }
 
@@ -2248,8 +2268,13 @@
           targetMatches.forEach(td => {
             const pal = docColorMap.get(`${td.dept_code}___${td.doctor}`) || metallicColorPalette[1];
             const hasStop = td.note && td.note.includes("停診");
-            html += `<span class="matrix-doc-pill clickable" style="background:${pal.bg}; border:1.5px solid ${pal.border}; color:${pal.text}; box-shadow:0 2px 6px ${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
-              ${td.doctor} (${td.room || "診間"}${td.note && !hasStop ? " / " + td.note : ""})${hasStop ? `<span class="pill-suspension-badge">⚠️ ${formatSuspensionNoteHtml(td.note)}</span>` : ""}
+            const roomText = `(${td.room || "診間"}${td.note && !hasStop ? " / " + td.note : ""})`;
+            html += `<span class="matrix-doc-pill clickable ${hasStop ? 'has-suspension' : ''}" style="background:${pal.bg}; border:1.5px solid ${pal.border}; color:${pal.text}; box-shadow:0 2px 6px ${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
+              <span class="matrix-doc-info">
+                <span class="matrix-doc-name">${td.doctor}</span>
+                <span class="matrix-doc-room">${roomText}</span>
+              </span>
+              ${hasStop ? `<span class="pill-suspension-badge">⚠️ ${formatSuspensionNoteHtml(td.note)}</span>` : ""}
             </span>`;
           });
 
