@@ -9,7 +9,7 @@
 | **專案名稱** | 門診時段交叉查詢與醫師代碼查詢系統 (Outpatient Clinic Schedule Cross-Query & Doctor Code Assistant) |
 | **專案代號** | `Clinic-Schedule-CrossQuery` |
 | **建立日期** | 2026-09-18 |
-| **目前版本** | `v0.9.0` (基準醫師加深為深墨海藍 #1E3545、改以科別區分色彩並納入 Morning Sky 與 Ocean Mist、其他醫師字體採用深藍石墨色 #0E4369、停診表分行置中、課表膠囊居中對齊) |
+| **目前版本** | `v0.9.1` (頂部Header改為#558E9B、加入按鈕改為#3d6e79、色卡限第3/4行與色卡3、彈窗時段改色卡3前3色字體#0E4369、大課表膠囊統一同寬、移除代表色圖例、修復網掛不開放斷字) |
 | **主要目標使用者** | 臨床醫師、門診跟診護理師、轉診中心個案管理師、批價掛號櫃檯人員、專科護理師 (NP)、各科行政秘書 |
 | **運作環境** | 現代網頁瀏覽器 (Chrome, Edge, Safari, Firefox)、支援行動裝置 (RWD)、純前端零依賴離線運作 (Zero-dependency Web App) |
 | **GitHub 倉庫** | `https://github.com/DAIDAI082340/OPD-schedule-and-Doctor-code` |
@@ -188,6 +188,31 @@ flowchart TD
   - **🎨 多醫師大色相互斥調色盤升級（徹底解決相近色混淆）**：
     - 全面剔除相鄰色，改採 8 大互斥色系（翡翠綠、活力橙、皇家深紫、石榴紅、焦糖棕、沉穩碳黑、電光天青、鮮亮洋紅）。
     - 徹底解決「深靛藍 vs 薰衣紫」偏紫藍撞色問題（改為碳黑 vs 正紫）。
+- **v0.9.1 (2026-09-21)**:
+  - **🌊 頂部 Header 改為 Horizon `#558E9B` ＆ 加入按鈕調深 `#3d6e79` (Horizon Palette Integration)**:
+    - 頂部導航區域底色全面套用圖 4 之 Horizon `#558E9B` 微漸層，風格沉著清亮。
+    - 「+ 加入比對名單」按鈕採用稍微加深的調和色 `#3d6e79`（`#447784` ~ `#366570`，純白字），兼具家族呼應與按鈕立體度。
+  - **🌿 色彩池嚴格限縮為「Spring Meadow」第 3、4 行與「Botanical Stories」**:
+    - 全面剔除色卡第 1、2 行之偏深偏暗顏色（Herald of Spring、Olive、Terracotta 等）。
+    - 嚴格僅保留 Sweet Mint、Dewpoint、Fairytale Dream、Atomic Tangerine、Buttercup、Pancake、Wisteria Purple、Tumbleweed、Lemon Cream、Coral Reef、Ocean Mist、Morning Sky、Golden Dune 等 13 組高明度淡彩。
+    - 所有比對醫師文字全面採用深藍石墨色 **`#0E4369`**，對比鮮明。
+  - **⚓ 基準醫師顏色維持深墨海藍 `#1E3545`（白字），與比對名單絕對不撞色**:
+    - 基準醫師固定為圖 3 之深墨海藍 `#1E3545`（明度 18%，純白粗體字），與比對名單之高明度淡彩（明度 > 75%）反差極為鮮明，絕無混淆撞色。
+  - **📅 個人門診時刻表彈窗改為色卡 3 前 3 個顏色，字體全面改為 `#0E4369` (Modal Slot Harmonization)**:
+    - 上午診：色卡 3 第 1 色 **Lemon Cream (`#FFF6D6`)**。
+    - 下午診：色卡 3 第 2 色 **Coral Reef (`#FFB5A7`)**。
+    - 夜診：色卡 3 第 3 色 **Ocean Mist (`#B7DCD6`)**。
+    - 彈窗內時段文字、診間號碼、備註字體全面改為深藍石墨色 **`#0E4369`**，消除白色重影，閱讀清晰溫潤。
+  - **📐 大課表膠囊框尺寸全面統一（不論字數多少排版原則均維持） (Uniform Timetable Pill Box)**:
+    - `.matrix-doc-pill` 設定為 `width: 100%; min-height: 48px; box-sizing: border-box;`。
+    - 同一欄位內的所有膠囊框寬度與排版風格均勻對齊，解決過去短字膠囊太小、長字膠囊過大之參差問題。
+  - **🚫 移除「醫師及科別代表色圖例」區塊 (Remove Legend Bar)**:
+    - 大課表上方不再呈現冗餘的代表色圖例，比對結果直接呈現停診表格與每週大課表，頁面更緊湊俐落。
+  - **🛡️ 修復網路版「⚠️ 網掛不開放」段落折行跑掉問題 (Atomic Web-closed Badge Protection)**:
+    - 建立 `renderSuspensionPillBadgeHtml()` 與 `.web-closed-atomic`，將「⚠️ 網掛不開放」封裝為原子化防斷行單元，徹底解決因空間受限而將「網掛不開」與「放」拆開折行的 bug。
+  - **🔒 雙生檔案 SHA-256 100% 位元級同步**：
+    - `index.html` 與 `門診時段交叉查詢與醫師代碼查詢系統.html` 之 SHA-256 雜湊值維持 100% 完全相同。
+
 - **v0.9.0 (2026-09-21)**:
   - **⚓ 基準醫師視覺再加深 (Deepen Base Doctor Background)**:
     - 基準醫師底色全面升級為沉穩深邃之 **`#1E3545`**（深墨海藍 Deep Slate Navy），邊框改為 `#132430`，搭配純白色高對比粗體字（`#ffffff`），在每週大課表頂部形成絕對清晰且具權威感之定錨基準。
