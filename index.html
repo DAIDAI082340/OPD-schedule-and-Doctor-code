@@ -34,9 +34,15 @@
       --shadow-lg: 0 10px 25px -4px rgba(52, 73, 94, 0.09), 0 4px 8px -2px rgba(52, 73, 94, 0.04);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
     body {
-      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      font-family: "Microsoft JhengHei", "微軟正黑體", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", sans-serif;
       font-size: 17.5px;
       background-color: var(--bg);
       background-image: radial-gradient(at 50% 0%, #f8fafc 0%, #edf2f7 65%);
@@ -49,7 +55,7 @@
     }
 
     header {
-      background: linear-gradient(180deg, #558E9B 0%, #467883 100%);
+      background: linear-gradient(180deg, #1E3545 0%, #152733 100%);
       color: white;
       padding: 22px 16px 18px 16px;
       text-align: center;
@@ -334,8 +340,8 @@
     }
     .selected-tag.base-tag {
       color: #ffffff !important;
-      background: #558E9B !important;
-      box-shadow: 0 3px 8px rgba(45, 90, 100, 0.28), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1px 2px rgba(0, 0, 0, 0.15) !important;
+      background: #1E3545 !important;
+      box-shadow: 0 4px 10px rgba(18, 32, 43, 0.38), inset 0 1px 1.5px rgba(255, 255, 255, 0.35), inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
     }
     .selected-tag:hover {
       transform: translateY(-1px);
@@ -597,7 +603,7 @@
       justify-content: center !important;
       gap: 3px;
       padding: 8px 10px;
-      border: none !important;
+      border: 1px solid transparent;
       border-radius: 20px;
       font-size: 1.04rem;
       font-weight: 800;
@@ -632,7 +638,7 @@
     }
     .matrix-doc-name {
       white-space: nowrap;
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing: 0.02em;
       font-size: 1.08rem;
     }
@@ -652,14 +658,14 @@
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     }
     .base-doc-pill {
-      background: #558E9B !important;
+      background: #1E3545 !important;
       color: #ffffff !important;
       border: none !important;
-      font-weight: 800;
-      box-shadow: 0 3px 8px rgba(45, 90, 100, 0.28), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1px 2px rgba(0, 0, 0, 0.15) !important;
+      font-weight: 900;
+      box-shadow: 0 4px 10px rgba(18, 32, 43, 0.38), inset 0 1px 1.5px rgba(255, 255, 255, 0.35), inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
     }
     .base-doc-pill:hover {
-      box-shadow: 0 5px 14px rgba(45, 90, 100, 0.38), inset 0 1px 1.5px rgba(255, 255, 255, 0.6) !important;
+      box-shadow: 0 6px 16px rgba(18, 32, 43, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.5) !important;
     }
     .matrix-legend-bar {
       display: none !important;
@@ -1616,11 +1622,9 @@
       { dept_code: "AC", dept_name: "胸腔內科", doctor: "林澤宏", weekday: 1, slot: "夜診", room: "5診", note: "" },
       { dept_code: "00", dept_name: "高年科", doctor: "梁垠盤", weekday: 1, slot: "上午", room: "9診", note: "9/28停診" },
       { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 4, slot: "上午", room: "88診", note: "網掛不開放 10/15停診" },
-      { dept_code: "04", dept_name: "小兒科", doctor: "鍾瑞賢", weekday: 5, slot: "上午", room: "28診", note: "代診" },
       { dept_code: "40", dept_name: "牙科", doctor: "鍾先揚", weekday: 2, slot: "上午", room: "21診", note: "" },
       { dept_code: "40", dept_name: "牙科", doctor: "金椿期", weekday: 3, slot: "夜診", room: "23診", note: "10/21停診" },
       { dept_code: "1303", dept_name: "兒童青少年心智科", doctor: "葉騰尹", weekday: 2, slot: "夜診", room: "27診", note: "" },
-      { dept_code: "1305", dept_name: "藥癮門診(美沙冬)", doctor: "李景嶽", weekday: 2, slot: "上午", room: "41診", note: "代診" },
       { dept_code: "03", dept_name: "外科", doctor: "蘇美旭", weekday: 4, slot: "下午", room: "13診", note: "" },
       { dept_code: "14", dept_name: "復健科", doctor: "廖宜新", weekday: 4, slot: "上午", room: "25診", note: "" },
       { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 5, slot: "上午", room: "22診", note: "9/25.10/9停診" },
@@ -1660,7 +1664,6 @@
       { dept_code: "00", dept_name: "高年科", doctor: "梁垠盤", weekday: 3, slot: "上午", room: "9診", note: "" },
       { dept_code: "BC", dept_name: "胸腔外科", doctor: "李佳穎", weekday: 4, slot: "下午", room: "11診", note: "" },
       { dept_code: "AA", dept_name: "腸胃內科", doctor: "楊智超", weekday: 3, slot: "上午", room: "2診", note: "" },
-      { dept_code: "1305", dept_name: "藥癮門診(美沙冬)", doctor: "梁孫源", weekday: 5, slot: "上午", room: "41診", note: "代診" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "李翰", weekday: 4, slot: "夜診", room: "12診", note: "" },
       { dept_code: "60", dept_name: "中醫科", doctor: "梁惠宇", weekday: 2, slot: "上午", room: "33診", note: "" },
       { dept_code: "AC", dept_name: "胸腔內科", doctor: "張子晏", weekday: 3, slot: "上午", room: "3診", note: "" },
@@ -1708,7 +1711,6 @@
       { dept_code: "12", dept_name: "神經內科", doctor: "連宮瑩", weekday: 2, slot: "上午", room: "1診", note: "" },
       { dept_code: "12", dept_name: "神經內科", doctor: "連宮瑩", weekday: 4, slot: "上午", room: "1診", note: "" },
       { dept_code: "04", dept_name: "小兒科", doctor: "馬瑞杉", weekday: 2, slot: "下午", room: "28診", note: "10/20停診" },
-      { dept_code: "1303", dept_name: "兒童青少年心智科", doctor: "葉騰尹", weekday: 4, slot: "夜診", room: "26診", note: "代診" },
       { dept_code: "08", dept_name: "泌尿科", doctor: "陳文銘", weekday: 2, slot: "下午", room: "18診", note: "" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "李學林", weekday: 4, slot: "上午", room: "6診", note: "" },
       { dept_code: "AC", dept_name: "胸腔內科", doctor: "林澤宏", weekday: 1, slot: "下午", room: "5診", note: "" },
@@ -1719,7 +1721,7 @@
       { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 5, slot: "下午", room: "22診", note: "" },
       { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 3, slot: "夜診", room: "88診", note: "" },
       { dept_code: "60", dept_name: "中醫科", doctor: "馮天祥", weekday: 1, slot: "夜診", room: "32診", note: "" },
-      { dept_code: "AD", dept_name: "腎臟內科", doctor: "吳佶育", weekday: 4, slot: "上午", room: "88診", note: "網掛不開放 10/8停診" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "吳佶育", weekday: 4, slot: "上午", room: "88診", note: "網掛不開放 10/1.10/8停診" },
       { dept_code: "12", dept_name: "神經內科", doctor: "林嶸洲", weekday: 3, slot: "上午", room: "1診", note: "" },
       { dept_code: "13", dept_name: "精神科", doctor: "陳羿行", weekday: 4, slot: "上午", room: "27診", note: "" },
       { dept_code: "13", dept_name: "精神科", doctor: "陳羿行", weekday: 2, slot: "夜診", room: "26診", note: "" },
@@ -1753,16 +1755,13 @@
       { dept_code: "4001", dept_name: "無障礙牙科特診", doctor: "黃惠娟", weekday: 3, slot: "上午", room: "60診", note: "" },
       { dept_code: "13", dept_name: "精神科", doctor: "梁孫源", weekday: 6, slot: "上午", room: "26診", note: "" },
       { dept_code: "AC", dept_name: "胸腔內科", doctor: "余養豪", weekday: 3, slot: "下午", room: "5診", note: "" },
-      { dept_code: "1305", dept_name: "藥癮門診(美沙冬)", doctor: "蕭銘鴻", weekday: 1, slot: "上午", room: "41診", note: "代診" },
       { dept_code: "03", dept_name: "外科", doctor: "蘇美旭", weekday: 1, slot: "上午", room: "13診", note: "" },
       { dept_code: "01", dept_name: "家醫科", doctor: "廖曜磐", weekday: 4, slot: "下午", room: "8診", note: "9/24.10/8.10/15停診" },
       { dept_code: "13", dept_name: "精神科", doctor: "王鴻松", weekday: 5, slot: "下午", room: "26診", note: "11/27停診" },
-      { dept_code: "1305", dept_name: "藥癮門診(美沙冬)", doctor: "李景嶽", weekday: 5, slot: "上午", room: "41診", note: "代診" },
       { dept_code: "05", dept_name: "婦產科", doctor: "李伊菱", weekday: 5, slot: "上午", room: "29診", note: "" },
       { dept_code: "BC", dept_name: "胸腔外科", doctor: "林聿騰", weekday: 1, slot: "上午", room: "30診", note: "" },
       { dept_code: "FB", dept_name: "放射腫瘤", doctor: "吳俊玠", weekday: 1, slot: "上午", room: "51診", note: "" },
       { dept_code: "60", dept_name: "中醫科", doctor: "馮天祥", weekday: 5, slot: "上午", room: "32診", note: "9/25停診" },
-      { dept_code: "13", dept_name: "精神科", doctor: "蕭銘鴻", weekday: 1, slot: "下午", room: "26診", note: "代診" },
       { dept_code: "60", dept_name: "中醫科", doctor: "馮天祥", weekday: 5, slot: "下午", room: "32診", note: "9/25.11/27停診" },
       { dept_code: "08", dept_name: "泌尿科", doctor: "劉清耀", weekday: 1, slot: "上午", room: "16診", note: "" },
       { dept_code: "60", dept_name: "中醫科", doctor: "馮天祥", weekday: 3, slot: "上午", room: "32診", note: "" },
@@ -1772,7 +1771,6 @@
       { dept_code: "0202", dept_name: "新陳代謝科", doctor: "張之昀", weekday: 1, slot: "上午", room: "6診", note: "9/21停診" },
       { dept_code: "40", dept_name: "牙科", doctor: "金椿期", weekday: 5, slot: "上午", room: "23診", note: "10/9停診" },
       { dept_code: "03", dept_name: "外科", doctor: "蘇美旭", weekday: 5, slot: "上午", room: "13診", note: "" },
-      { dept_code: "1303", dept_name: "兒童青少年心智科", doctor: "葉騰尹", weekday: 3, slot: "夜診", room: "26診", note: "代診" },
       { dept_code: "07", dept_name: "神經外科/脊椎外科(微創)", doctor: "趙紹清", weekday: 2, slot: "上午", room: "38診", note: "" },
       { dept_code: "AA", dept_name: "腸胃內科", doctor: "陳詩典", weekday: 4, slot: "下午", room: "2診", note: "網掛不開放 10/8.10/15停診" },
       { dept_code: "4001", dept_name: "無障礙牙科特診", doctor: "金椿期", weekday: 3, slot: "下午", room: "60診", note: "" },
@@ -1780,7 +1778,6 @@
       { dept_code: "14", dept_name: "復健科", doctor: "林昭宏", weekday: 2, slot: "下午", room: "25診", note: "" },
       { dept_code: "AE", dept_name: "風濕免疫科", doctor: "高堅凱", weekday: 4, slot: "下午", room: "7診", note: "11/5停診" },
       { dept_code: "11", dept_name: "皮膚科", doctor: "郭峰昇", weekday: 2, slot: "上午", room: "61診", note: "10/6.11/17停診" },
-      { dept_code: "14", dept_name: "復健科", doctor: "廖宜新", weekday: 5, slot: "上午", room: "25診", note: "代診" },
       { dept_code: "AF", dept_name: "血液腫瘤科", doctor: "陳筠方", weekday: 5, slot: "上午", room: "52診", note: "" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "何東錦", weekday: 1, slot: "上午", room: "12診", note: "" },
       { dept_code: "AH", dept_name: "感染科", doctor: "莊佳慧", weekday: 2, slot: "夜診", room: "3診", note: "" },
@@ -1797,14 +1794,13 @@
       { dept_code: "AE", dept_name: "風濕免疫科", doctor: "高堅凱", weekday: 1, slot: "上午", room: "7診", note: "11/2停診" },
       { dept_code: "AE", dept_name: "風濕免疫科", doctor: "王仕凱", weekday: 5, slot: "上午", room: "7診", note: "" },
       { dept_code: "13", dept_name: "精神科", doctor: "陳羿行", weekday: 1, slot: "上午", room: "26診", note: "9/28.10/26停診" },
-      { dept_code: "13", dept_name: "精神科", doctor: "李景嶽", weekday: 5, slot: "下午", room: "26診", note: "代診" },
       { dept_code: "60", dept_name: "中醫科", doctor: "馮天祥", weekday: 1, slot: "下午", room: "32診", note: "9/28停診" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "李翰", weekday: 4, slot: "上午", room: "12診", note: "" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "何東錦", weekday: 5, slot: "上午", room: "12診", note: "10/16.10/30停診" },
       { dept_code: "01", dept_name: "家醫科", doctor: "廖曜磐", weekday: 2, slot: "上午", room: "8診", note: "10/13停診" },
       { dept_code: "03", dept_name: "外科", doctor: "余明昌", weekday: 1, slot: "下午", room: "13診", note: "10/26停診" },
       { dept_code: "4001", dept_name: "無障礙牙科特診", doctor: "黃左琪", weekday: 3, slot: "上午", room: "60診", note: "" },
-      { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 5, slot: "上午", room: "88診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 5, slot: "上午", room: "88診", note: "10/9停診" },
       { dept_code: "10", dept_name: "眼科", doctor: "許紘睿", weekday: 5, slot: "上午", room: "20診", note: "10/2停診" },
       { dept_code: "08", dept_name: "泌尿科", doctor: "林憲治", weekday: 1, slot: "下午", room: "18診", note: "10/26停診" },
       { dept_code: "06", dept_name: "骨科", doctor: "李文宏", weekday: 6, slot: "上午", room: "17診", note: "網掛不開放" },
@@ -1846,11 +1842,9 @@
       { dept_code: "11", dept_name: "皮膚科", doctor: "郭峰昇", weekday: 4, slot: "上午", room: "61診", note: "10/8停診" },
       { dept_code: "04", dept_name: "小兒科", doctor: "馬瑞杉", weekday: 6, slot: "上午", room: "28診", note: "" },
       { dept_code: "AE", dept_name: "風濕免疫科", doctor: "王仕凱", weekday: 3, slot: "上午", room: "7診", note: "" },
-      { dept_code: "AD", dept_name: "腎臟內科", doctor: "蔡旻叡", weekday: 5, slot: "上午", room: "88診", note: "代診" },
       { dept_code: "01", dept_name: "家醫科", doctor: "廖曜磐", weekday: 4, slot: "上午", room: "8診", note: "9/24.10/8.10/15停診" },
       { dept_code: "06", dept_name: "骨科", doctor: "王守吉", weekday: 5, slot: "下午", room: "17診", note: "" },
       { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 2, slot: "上午", room: "22診", note: "" },
-      { dept_code: "13", dept_name: "精神科", doctor: "李景嶽", weekday: 5, slot: "上午", room: "26診", note: "代診" },
       { dept_code: "1305", dept_name: "藥癮門診(美沙冬)", doctor: "葉騰尹", weekday: 5, slot: "上午", room: "41診", note: "" },
       { dept_code: "AA", dept_name: "腸胃內科", doctor: "蔡安順", weekday: 1, slot: "上午", room: "2診", note: "10/26停診" },
       { dept_code: "14", dept_name: "復健科", doctor: "賴仲亮", weekday: 5, slot: "下午", room: "25診", note: "" },
@@ -1905,23 +1899,24 @@
     const weekdayMap = { 1: "星期一", 2: "星期二", 3: "星期三", 4: "星期四", 5: "星期五", 6: "星期六" };
     const slotRank = { "上午": 1, "下午": 2, "夜診": 3 };
 
-    // 基準醫師專屬色：色卡標注之 Horizon #558E9B，純白粗體字，輕微圓形浮凸感無邊框
+    // 基準醫師專屬色：極深墨海藍 #1E3545，微軟正黑體純白粗體字，圓形立體浮凸感
     const baseDoctorColor = {
-      id: "baseHorizon",
-      bg: "#558E9B",
+      id: "baseDeepOcean",
+      bg: "#1E3545",
       border: "none",
       text: "#ffffff",
-      shadow: "0 3px 8px rgba(45, 90, 100, 0.28), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1px 2px rgba(0, 0, 0, 0.15)"
+      shadow: "0 4px 10px rgba(18, 32, 43, 0.38), inset 0 1px 1.5px rgba(255, 255, 255, 0.35), inset 0 -1px 2px rgba(0, 0, 0, 0.3)"
     };
 
-    // 科別專屬色彩池陣列：嚴格依照「色卡.jpg」紅筆手繪標注 1~5 順序
-    // 文字顏色統一採用深藍石墨色 #0E4369，粗體無邊框，輕微圓形浮凸感
+    // 比對科別專屬色彩池：彩虹馬卡龍 6 色（依指示再刷淡、柔光襯底，排序：1粉, 4綠, 3黃, 5藍, 2橘, 6紫）
+    // 文字深度統一採用基準底色 #1E3545 深墨海藍，微軟正黑體粗體，清透對比極致鮮明
     const departmentPalette = [
-      { id: "buttercup",       name: "秋麥金黃 (Buttercup)",         bg: "#E7C676", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(231, 198, 118, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06)" }, // 紅筆 1
-      { id: "wisteriapurple",  name: "紫藤柔紫 (Wisteria Purple)",   bg: "#C6B3CA", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(198, 179, 202, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06)" }, // 紅筆 2
-      { id: "rose",            name: "珊瑚玫瑰粉 (Rose)",            bg: "#E89B88", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(232, 155, 136, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06)" }, // 紅筆 3
-      { id: "fairytaledream",  name: "童話夢境粉 (Fairytale Dream)", bg: "#F9D0CD", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(249, 208, 205, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06)" }, // 紅筆 4
-      { id: "tumbleweed",      name: "風滾草褐沙 (Tumbleweed)",      bg: "#D1A996", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(209, 169, 150, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06)" }  // 紅筆 5
+      { id: "sakurapink",     name: "淡淡櫻花粉 (Sakura Pink)",     bg: "#FFEBF0", border: "1px solid rgba(244, 114, 182, 0.35)", text: "#1E3545", shadow: "0 2px 6px rgba(30, 53, 69, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.95)" }, // 1
+      { id: "mintgreen",      name: "淡淡薄荷綠 (Mint Green)",      bg: "#E2F8EB", border: "1px solid rgba(52, 211, 153, 0.35)",  text: "#1E3545", shadow: "0 2px 6px rgba(30, 53, 69, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.95)" }, // 4
+      { id: "vanillayellow",  name: "淡淡香草黃 (Vanilla Yellow)",  bg: "#FFF9D2", border: "1px solid rgba(251, 191, 36, 0.35)",  text: "#1E3545", shadow: "0 2px 6px rgba(30, 53, 69, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.95)" }, // 3
+      { id: "glacierblue",    name: "淡淡晴空藍 (Glacier Blue)",    bg: "#E0F4FE", border: "1px solid rgba(56, 189, 248, 0.35)",  text: "#1E3545", shadow: "0 2px 6px rgba(30, 53, 69, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.95)" }, // 5
+      { id: "peachapricot",   name: "淡淡蜜桃杏 (Peach Apricot)",   bg: "#FFF0E2", border: "1px solid rgba(251, 146, 60, 0.35)",  text: "#1E3545", shadow: "0 2px 6px rgba(30, 53, 69, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.95)" }, // 2
+      { id: "lavenderpurple", name: "淡淡薰衣紫 (Lavender Purple)", bg: "#F1E9FA", border: "1px solid rgba(192, 132, 252, 0.35)", text: "#1E3545", shadow: "0 2px 6px rgba(30, 53, 69, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.95)" }  // 6
     ];
 
     // 動態色彩分配管理：依照加入順序以「科別」為單位分配代表色；同科底下所有醫師統一共用該科專屬代表色
@@ -2212,7 +2207,7 @@
       const allDepts = getAllDepts();
       const { tagColorMap } = getDynamicColorAssignment();
 
-      // 1. 基準醫師/科別標籤 (固定使用 baseDoctorColor Horizon #558E9B，純白粗體字無邊框)
+      // 1. 基準醫師/科別標籤 (固定使用 baseDoctorColor 極深墨海藍 #1E3545，純白粗體字無邊框)
       if (crossBaseDoctorKey) {
         const baseTag = document.createElement("div");
         baseTag.className = "selected-tag base-tag";
@@ -2240,7 +2235,7 @@
         const tag = document.createElement("div");
         tag.className = "selected-tag";
         tag.style.background = pal.bg;
-        tag.style.border = "none";
+        tag.style.border = pal.border || "none";
         tag.style.color = pal.text;
         tag.style.boxShadow = pal.shadow;
 
@@ -2416,6 +2411,7 @@
         doctorSuspensionMap.get(dKey).items.push(a);
       });
 
+      let suspensionAlertBannerHtml = "";
       if (suspensionAlerts.length > 0) {
         let tableRowsHtml = "";
         const docGroups = Array.from(doctorSuspensionMap.values());
@@ -2437,7 +2433,7 @@
               tableRowsHtml += `
                 <td rowspan="${rowCount}" class="suspension-doc-cell" style="vertical-align:middle; text-align:center;">
                   <div style="display:flex; flex-direction:column; gap:4px; align-items:center; justify-content:center;">
-                    <span class="suspension-doc-pill" style="background:${docPal.bg}; border:none; color:${docPal.text}; box-shadow:${docPal.shadow};" onclick="showDoctorScheduleModal('${group.doctor}', '${group.dept_code}', '${group.dept}', '${findDocCode(group.doctor) || ''}')" title="點擊查看 ${group.doctor} 醫師每週門診表">
+                    <span class="suspension-doc-pill" style="background:${docPal.bg}; border:${docPal.border || 'none'}; color:${docPal.text}; box-shadow:${docPal.shadow};" onclick="showDoctorScheduleModal('${group.doctor}', '${group.dept_code}', '${group.dept}', '${findDocCode(group.doctor) || ''}')" title="點擊查看 ${group.doctor} 醫師每週門診表">
                       <span style="white-space: nowrap;">${group.doctor}</span>
                       ${showBaseBadge ? '<span class="suspension-base-sub">(基準)</span>' : ''}
                     </span>
@@ -2460,8 +2456,8 @@
           });
         });
 
-        html += `
-          <div class="suspension-alert-banner">
+        suspensionAlertBannerHtml = `
+          <div class="suspension-alert-banner" style="margin-top: 18px;">
             <div class="suspension-alert-header">
               <span>📢 近期門診停診／異動提醒</span>
               <span style="font-size:0.82rem; font-weight:600; color:#c2410c;">（共 ${suspensionAlerts.length} 診次異動，就診前請特別留意）</span>
@@ -2498,6 +2494,9 @@
         html += `<div style="color: #5d6d7e; font-size: 0.9rem; padding: 20px; text-align: center; background: #f8fafc; border-radius: 8px; border: 1.5px dashed #cbd5e1;">
           所選比對目標與基準在全週各時段均無出診記錄。
         </div>`;
+        if (suspensionAlertBannerHtml) {
+          html += suspensionAlertBannerHtml;
+        }
         resultArea.innerHTML = html;
         return;
       }
@@ -2527,10 +2526,11 @@
 
           html += `<td class="matrix-slot-cell"><div class="matrix-pills-wrap">`;
 
-          // 若有基準醫師/科別出診，放於頂部（Horizon #558E9B，白字加粗無邊框）
+          // 若有基準醫師/科別出診，放於頂部（極深墨海藍 #1E3545，白字加粗無邊框）
           baseMatches.forEach(bm => {
             const hasStop = bm.note && bm.note.includes("停診");
-            const roomText = `(${bm.room || "診間"}${bm.note && !hasStop ? " / " + bm.note : ""})`;
+            const nonStopNote = (bm.note && !hasStop && !bm.note.includes("代診")) ? " / " + bm.note : "";
+            const roomText = `(${bm.room || "診間"}${nonStopNote})`;
             const dObj = masterData.find(m => m.deptCode === bm.dept_code);
             html += `<span class="matrix-doc-pill base-doc-pill clickable ${hasStop ? 'has-suspension' : ''}" style="background:${baseDoctorColor.bg}; border:none; color:${baseDoctorColor.text}; box-shadow:${baseDoctorColor.shadow};" onclick="showDoctorScheduleModal('${bm.doctor}', '${bm.dept_code}', '${dObj ? dObj.dept : ''}', '${findDocCode(bm.doctor) || ''}')" title="點擊查看 ${bm.doctor} 醫師每週門診表">
               <span class="matrix-doc-info">
@@ -2541,12 +2541,13 @@
             </span>`;
           });
 
-          // 比對醫師依序放於下方（使用科別色彩池 1~5，無邊框浮凸感）
+          // 比對醫師依序放於下方（使用彩虹馬卡龍色彩池，微軟正黑體粗體，細緻邊框浮凸感）
           targetMatches.forEach(td => {
             const pal = docColorMap.get(`${td.dept_code}___${td.doctor}`) || departmentPalette[0];
             const hasStop = td.note && td.note.includes("停診");
-            const roomText = `(${td.room || "診間"}${td.note && !hasStop ? " / " + td.note : ""})`;
-            html += `<span class="matrix-doc-pill clickable ${hasStop ? 'has-suspension' : ''}" style="background:${pal.bg}; border:none; color:${pal.text}; box-shadow:${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
+            const nonStopNote = (td.note && !hasStop && !td.note.includes("代診")) ? " / " + td.note : "";
+            const roomText = `(${td.room || "診間"}${nonStopNote})`;
+            html += `<span class="matrix-doc-pill clickable ${hasStop ? 'has-suspension' : ''}" style="background:${pal.bg}; border:${pal.border || 'none'}; color:${pal.text}; box-shadow:${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
               <span class="matrix-doc-info">
                 <span class="matrix-doc-name">${td.doctor}</span>
                 <span class="matrix-doc-room">${roomText}</span>
@@ -2562,6 +2563,11 @@
       });
 
       html += `</tbody></table></div>`;
+
+      // 順序對調：每週矩陣大課表在上最優先呈現，近期門診停診／異動提醒置於大課表下方
+      if (suspensionAlertBannerHtml) {
+        html += suspensionAlertBannerHtml;
+      }
 
       resultArea.innerHTML = html;
     }
@@ -2732,7 +2738,7 @@
                 bodyHtml += `<div class="modal-slot-card ${slotClass}" style="${hasStop ? 'border: 2px solid #ef4444; position:relative;' : ''}">
                   <span style="font-size: 0.96rem; font-weight: 800; letter-spacing: 0.04em; color: #0E4369;">${slotLabel}</span>
                   <strong style="font-size: 1.16rem; color: #0E4369; font-weight: 800;">${m.room || "看診中"}</strong>
-                  ${m.note ? (hasStop ? 
+                  ${(m.note && !m.note.includes("代診")) ? (hasStop ? 
                     `<span class="modal-suspension-badge">${renderSuspensionPillBadgeHtml(m.note)}</span>` :
                     `<span style="font-size: 0.84rem; background: rgba(14,67,105,0.08); color: #0E4369; padding: 2px 7px; border-radius: 4px; font-weight: 800; margin-top: 3px;">${m.note}</span>`
                   ) : ""}
