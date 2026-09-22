@@ -340,8 +340,8 @@
     }
     .selected-tag.base-tag {
       color: #ffffff !important;
-      background: #1E3545 !important;
-      box-shadow: 0 4px 10px rgba(18, 32, 43, 0.38), inset 0 1px 1.5px rgba(255, 255, 255, 0.35), inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+      background: #284E59 !important;
+      box-shadow: 0 3px 8px rgba(25, 50, 58, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1px 2px rgba(0, 0, 0, 0.2) !important;
     }
     .selected-tag:hover {
       transform: translateY(-1px);
@@ -658,14 +658,14 @@
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     }
     .base-doc-pill {
-      background: #1E3545 !important;
+      background: #284E59 !important;
       color: #ffffff !important;
       border: none !important;
       font-weight: 900;
-      box-shadow: 0 4px 10px rgba(18, 32, 43, 0.38), inset 0 1px 1.5px rgba(255, 255, 255, 0.35), inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+      box-shadow: 0 3px 8px rgba(25, 50, 58, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1px 2px rgba(0, 0, 0, 0.2) !important;
     }
     .base-doc-pill:hover {
-      box-shadow: 0 6px 16px rgba(18, 32, 43, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.5) !important;
+      box-shadow: 0 6px 14px rgba(25, 50, 58, 0.42), inset 0 1px 1.5px rgba(255, 255, 255, 0.5) !important;
     }
     .matrix-legend-bar {
       display: none !important;
@@ -770,26 +770,26 @@
       text-align: center;
       word-break: break-word;
     }
-    /* 上午診：色卡 3 紅筆 1 Golden Dune 金沙暖黃 */
+    /* 上午診：同款刷淡淡淡香草黃 */
     .slot-morning {
-      background: linear-gradient(135deg, #F4D9A6 0%, #edd09b 100%) !important;
-      border: none !important;
-      color: #0E4369 !important;
-      box-shadow: 0 3px 8px rgba(244, 217, 166, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06);
+      background: #FFF9D2 !important;
+      border: 1px solid rgba(251, 191, 36, 0.4) !important;
+      color: #1E3545 !important;
+      box-shadow: 0 2px 6px rgba(30, 53, 69, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
     }
-    /* 下午診：色卡 3 紅筆 2 Coral Reef 珊瑚橘粉 */
+    /* 下午診：同款刷淡淡淡蜜桃杏 */
     .slot-afternoon {
-      background: linear-gradient(135deg, #FFB5A7 0%, #fca292 100%) !important;
-      border: none !important;
-      color: #0E4369 !important;
-      box-shadow: 0 3px 8px rgba(255, 181, 167, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06);
+      background: #FFF0E2 !important;
+      border: 1px solid rgba(251, 146, 60, 0.4) !important;
+      color: #1E3545 !important;
+      box-shadow: 0 2px 6px rgba(30, 53, 69, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
     }
-    /* 夜診/晚上：色卡 3 紅筆 3 Ocean Mist 清透湖水霧青 */
+    /* 夜診/晚上：同款刷淡淡淡晴空藍 */
     .slot-night {
-      background: linear-gradient(135deg, #B7DCD6 0%, #9fcbc4 100%) !important;
-      border: none !important;
-      color: #0E4369 !important;
-      box-shadow: 0 3px 8px rgba(183, 220, 214, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06);
+      background: #E0F4FE !important;
+      border: 1px solid rgba(56, 189, 248, 0.4) !important;
+      color: #1E3545 !important;
+      box-shadow: 0 2px 6px rgba(30, 53, 69, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
     }
 
     .dept-code {
@@ -1899,13 +1899,13 @@
     const weekdayMap = { 1: "星期一", 2: "星期二", 3: "星期三", 4: "星期四", 5: "星期五", 6: "星期六" };
     const slotRank = { "上午": 1, "下午": 2, "夜診": 3 };
 
-    // 基準醫師專屬色：極深墨海藍 #1E3545，微軟正黑體純白粗體字，圓形立體浮凸感
+    // 基準醫師專屬色：建議方案 A 深墨青海藍 #284E59，微軟正黑體純白粗體字，圓形立體浮凸感
     const baseDoctorColor = {
       id: "baseDeepOcean",
-      bg: "#1E3545",
+      bg: "#284E59",
       border: "none",
       text: "#ffffff",
-      shadow: "0 4px 10px rgba(18, 32, 43, 0.38), inset 0 1px 1.5px rgba(255, 255, 255, 0.35), inset 0 -1px 2px rgba(0, 0, 0, 0.3)"
+      shadow: "0 3px 8px rgba(25, 50, 58, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1px 2px rgba(0, 0, 0, 0.2)"
     };
 
     // 比對科別專屬色彩池：彩虹馬卡龍 6 色（依指示再刷淡、柔光襯底，排序：1粉, 4綠, 3黃, 5藍, 2橘, 6紫）
@@ -1926,7 +1926,7 @@
       const deptColorMap = new Map();
       let colorIndex = 0;
 
-      // 1. 基準醫師/科別固定使用 baseDoctorColor (#1E3545，深墨海藍，深色底純白字)
+      // 1. 基準醫師/科別固定使用 baseDoctorColor (#284E59，深墨青海藍，深色底純白字)
       if (crossBaseDoctorKey) {
         if (crossBaseDoctorKey.startsWith("DEPT_")) {
           const deptCode = crossBaseDoctorKey.replace("DEPT_", "");
@@ -2006,7 +2006,14 @@
           map.set(s.dept_code, { code: s.dept_code, name: s.dept_name });
         }
       });
-      return Array.from(map.values()).sort((a,b) => a.code.localeCompare(b.code));
+      const list = Array.from(map.values()).sort((a,b) => a.code.localeCompare(b.code));
+      // 特別將 [AD] 腎臟內科置頂排在第 1 位
+      const adIdx = list.findIndex(d => d.code === "AD");
+      if (adIdx > -1) {
+        const ad = list.splice(adIdx, 1)[0];
+        list.unshift(ad);
+      }
+      return list;
     }
 
     function getDocsByDept(dept_code) {
@@ -2041,7 +2048,7 @@
     function initCrossTab() {
       const depts = getAllDepts();
 
-      // 基準科別：預設為空「-- 請選擇科別 --」
+      // 基準科別：預設選中「[AD] 腎臟內科」
       const baseDeptSelect = document.getElementById("cross-base-dept-select");
       baseDeptSelect.innerHTML = '<option value="">-- 請選擇科別 --</option>';
       depts.forEach(d => {
@@ -2050,7 +2057,7 @@
         opt.textContent = `[${d.code}] ${d.name}`;
         baseDeptSelect.appendChild(opt);
       });
-      baseDeptSelect.value = "";
+      baseDeptSelect.value = "AD";
 
       const baseDocSelect = document.getElementById("cross-base-doc-select");
       baseDocSelect.innerHTML = '<option value="">-- 全科所有醫師 --</option>';
@@ -2070,7 +2077,8 @@
       const targetDocSelect = document.getElementById("cross-target-doc-select");
       targetDocSelect.innerHTML = '<option value="">-- 全科所有醫師 --</option>';
 
-      renderCrossTargetTags();
+      // 開啟系統時立即觸發基準科別切換，預設展開 [AD] 腎臟內科全體醫師大課表
+      onCrossBaseDeptChanged();
     }
 
     function onCrossBaseDeptChanged() {
@@ -2207,7 +2215,7 @@
       const allDepts = getAllDepts();
       const { tagColorMap } = getDynamicColorAssignment();
 
-      // 1. 基準醫師/科別標籤 (固定使用 baseDoctorColor 極深墨海藍 #1E3545，純白粗體字無邊框)
+      // 1. 基準醫師/科別標籤 (固定使用 baseDoctorColor 深墨青海藍 #284E59，純白粗體字無邊框)
       if (crossBaseDoctorKey) {
         const baseTag = document.createElement("div");
         baseTag.className = "selected-tag base-tag";
@@ -2526,7 +2534,7 @@
 
           html += `<td class="matrix-slot-cell"><div class="matrix-pills-wrap">`;
 
-          // 若有基準醫師/科別出診，放於頂部（極深墨海藍 #1E3545，白字加粗無邊框）
+          // 若有基準醫師/科別出診，放於頂部（深墨青海藍 #284E59，白字加粗無邊框）
           baseMatches.forEach(bm => {
             const hasStop = bm.note && bm.note.includes("停診");
             const nonStopNote = (bm.note && !hasStop && !bm.note.includes("代診")) ? " / " + bm.note : "";
@@ -2589,8 +2597,13 @@
         }
       });
 
-      // 依科別代碼按數字及英文字母排序（與門診比對下拉選單順序完全一致：01, 0202, 03... AA, AB...）
+      // 依科別代碼按數字及英文字母排序，特別將 [AD] 腎臟內科置頂排在第 1 位（與門診比對下拉選單順序完全一致）
       const sortedDepts = Array.from(deptMap.values()).sort((a, b) => a.code.localeCompare(b.code));
+      const adIdx = sortedDepts.findIndex(d => d.code === "AD");
+      if (adIdx > -1) {
+        const ad = sortedDepts.splice(adIdx, 1)[0];
+        sortedDepts.unshift(ad);
+      }
 
       codeDeptSelect.innerHTML = '<option value="">-- 請選擇科別 --</option>';
       sortedDepts.forEach(d => {
@@ -2683,7 +2696,7 @@
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
             <strong style="color: #34495e; font-size: 1.18rem; letter-spacing: 0.02em;">${docName} 醫師</strong>
             <div>
-              <span style="font-size: 0.88rem; background: linear-gradient(135deg, #1E3545, #152733); color: white; padding: 4px 12px; border-radius: 14px; font-weight: 700; box-shadow: 0 1px 3px rgba(30, 53, 69, 0.25);">[${deptCode}] ${deptName}</span>
+              <span style="font-size: 0.88rem; background: linear-gradient(135deg, #284E59, #1c3840); color: white; padding: 4px 12px; border-radius: 14px; font-weight: 700; box-shadow: 0 1px 3px rgba(30, 53, 69, 0.25);">[${deptCode}] ${deptName}</span>
               <span style="font-size: 0.92rem; background: #e2edf1; color: #203e45; padding: 4px 12px; border-radius: 14px; font-weight: 800; font-family: ui-monospace, SFMono-Regular, monospace; margin-left: 6px; border: 1px solid #cbd5e1;">${codeText}</span>
             </div>
           </div>
@@ -2736,11 +2749,11 @@
 
                 const hasStop = m.note && m.note.includes("停診");
                 bodyHtml += `<div class="modal-slot-card ${slotClass}" style="${hasStop ? 'border: 2px solid #ef4444; position:relative;' : ''}">
-                  <span style="font-size: 0.96rem; font-weight: 800; letter-spacing: 0.04em; color: #0E4369;">${slotLabel}</span>
-                  <strong style="font-size: 1.16rem; color: #0E4369; font-weight: 800;">${m.room || "看診中"}</strong>
+                  <span style="font-size: 0.96rem; font-weight: 800; letter-spacing: 0.04em; color: #1E3545;">${slotLabel}</span>
+                  <strong style="font-size: 1.16rem; color: #1E3545; font-weight: 800;">${m.room || "看診中"}</strong>
                   ${(m.note && !m.note.includes("代診")) ? (hasStop ? 
                     `<span class="modal-suspension-badge">${renderSuspensionPillBadgeHtml(m.note)}</span>` :
-                    `<span style="font-size: 0.84rem; background: rgba(14,67,105,0.08); color: #0E4369; padding: 2px 7px; border-radius: 4px; font-weight: 800; margin-top: 3px;">${m.note}</span>`
+                    `<span style="font-size: 0.84rem; background: rgba(30,53,69,0.08); color: #1E3545; padding: 2px 7px; border-radius: 4px; font-weight: 800; margin-top: 3px;">${m.note}</span>`
                   ) : ""}
                 </div>`;
               });
