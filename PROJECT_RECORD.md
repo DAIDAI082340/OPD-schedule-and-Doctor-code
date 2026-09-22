@@ -567,3 +567,12 @@ flowchart TD
 - **⚠️ 停診標籤 (`.pill-suspension-badge`)**：底色 `#b91c1c`，純白粗字 `#FFFFFF`，字重 800
 - **⚠️ 網掛不開放 (`.badge-web-closed`)**：底色 `#c2410c`，純白粗字 `#FFFFFF`，字重 800
 
+### 10.6 歷代備用色彩方案庫摘要 (Backup Palette Archives)
+完整色碼、陰影與 JavaScript 程式常數已封存於 [`DESIGN_PALETTE_SPEC.md`](file:///c:/Users/X4715G/Desktop/Antigravity%20專案/門診時段交叉查詢與醫師代碼查詢系統/DESIGN_PALETTE_SPEC.md#7-歷代備用色彩方案庫-alternative--backup-palette-archives)：
+- **備用 1（v0.9.5）**：加深 60% 極深墨海藍方案（基準醫師 `#1E3545` 白字，最高黑白階層對比）。
+- **備用 2（v0.9.2~v0.9.4）**：Horizon 湖水天青 `#558E9B` ＆ 手繪色卡 1~5 號秋麥莫蘭迪淡彩（文字 `#0E4369`）。
+- **備用 3（v0.9.0~v0.9.1）**：自然草甸植物物語 (Botanical Stories) 10 款清甜高明度淡彩（Morning Sky、Ocean Mist、Sage 等，適用多於 6 科交叉比對）。
+- **備用 4（v0.8.0）**：Spring Meadow 12 色經典原色（磚紅珊瑚、鼠尾草綠、柔湖水藍等質樸原木感）。
+- **備用 5（v0.4.0~v0.7.0）**：高飽和度強烈互斥色盤 8 色（翡翠綠、活力橙、皇家紫、石榴紅等高衝擊色彩）。
+
+

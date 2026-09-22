@@ -115,3 +115,123 @@ const departmentPalette = [
   { id: "lavenderpurple", name: "淡淡薰衣紫 (Lavender Purple)", bg: "#F1E9FA", border: "1px solid rgba(192, 132, 252, 0.35)", text: "#1E3545", shadow: "0 2px 6px rgba(30, 53, 69, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.95)" }  // 6
 ];
 ```
+
+---
+
+## 7. 歷代備用色彩方案庫 (Alternative / Backup Palette Archives)
+
+本章節完整封存歷次改版驗證過的優質色彩方案。若未來因特殊看診環境（如高對比螢幕、戶外巡迴醫療、投影簡報）、節慶視覺更替或個人偏好需要切換，可直接從此處**一鍵複製套用**！
+
+---
+
+### 🗄️ 備用方案 1：加深 60% 極深墨海藍方案 (v0.9.5 規格)
+- **視覺特色**：基準醫師厚重沉邃、份量感極強，純白字如黑夜星光般醒目。
+- **適用情境**：需要最高度視覺權威感、強烈黑白階層區隔時。
+
+```javascript
+// 備用方案 1 - 基準醫師：加深 60% 極深墨海藍
+const backupBaseDoctor_v095 = {
+  id: "baseDeepOcean60",
+  bg: "#1E3545",
+  border: "none",
+  text: "#ffffff",
+  shadow: "0 4px 10px rgba(18, 32, 43, 0.38), inset 0 1px 1.5px rgba(255, 255, 255, 0.35), inset 0 -1px 2px rgba(0, 0, 0, 0.3)"
+};
+// 比對科別：同主要方案（彩虹馬卡龍 6 色再刷淡版）
+```
+
+---
+
+### 🗄️ 備用方案 2：Horizon 湖水天青 ＆ 手繪色卡 1~5 號方案 (v0.9.2 ~ v0.9.4 規格)
+- **視覺特色**：優雅莫蘭迪秋麥金黃、紫藤柔灰紫、珊瑚粉與暖沙褐，具備如文藝畫作般典雅柔和的大地質感。
+- **適用情境**：秋冬季風格、溫馨舒緩門診情境。
+
+```javascript
+// 備用方案 2 - 基準醫師：Horizon 湖水天青 #558E9B
+const backupBaseDoctor_Horizon = {
+  id: "baseHorizon",
+  bg: "#558E9B",
+  border: "none",
+  text: "#ffffff",
+  shadow: "0 3px 8px rgba(85, 142, 155, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.06)"
+};
+
+// 備用方案 2 - 比對科別（手繪色卡 1~5 號）：
+const backupDepartmentPalette_Card1to5 = [
+  { id: "buttercup",       name: "Buttercup (秋麥金黃)",       bg: "#E7C676", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(231, 198, 118, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" }, // 1
+  { id: "wisteriapurple",  name: "Wisteria Purple (紫藤柔灰紫)", bg: "#C6B3CA", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(198, 179, 202, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" }, // 2
+  { id: "rose",            name: "Rose (蜜桃珊瑚玫瑰粉)",      bg: "#E89B88", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(232, 155, 136, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" }, // 3
+  { id: "fairytaledream",  name: "Fairytale Dream (童話夢境)",  bg: "#F9D0CD", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(249, 208, 205, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" }, // 4
+  { id: "tumbleweed",      name: "Tumbleweed (風滾草暖沙褐)",   bg: "#D1A996", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(209, 169, 150, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" }  // 5
+];
+
+// 門診時刻表彈窗：色卡-3 前 3 色
+// 上午：Golden Dune #F4D9A6 ｜ 下午：Coral Reef #FFB5A7 ｜ 夜診：Ocean Mist #B7DCD6 (字體 #0E4369)
+```
+
+---
+
+### 🗄️ 備用方案 3：自然草甸植物物語 (Botanical Stories) 高明度淡彩 10 色 (v0.9.0 ~ v0.9.1 規格)
+- **視覺特色**：收錄 Morning Sky 澄空藍、Ocean Mist 湖水青、鼠尾草綠等 10 款清甜淡彩。
+- **適用情境**：同時比對超過 6 個科別的大規模交叉查詢，需要高達 10 款互不重複的高明度淡彩。
+
+```javascript
+// 備用方案 3 - 比對科別：自然草甸植物物語 10 款淡彩
+const backupDepartmentPalette_Botanical10 = [
+  { id: "morningsky",    name: "Morning Sky (晨曦澄空藍)",   bg: "#D6E4FA", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(214, 228, 250, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" },
+  { id: "oceanmist",     name: "Ocean Mist (清透湖水青)",    bg: "#B7DCD6", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(183, 220, 214, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" },
+  { id: "sage",          name: "Sage Leaf (鼠尾草綠)",       bg: "#D6EAD4", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(214, 234, 212, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" },
+  { id: "sakura",        name: "Sakura Pink (櫻花淡粉)",     bg: "#F7E1E6", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(247, 225, 230, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" },
+  { id: "peach",         name: "Peach (蜜桃粉杏)",          bg: "#FFD6A5", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(255, 214, 165, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" },
+  { id: "lilac",         name: "Lilac (丁香淡紫)",          bg: "#E6D6F7", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(230, 214, 247, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" },
+  { id: "lemoncream",    name: "Lemon Cream (檸檬鵝黃)",     bg: "#FFF6D6", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(255, 246, 214, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" },
+  { id: "coralreef",     name: "Coral Reef (珊瑚橘粉)",      bg: "#FFB5A7", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(255, 181, 167, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" },
+  { id: "goldendune",    name: "Golden Dune (金沙暖黃)",     bg: "#F4D9A6", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(244, 217, 166, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" },
+  { id: "oatmilk",       name: "Oat Milk (燕麥奶褐)",        bg: "#EAD8B0", border: "none", text: "#0E4369", shadow: "0 3px 8px rgba(234, 216, 176, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.7)" }
+];
+```
+
+---
+
+### 🗄️ 備用方案 4：Spring Meadow 自然草甸 12 色經典原色方案 (v0.8.0 規格)
+- **視覺特色**：經典自然草甸色系，包含磚紅珊瑚、橄欖苔綠、柔湖水藍、秋麥金黃等。
+- **適用情境**：偏愛自然質樸原木感之臨床顯示風格。
+
+```javascript
+// 備用方案 4 - 比對科別：Spring Meadow 12 色原色
+const backupDepartmentPalette_Meadow12 = [
+  { id: "terracotta",    name: "磚紅珊瑚 (Coral Terracotta)", bg: "#C96349", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(201, 99, 73, 0.35)" },
+  { id: "sageleaf",      name: "鼠尾草綠 (Sage Leaf)",        bg: "#84A48B", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(132, 164, 139, 0.35)" },
+  { id: "lilacmist",     name: "紫丁香粉紫 (Lilac Mist)",     bg: "#A386A9", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(163, 134, 169, 0.35)" },
+  { id: "olivemoss",     name: "橄欖苔綠 (Olive Moss)",      bg: "#88895B", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(136, 137, 91, 0.35)" },
+  { id: "warmpeach",     name: "蜜桃珊瑚粉 (Warm Peach)",     bg: "#E89B88", border: "none", text: "#2c3e50", shadow: "0 3px 8px rgba(232, 155, 136, 0.35)" },
+  { id: "springlake",    name: "柔湖水藍 (Spring Lake)",      bg: "#7BB2BA", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(123, 178, 186, 0.35)" },
+  { id: "rosewood",      name: "暖赤褐 (Rosewood)",          bg: "#A36361", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(163, 99, 97, 0.35)" },
+  { id: "duskyheather",  name: "粉紫灰 (Dusky Heather)",      bg: "#C6B3CA", border: "none", text: "#2c3e50", shadow: "0 3px 8px rgba(198, 179, 202, 0.35)" },
+  { id: "softamber",     name: "秋麥金黃 (Soft Amber)",       bg: "#E7C676", border: "none", text: "#2c3e50", shadow: "0 3px 8px rgba(231, 198, 118, 0.35)" },
+  { id: "celadonmint",   name: "薄荷清綠 (Celadon Mint)",     bg: "#AECBB8", border: "none", text: "#2c3e50", shadow: "0 3px 8px rgba(174, 203, 184, 0.35)" },
+  { id: "oatmilkbrow",   name: "燕麥奶褐 (Oat Milk)",        bg: "#D1A996", border: "none", text: "#2c3e50", shadow: "0 3px 8px rgba(209, 169, 150, 0.35)" },
+  { id: "softapricot",   name: "暖杏橙 (Soft Apricot)",       bg: "#F79E70", border: "none", text: "#2c3e50", shadow: "0 3px 8px rgba(247, 158, 112, 0.35)" }
+];
+```
+
+---
+
+### 🗄️ 備用方案 5：高飽和度強烈互斥色盤 (v0.4.0 ~ v0.7.0 規格)
+- **視覺特色**：翡翠綠、活力橙、皇家紫、石榴紅等 8 款高飽和度互斥色。
+- **適用情境**：極端老舊低對比度螢幕、遠距離投影、或需要一眼強烈區分各專科時。
+
+```javascript
+// 備用方案 5 - 比對科別：8 色高對比互斥色
+const backupDepartmentPalette_HighContrast8 = [
+  { id: "emerald",    name: "翡翠綠", bg: "#059669", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(5, 150, 105, 0.3)" },
+  { id: "amber",      name: "活力橙", bg: "#d97706", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(217, 119, 6, 0.3)" },
+  { id: "violet",     name: "皇家紫", bg: "#7c3aed", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(124, 58, 237, 0.3)" },
+  { id: "crimson",    name: "石榴紅", bg: "#dc2626", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(220, 38, 38, 0.3)" },
+  { id: "caramel",    name: "焦糖棕", bg: "#92400e", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(146, 64, 14, 0.3)" },
+  { id: "slateblack", name: "沉穩黑", bg: "#1f2937", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(31, 41, 55, 0.3)" },
+  { id: "cyan",       name: "電光青", bg: "#0891b2", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(8, 145, 178, 0.3)" },
+  { id: "magenta",    name: "鮮洋紅", bg: "#db2777", border: "none", text: "#ffffff", shadow: "0 3px 8px rgba(219, 39, 119, 0.3)" }
+];
+```
+
