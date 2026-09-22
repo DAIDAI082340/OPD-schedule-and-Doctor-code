@@ -525,3 +525,45 @@ flowchart TD
   - 建立入口首頁 `index.html`，具備 GitHub Pages 靜態託管規格相容性。
   - 完成 Git 本地倉庫初始化 (`main` 分支) 並配置 `.gitignore`。
   - 連接 GitHub 遠端倉庫 `DAIDAI082340/OPD-schedule-and-Doctor-code` 並啟用 GitHub Pages 線上服務。
+
+---
+
+## 10. 視覺設計規範與色彩資料庫存檔 (Design Tokens & Color Palette Archive)
+
+> **正式定案版本**：`v0.9.6`  
+> **專屬規範檔案**：[`DESIGN_PALETTE_SPEC.md`](file:///c:/Users/X4715G/Desktop/Antigravity%20專案/門診時段交叉查詢與醫師代碼查詢系統/DESIGN_PALETTE_SPEC.md)
+
+### 10.1 全域字體與排版規範 (Typography)
+- **字型家族**：`"Microsoft JhengHei", "微軟正黑體", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", sans-serif;`
+- **點陣渲染**：原生 ClearType 最佳化，解決字體發虛模糊問題。
+- **字重階層**：
+  - 膠囊醫師姓名：`font-weight: 900`（特粗）
+  - 診間號碼、標籤、彈窗時段、停診警示：`font-weight: 800`（極粗）
+  - 全域基礎字級：`17.5px`；大課表姓名：`1.08rem`；診間：`0.96em`；彈窗時段：`0.96rem`；彈窗診間：`1.16rem`。
+
+### 10.2 基準醫師色系 (Base Doctor Palette)
+- **色系名稱**：深墨青海藍 (Pine Slate Navy)
+- **底色**：`#284E59`
+- **文字**：純白 `#FFFFFF`（微軟正黑體粗體，字重 900）
+- **外框**：`none`
+- **雙層光影**：`box-shadow: 0 3px 8px rgba(25, 50, 58, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1px 2px rgba(0, 0, 0, 0.2);`
+
+### 10.3 比對科別：彩虹馬卡龍 6 色【再刷淡版】(Brushed-Lighter Rainbow Macaron Palette)
+輪流分配順序：**1粉 ➔ 4綠 ➔ 3黃 ➔ 5藍 ➔ 2橘 ➔ 6紫**，文字統一採用深墨海藍 **`#1E3545`** 粗體字（字重 800，對比度 > 12:1）：
+1. **🌸 淡淡櫻花粉**：底色 `#FFEBF0`，邊框 `1px solid rgba(244, 114, 182, 0.35)`
+2. **🍵 淡淡薄荷綠**：底色 `#E2F8EB`，邊框 `1px solid rgba(52, 211, 153, 0.35)`
+3. **🍋 淡淡香草黃**：底色 `#FFF9D2`，邊框 `1px solid rgba(251, 191, 36, 0.35)`
+4. **🩵 淡淡晴空藍**：底色 `#E0F4FE`，邊框 `1px solid rgba(56, 189, 248, 0.35)`
+5. **🍑 淡淡蜜桃杏**：底色 `#FFF0E2`，邊框 `1px solid rgba(251, 146, 60, 0.35)`
+6. **🪻 淡淡薰衣紫**：底色 `#F1E9FA`，邊框 `1px solid rgba(192, 132, 252, 0.35)`
+- 膠囊造型：`border-radius: 20px`；微陰影：`0 2px 6px rgba(30, 53, 69, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.95)`。
+
+### 10.4 醫師個人門診時刻表彈窗卡片色系 (Modal Slot Cards)
+- **上午診 (`.slot-morning`)**：底色 `#FFF9D2`（淡黃），邊框 `rgba(251, 191, 36, 0.4)`，文字 `#1E3545`
+- **下午診 (`.slot-afternoon`)**：底色 `#FFF0E2`（淡杏），邊框 `rgba(251, 146, 60, 0.4)`，文字 `#1E3545`
+- **夜診 (`.slot-night`)**：底色 `#E0F4FE`（淡藍），邊框 `rgba(56, 189, 248, 0.4)`，文字 `#1E3545`
+
+### 10.5 警示與停診標籤色系 (Badges)
+- **⚠️ 停診標籤 (`.pill-suspension-badge`)**：底色 `#b91c1c`，純白粗字 `#FFFFFF`，字重 800
+- **⚠️ 網掛不開放 (`.badge-web-closed`)**：底色 `#c2410c`，純白粗字 `#FFFFFF`，字重 800
+
