@@ -84,6 +84,7 @@
 
 | 標籤項目 | 底色 (Background) | 文字色彩 (Text) | 字重 | 陰影 / 樣式 |
 | :--- | :---: | :---: | :---: | :--- |
+| **📅 特定看診日標籤 (`.pill-specific-date-badge`)** | **`#B76E79`**（經典珠寶玫瑰金） | `#FFFFFF`（純白） | 800 | `box-shadow: 0 1.5px 3px rgba(0,0,0,0.25); border-radius: 6px;` |
 | **⚠️ 停診標籤 (`.pill-suspension-badge`)** | **`#b91c1c`**（深紅） | `#FFFFFF`（純白） | 800 | `box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.28); border-radius: 4px;` |
 | **⚠️ 網掛不開放 (`.badge-web-closed`)** | **`#c2410c`**（橙紅） | `#FFFFFF`（純白） | 800 | `box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.25); border-radius: 4px;` |
 | **醫師代碼標籤 (`.doc-code-tag`)** | `#e2edf1` | `#203e45` | 800 | 等寬字體 (`ui-monospace, SFMono-Regular, monospace`) |

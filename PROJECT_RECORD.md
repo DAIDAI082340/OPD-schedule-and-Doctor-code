@@ -9,7 +9,7 @@
 | **專案名稱** | 門診時段交叉查詢與醫師代碼查詢系統 (Outpatient Clinic Schedule Cross-Query & Doctor Code Assistant) |
 | **專案代號** | `Clinic-Schedule-CrossQuery` |
 | **建立日期** | 2026-09-18 |
-| **目前版本** | `v0.9.7` (特定看診日大課表呈現、琥珀金棕開診徽章、原子化消除折行段落、停診提醒表維持純粹) |
+| **目前版本** | `v0.9.8` (陳筠方醫師代碼 FB17、特定看診日改為經典珠寶玫瑰金 #B76E79、李學林雙標籤方案3水平並列零折行) |
 | **主要目標使用者** | 臨床醫師、門診跟診護理師、轉診中心個案管理師、批價掛號櫃檯人員、專科護理師 (NP)、各科行政秘書 |
 | **運作環境** | 現代網頁瀏覽器 (Chrome, Edge, Safari, Firefox)、支援行動裝置 (RWD)、純前端零依賴離線運作 (Zero-dependency Web App) |
 | **GitHub 倉庫** | `https://github.com/DAIDAI082340/OPD-schedule-and-Doctor-code` |
@@ -563,7 +563,8 @@ flowchart TD
 - **下午診 (`.slot-afternoon`)**：底色 `#FFF0E2`（淡杏），邊框 `rgba(251, 146, 60, 0.4)`，文字 `#1E3545`
 - **夜診 (`.slot-night`)**：底色 `#E0F4FE`（淡藍），邊框 `rgba(56, 189, 248, 0.4)`，文字 `#1E3545`
 
-### 10.5 警示與停診標籤色系 (Badges)
+### 10.5 警示與特殊標籤色系 (Badges)
+- **📅 特定看診日標籤 (`.pill-specific-date-badge`)**：底色 `#B76E79`（經典珠寶玫瑰金 Classic Rose Gold），純白粗字 `#FFFFFF`，字重 800，`box-shadow: 0 1.5px 3px rgba(0,0,0,0.25)`
 - **⚠️ 停診標籤 (`.pill-suspension-badge`)**：底色 `#b91c1c`，純白粗字 `#FFFFFF`，字重 800
 - **⚠️ 網掛不開放 (`.badge-web-closed`)**：底色 `#c2410c`，純白粗字 `#FFFFFF`，字重 800
 
@@ -596,5 +597,22 @@ flowchart TD
   - `.pill-badges-row`：水平並列容器，`display: inline-flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: nowrap;`。
 - **核心渲染邏輯**：新增 `renderPillBadgesHtml(note)`，原子化組裝特定開診日與停診徽章；`formatSuspensionTableCellNote` 排除開診字串，確保停診表純粹。
 - **雙生檔案 100% 同步**：`index.html` 與 `門診時段交叉查詢與醫師代碼查詢系統.html` 之 SHA-256 雜湊碼完全一致 (`F69CFE0140949454A4594C01909D873D35B42A9B091EFBAD19FF422B2ED9C152`)。
+
+---
+
+## 12. 版本 v0.9.8 更新紀錄：陳筠方醫師代碼補齊與特定看診日經典玫瑰金定案 (2026-09-22)
+
+### 12.1 臨床更新與使用者確認
+1. **補齊醫師代碼**：
+   - 血液腫瘤科 (`AF`) **陳筠方** 醫師代碼正式填入 **`FB17`**。
+   - 同時支援系統第三分頁「科別與醫師代碼速查」即時搜尋、卡片展示與轉診複製。
+2. **特定看診日徽章色彩定案（經典珠寶玫瑰金）**：
+   - 經實景對比紅色停診膠囊（`#b91c1c`）多款色彩方案，使用者最終拍板定案 **款式 1：經典珠寶玫瑰金 (`#B76E79`)**。
+   - 玫瑰金沉著優雅、自帶細緻辨識度，與停診醒目深紅形成絕佳的「開診 vs 停診」高低對比層次，在各種淡彩背景上均高度和諧耐看。
+3. **李學林看診/停診同格雙標籤定案（方案 3）**：
+   - 拍板定案 **方案 3（水平緊湊並列 `[📅 9/12.26看診]  [⚠️ 9/26停診]`）**，完全杜絕折行與拆字問題。
+4. **雙生檔案 100% 同步**：
+   - `index.html` 與 `門診時段交叉查詢與醫師代碼查詢系統.html` 之 SHA-256 雜湊碼完全一致 (`8EAD972976F1E7B27FD909A846CD3381FED74E9318B9F3991ED687FEF354C1FC`)。
+
 
 
