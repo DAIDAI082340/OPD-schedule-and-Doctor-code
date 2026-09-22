@@ -9,7 +9,7 @@
 | **專案名稱** | 門診時段交叉查詢與醫師代碼查詢系統 (Outpatient Clinic Schedule Cross-Query & Doctor Code Assistant) |
 | **專案代號** | `Clinic-Schedule-CrossQuery` |
 | **建立日期** | 2026-09-18 |
-| **目前版本** | `v0.9.6` (基準醫師改為深墨青海藍 #284E59、基準欄預設腎臟內科且科別排序置頂、個人門診彈窗改同款刷淡色系) |
+| **目前版本** | `v0.9.7` (特定看診日大課表呈現、琥珀金棕開診徽章、原子化消除折行段落、停診提醒表維持純粹) |
 | **主要目標使用者** | 臨床醫師、門診跟診護理師、轉診中心個案管理師、批價掛號櫃檯人員、專科護理師 (NP)、各科行政秘書 |
 | **運作環境** | 現代網頁瀏覽器 (Chrome, Edge, Safari, Firefox)、支援行動裝置 (RWD)、純前端零依賴離線運作 (Zero-dependency Web App) |
 | **GitHub 倉庫** | `https://github.com/DAIDAI082340/OPD-schedule-and-Doctor-code` |
@@ -574,5 +574,27 @@ flowchart TD
 - **備用 3（v0.9.0~v0.9.1）**：自然草甸植物物語 (Botanical Stories) 10 款清甜高明度淡彩（Morning Sky、Ocean Mist、Sage 等，適用多於 6 科交叉比對）。
 - **備用 4（v0.8.0）**：Spring Meadow 12 色經典原色（磚紅珊瑚、鼠尾草綠、柔湖水藍等質樸原木感）。
 - **備用 5（v0.4.0~v0.7.0）**：高飽和度強烈互斥色盤 8 色（翡翠綠、活力橙、皇家紫、石榴紅等高衝擊色彩）。
+
+---
+
+## 11. 版本 v0.9.7 更新紀錄：特定看診日大課表呈現與消除折行段落 (2026-09-22)
+
+### 11.1 臨床背景與使用者指示
+- 門診實務中部分醫師並非每週常態看診，而是僅在每個月特定日期開診（例如雙週看診、指定日出診）。
+- 使用者依據紙本排班手冊標註指示：
+  1. **陳筠方（血液腫瘤科 週五上午 52診）**：`9/11.25看診`
+  2. **張淑鈺（腎臟內科 週六上午 88診）**：`9/12.26看診`
+  3. **李學林（心臟內科 週六上午 6診）**：`9/12.26看診 9/26停診`
+  4. **大課表直接呈現**：現有頁面規範原則不變，特定看診日直接呈現於每週矩陣大課表膠囊與個人門診表彈窗中。
+  5. **停診提醒表保持純粹**：純特定看診日不混入「📢 近期門診停診／異動提醒表格」，保持停診表格專注於請假停診。
+  6. **徹底消除折行段落**：李學林同時具備特定日開診與停診時，兩個標籤必須水平並排在同一行，全面強制 `white-space: nowrap !important; word-break: keep-all !important;`，徹底消除折行拆字段落感。
+
+### 11.2 技術實作架構
+- **資料庫更新**：`schedules` 陣列登錄 3 筆特定看診日時段。
+- **新增樣式**：
+  - `.pill-specific-date-badge`：底色 `#b45309`（琥珀金棕），文字純白加粗，`white-space: nowrap !important; word-break: keep-all !important;`。
+  - `.pill-badges-row`：水平並列容器，`display: inline-flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: nowrap;`。
+- **核心渲染邏輯**：新增 `renderPillBadgesHtml(note)`，原子化組裝特定開診日與停診徽章；`formatSuspensionTableCellNote` 排除開診字串，確保停診表純粹。
+- **雙生檔案 100% 同步**：`index.html` 與 `門診時段交叉查詢與醫師代碼查詢系統.html` 之 SHA-256 雜湊碼完全一致 (`F69CFE0140949454A4594C01909D873D35B42A9B091EFBAD19FF422B2ED9C152`)。
 
 
