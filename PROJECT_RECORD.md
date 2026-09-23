@@ -9,7 +9,7 @@
 | **專案名稱** | 門診時段交叉查詢與醫師代碼查詢系統 (Outpatient Clinic Schedule Cross-Query & Doctor Code Assistant) |
 | **專案代號** | `Clinic-Schedule-CrossQuery` |
 | **建立日期** | 2026-09-18 |
-| **目前版本** | `v0.9.8` (陳筠方醫師代碼 FB17、特定看診日改為經典珠寶玫瑰金 #B76E79、李學林雙標籤方案3水平並列零折行) |
+| **目前版本** | `v0.9.9` (PWA 漸進式 Web App 升級、專屬 App 圖示定案：方案2無限交叉圖騰＋淡湖水青底色 #EBF5F7＋深墨海藍 #1E3545 大字無外框、支援 iOS/Android 獨立視窗與離線秒開) |
 | **主要目標使用者** | 臨床醫師、門診跟診護理師、轉診中心個案管理師、批價掛號櫃檯人員、專科護理師 (NP)、各科行政秘書 |
 | **運作環境** | 現代網頁瀏覽器 (Chrome, Edge, Safari, Firefox)、支援行動裝置 (RWD)、純前端零依賴離線運作 (Zero-dependency Web App) |
 | **GitHub 倉庫** | `https://github.com/DAIDAI082340/OPD-schedule-and-Doctor-code` |
@@ -613,6 +613,39 @@ flowchart TD
    - 拍板定案 **方案 3（水平緊湊並列 `[📅 9/12.26看診]  [⚠️ 9/26停診]`）**，完全杜絕折行與拆字問題。
 4. **雙生檔案 100% 同步**：
    - `index.html` 與 `門診時段交叉查詢與醫師代碼查詢系統.html` 之 SHA-256 雜湊碼完全一致 (`8EAD972976F1E7B27FD909A846CD3381FED74E9318B9F3991ED687FEF354C1FC`)。
+
+---
+
+## 13. 版本 v0.9.9 更新紀錄：PWA 手機原生 App 轉型與專屬品牌圖示定案 (2026-09-23)
+
+### 13.1 臨床升級需求與背景
+醫護同仁於診間、病房查房或移動間查詢排班時，常需透過手機瀏覽器（Safari / Chrome）查詢。傳統網頁存在「頂部網址列佔空間」、「底部分享導覽列易誤觸」、「斷網或訊號不佳時無法載入」等問題。
+依據使用者決策，正式將系統升級為現代化 **PWA (Progressive Web App, 漸進式網路應用程式)**，實現：
+1. **加入主畫面生成原生 App 圖示**：在 iPhone / Android 點擊「加入主畫面」後，手機桌面直接生成專屬的高解析度 App 圖示。
+2. **滿版獨立 App 體驗 (Standalone Display)**：點開後完全隱藏瀏覽器網址列與工具列，視覺與操作體驗 100% 等同於 App Store / Google Play 下載之原生 App。
+3. **極致離線秒開 (Zero Latency Offline)**：透過 Service Worker Stale-While-Revalidate 快取架構，即使在地下室、電梯等無收訊環境下，依然 0.1 秒秒開。
+
+### 13.2 專屬 App 圖示品牌視覺定案規格
+經多次實機排版與使用者親自決策，正式定案圖示規格：
+- **核心圖騰**：**方案 2（無限交叉循環迴圈）**，醫療十字無縫交織「無限 $\infty$ 交叉流線環」與心電脈衝，象徵跨科門診毫秒級交叉對齊。圖騰放大至 720px，飽滿扎實。
+- **底圖色彩**：**底色 1（淡湖水青 `#EBF5F7`）**，如湖水清晨微光，完全消除生硬白光的刺眼反光感，與天青光軌形成溫潤同色系過渡，極度護眼耐看。
+- **文字排版**：單行大字「**門診速查系統**」，微軟正黑體 92pt 特粗，深墨海藍 (`#1E3545`)，**零外框、零膠囊**，極致純淨俐落。
+- **手機桌面顯示名稱**：`門診速查`（四字工整，iOS/Android 零截斷、零折行）。
+
+### 13.3 產出與變更資產清單
+1. **圖示資產**：
+   - `apple-touch-icon.png`：180×180 px，供 iPhone / iPad Retina 螢幕。
+   - `icon-192.png`：192×192 px，供 Android 桌面與 PWA 清單。
+   - `icon-512.png`：512×512 px，供高解析 Splash Screen 啟動開機畫面。
+2. **PWA 清單與快取設定**：
+   - `manifest.json`：設定 `standalone` 模式、主題色 `#1E3545`、背景色 `#EBF5F7`。
+   - `sw.js`：註冊 Service Worker，預載核心資產並實現 Stale-While-Revalidate 離線快取與雲端自動同步。
+3. **主程式整合 (`<head>` & `<body>`)**：
+   - 加入 `manifest.json`、`apple-touch-icon`、`apple-mobile-web-app-capable` 等規格標籤。
+   - 註冊 Service Worker 離線引擎。
+4. **雙生檔案 100% 同步**：
+   - `index.html` 與 `門診時段交叉查詢與醫師代碼查詢系統.html` 之 SHA-256 雜湊碼完全一致 (`B1F57C8077C29DBE5D9D6CE60427D8AC99088ED0E891BCA4A47A9AD675A62A14`)。
+
 
 
 

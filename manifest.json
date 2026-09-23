@@ -1,0 +1,29 @@
+{
+  "name": "門診時段交叉查詢與醫師代碼查詢系統",
+  "short_name": "門診速查",
+  "description": "排班交叉查詢・跨科同時段對照・醫師及科別代碼整合",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#EBF5F7",
+  "theme_color": "#1E3545",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
