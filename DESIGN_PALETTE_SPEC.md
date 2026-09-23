@@ -236,3 +236,52 @@ const backupDepartmentPalette_HighContrast8 = [
 ];
 ```
 
+---
+
+## 8. 專屬品牌識別標誌規格 (Official App Logo & Brand DNA Specifications)
+
+> **定案日期**：2026-09-23  
+> **正式定案款式**：**3D 浮雕立體金框徽章 (款式 B 滿版金框版)**  
+> **核心設計 DNA 承諾**：永久銘記並嚴格遵循「**黃金立體邊框**」、「**3D 浮雕微光風格**」與「**右下角『卉』字草木圖騰**」，作為本系統未來所有視覺衍生（App 圖示、Header 導覽列、名牌胸章、院內公文）之不可撼動基準。
+
+### 8.1 三大核心視覺基因 (Brand Core DNA)
+
+| 核心基因 | 視覺元素與規格 | 象徵意涵與設計規範 |
+| :--- | :--- | :--- |
+| **🥇 黃金立體邊框**<br>(3D Gold Squircle Frame) | • 3D 金屬立體拉絲黃金圓角框。<br>• 具備細緻的高光倒角、金屬微反光與環境立體陰影。<br>• **滿版金框貼齊 (款式 B)**：金框精準包覆整個 App 圓角邊界，整顆 App 猶如一枚沉甸甸的純金勳章。 | 象徵醫療臨床專業的**卓越品質、權威可信與尊榮感**。 |
+| **🎨 3D 浮雕微光風格**<br>(Tactile 3D Emboss Style) | • **底座質感**：暖象牙亞麻紙紋／柔和皮革布紋肌理（`#FAF8F5`），徹底告別死白反光。<br>• **雕刻色彩**：湖水青瓷深綠（`#2D5A5B`）立體陰影，具備手感溫潤之陶石浮雕質感。<br>• **圖騰組合**：<br>  1. **立體放大鏡**（內嵌核對勾選與衝刺向上箭頭，象徵秒級速查與正確核對）。<br>  2. **時鐘排班矩陣**（時鐘指針與刻度，精確象徵門診時段與時間管理）。<br>  3. **環形網絡軌道節點**（弧形環帶與端點圓珠，象徵跨科聯通與交叉比對）。 | 兼具現代科技數位效率與自然手作溫度，**層次深邃、視覺厚實大氣**。 |
+| **🌿 右下角「卉」字圖騰**<br>(The "卉" Botanical Emblem) | • 位於圖騰右下角，由草木葉脈與流暢線條交織勾勒而成的**「卉」**字草本紋章。<br>• 筆法圓融流暢，如初生嫩葉與中西醫療藥草之芽。 | **「卉」本義為百草之總稱**。象徵生機勃勃、仁心濟世、草木療癒與患者康復長青，為數位排班工具注入深厚的**醫療生命力與人文關懷**。 |
+
+### 8.2 品牌色彩色票與代碼 (Logo Palette Tokens)
+
+```json
+{
+  "logo_brand_dna": {
+    "border_frame": {
+      "type": "3D Brushed Metallic Gold Squircle",
+      "primary_gold": "#D4AF37",
+      "highlight_gold": "#F3E5AB",
+      "shadow_bronze": "#8C6D23",
+      "style": "Flush Edge (款式 B 滿版金框)"
+    },
+    "background_surface": {
+      "name": "Warm Ivory Linen Texture (暖象牙亞麻紙紋)",
+      "hex": "#FAF8F5",
+      "finish": "Tactile Matte (溫潤不反光)"
+    },
+    "embossed_graphic": {
+      "name": "Deep Lake Sage Green (湖水青瓷深綠)",
+      "hex": "#2D5A5B",
+      "accent_teal": "#3A6E70",
+      "shadow_depth": "Soft 3D Deboss"
+    },
+    "botanical_emblem": {
+      "character": "卉 (Hùi)",
+      "symbolism": "草木百花、仁心濟世、生機盎然、健康長青",
+      "position": "Bottom-Right Quadrant"
+    }
+  }
+}
+```
+
+
