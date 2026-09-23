@@ -1087,6 +1087,16 @@
         padding: 2px 4px !important;
         border-radius: 5px;
       }
+      .suspension-alert-banner {
+        padding: 8px 10px !important;
+      }
+      .suspension-table th, .suspension-table td {
+        padding: 5px 3px !important;
+        font-size: 0.80rem !important;
+      }
+      .suspension-table th:nth-child(3), .suspension-table td:nth-child(3) {
+        padding-left: 6px !important;
+      }
     }
 
     /* 官方停代診公告按鈕與角標 */
@@ -1250,7 +1260,7 @@
     }
     .suspension-table th:nth-child(3) {
       text-align: left !important;
-      padding-left: 16px !important;
+      padding-left: 10px !important;
     }
     .suspension-table td {
       padding: 6px 8px;
@@ -1265,7 +1275,7 @@
     }
     .suspension-table td:nth-child(3) {
       text-align: left !important;
-      padding-left: 16px !important;
+      padding-left: 10px !important;
     }
     .suspension-table tr.doc-group-last td {
       border-bottom: 1.5px solid #fdba74;
@@ -1796,7 +1806,6 @@
       { dept_code: "13", dept_name: "精神科", doctor: "王鴻松", weekday: 6, slot: "上午", room: "26診", note: "" },
       { dept_code: "AC", dept_name: "胸腔內科", doctor: "林澤宏", weekday: 1, slot: "夜診", room: "5診", note: "" },
       { dept_code: "00", dept_name: "高年科", doctor: "梁垠盤", weekday: 1, slot: "上午", room: "9診", note: "9/28停診" },
-      { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 4, slot: "上午", room: "88診", note: "網掛不開放 10/15停診" },
       { dept_code: "40", dept_name: "牙科", doctor: "鍾先揚", weekday: 2, slot: "上午", room: "21診", note: "" },
       { dept_code: "40", dept_name: "牙科", doctor: "金椿期", weekday: 3, slot: "夜診", room: "23診", note: "10/21停診" },
       { dept_code: "1303", dept_name: "兒童青少年心智科", doctor: "葉騰尹", weekday: 2, slot: "夜診", room: "27診", note: "" },
@@ -2403,7 +2412,7 @@
           const bCode = crossBaseDoctorKey.replace("DEPT_", "");
           const dObj = allDepts.find(d => d.code === bCode);
           const bDeptName = dObj ? dObj.name : bCode;
-          baseTag.innerHTML = `<span>[基準科別] [${bCode}] ${bDeptName} 全科所有醫師</span><span class="close-btn" onclick="clearCrossBaseDoctor()" title="移除基準科別">✕</span>`;
+          baseTag.innerHTML = `<span>[基準科別] [${bCode}] ${bDeptName}</span><span class="close-btn" onclick="clearCrossBaseDoctor()" title="移除基準科別">✕</span>`;
         } else {
           const [bCode, bDoc] = crossBaseDoctorKey.split("___");
           const bDocCode = findDocCode(bDoc);
@@ -2484,7 +2493,7 @@
         const bDeptName = dObj ? dObj.name : bCode;
         docSlots = schedules.filter(s => s.dept_code === bCode);
         baseDoctorNames = getDocsByDept(bCode);
-        baseTitleHtml = `查詢基準：<span style="color:#1E3545; font-weight:800;">[${bCode}] ${bDeptName} 全科所有醫師</span>（共 <strong>${baseDoctorNames.length}</strong> 位醫師，每週門診 <strong>${docSlots.length}</strong> 診次）`;
+        baseTitleHtml = `查詢基準：<span style="color:#1E3545; font-weight:800;">[${bCode}] ${bDeptName}</span>（共 <strong>${baseDoctorNames.length}</strong> 位醫師，每週門診 <strong>${docSlots.length}</strong> 診次）`;
       } else {
         const [deptCode, docName] = crossBaseDoctorKey.split("___");
         docSlots = schedules.filter(s => s.dept_code === deptCode && s.doctor === docName);
@@ -2632,7 +2641,7 @@
                 <span style="color:#1E3545; font-weight:700; margin-left:4px; margin-right:4px;">${item.slot}</span>
                 <span style="font-size:0.84rem; color:#5d6d7e; white-space: nowrap;">（${item.room}）</span>
               </td>
-              <td style="text-align:left; vertical-align:middle; padding-left:16px;">
+              <td style="text-align:left; vertical-align:middle; padding-left:10px;">
                 ${formatSuspensionTableCellNote(item.note)}
               </td>
             </tr>`;
@@ -2642,16 +2651,15 @@
         suspensionAlertBannerHtml = `
           <div class="suspension-alert-banner" style="margin-top: 18px;">
             <div class="suspension-alert-header">
-              <span>📢 近期門診停診／異動提醒</span>
-              <span style="font-size:0.82rem; font-weight:600; color:#c2410c;">（共 ${suspensionAlerts.length} 診次異動，就診前請特別留意）</span>
+              <span>📢 門診停診異動</span>
             </div>
             <div style="overflow-x:auto; margin-top:6px;">
               <table class="suspension-table">
                 <thead>
                   <tr>
-                    <th style="width:24%; min-width:110px; text-align:center;">科別與醫師</th>
-                    <th style="width:36%; min-width:140px; text-align:center;">異動看診時段</th>
-                    <th style="width:40%; min-width:160px; text-align:left; padding-left:16px;">停診／異動日期標註</th>
+                    <th style="width:28%; text-align:center;">科別／醫師</th>
+                    <th style="width:34%; text-align:center;">看診時段</th>
+                    <th style="width:38%; text-align:left; padding-left:10px;">停診／異動日期</th>
                   </tr>
                 </thead>
                 <tbody>
