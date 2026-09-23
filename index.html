@@ -1087,16 +1087,6 @@
         padding: 2px 4px !important;
         border-radius: 5px;
       }
-      .suspension-alert-banner {
-        padding: 8px 10px !important;
-      }
-      .suspension-table th, .suspension-table td {
-        padding: 5px 3px !important;
-        font-size: 0.80rem !important;
-      }
-      .suspension-table th:nth-child(3), .suspension-table td:nth-child(3) {
-        padding-left: 6px !important;
-      }
     }
 
     /* 官方停代診公告按鈕與角標 */
@@ -1260,7 +1250,7 @@
     }
     .suspension-table th:nth-child(3) {
       text-align: left !important;
-      padding-left: 10px !important;
+      padding-left: 16px !important;
     }
     .suspension-table td {
       padding: 6px 8px;
@@ -1275,7 +1265,7 @@
     }
     .suspension-table td:nth-child(3) {
       text-align: left !important;
-      padding-left: 10px !important;
+      padding-left: 16px !important;
     }
     .suspension-table tr.doc-group-last td {
       border-bottom: 1.5px solid #fdba74;
@@ -2637,11 +2627,13 @@
 
             tableRowsHtml += `
               <td style="font-weight:800; color:#34495e; text-align:center; vertical-align:middle;">
-                <span style="font-weight:800; color:#34495e;">${item.weekday}</span>
-                <span style="color:#1E3545; font-weight:700; margin-left:4px; margin-right:4px;">${item.slot}</span>
-                <span style="font-size:0.84rem; color:#5d6d7e; white-space: nowrap;">（${item.room}）</span>
+                <div style="white-space: nowrap !important; word-break: keep-all !important;">
+                  <span style="font-weight:800; color:#34495e;">${item.weekday}</span>
+                  <span style="color:#1E3545; font-weight:700; margin-left:3px;">${item.slot}</span>
+                </div>
+                <div style="font-size:0.84rem; color:#5d6d7e; white-space: nowrap !important; margin-top:2px;">（${item.room}）</div>
               </td>
-              <td style="text-align:left; vertical-align:middle; padding-left:10px;">
+              <td style="text-align:left; vertical-align:middle; padding-left:16px;">
                 ${formatSuspensionTableCellNote(item.note)}
               </td>
             </tr>`;
@@ -2657,9 +2649,9 @@
               <table class="suspension-table">
                 <thead>
                   <tr>
-                    <th style="width:28%; text-align:center;">科別／醫師</th>
-                    <th style="width:34%; text-align:center;">看診時段</th>
-                    <th style="width:38%; text-align:left; padding-left:10px;">停診／異動日期</th>
+                    <th style="width:24%; min-width:110px; text-align:center;">科別與醫師</th>
+                    <th style="width:36%; min-width:140px; text-align:center;">異動看診時段</th>
+                    <th style="width:40%; min-width:160px; text-align:left; padding-left:16px;">停診／異動日期標註</th>
                   </tr>
                 </thead>
                 <tbody>
