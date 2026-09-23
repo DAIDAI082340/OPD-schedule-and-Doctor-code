@@ -86,9 +86,10 @@
       backdrop-filter: blur(4px);
     }
     header h1 {
-      font-size: 1.55rem;
+      font-size: clamp(1.05rem, 4.3vw, 1.55rem);
       font-weight: 800;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     }
     header p {
@@ -118,7 +119,7 @@
     }
     .nav-tab {
       flex: 1;
-      padding: 11px 10px;
+      padding: 9px 8px;
       border: none;
       background: transparent;
       font-size: 1.02rem;
@@ -127,7 +128,24 @@
       border-radius: 9px;
       cursor: pointer;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      line-height: 1.3;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .nav-tab-title {
+      display: block;
+      text-align: center;
+    }
+    .nav-tab-sub {
+      display: block;
+      text-align: center;
+      font-size: 0.82em;
+      font-weight: 600;
+      opacity: 0.88;
+      margin-top: 2px;
     }
     .nav-tab:hover:not(.active) {
       background: rgba(255, 255, 255, 0.55);
@@ -159,6 +177,28 @@
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+    .card-title-cross {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 4px;
+    }
+    .card-title-main {
+      display: block;
+      font-size: clamp(0.88rem, 3.8vw, 1.20rem);
+      font-weight: 800;
+      white-space: nowrap;
+      color: #34495e;
+      text-align: center;
+    }
+    .card-title-sub {
+      display: block;
+      font-size: clamp(0.80rem, 3.3vw, 0.95rem);
+      font-weight: 600;
+      color: #5c768d;
+      text-align: center;
     }
 
     .form-group {
@@ -279,6 +319,30 @@
       transform: translateY(-1px);
     }
     .btn-main:active { transform: translateY(0); }
+    .btn-main-cross {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.32;
+      padding: 9px 12px;
+    }
+    .btn-text-main {
+      display: block;
+      font-size: 1.04rem;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+    .btn-text-sub {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      opacity: 0.92;
+      text-align: center;
+      margin-top: 2px;
+      letter-spacing: 0.02em;
+    }
 
     .btn-add {
       background: linear-gradient(135deg, #447784 0%, #366570 100%);
@@ -1308,8 +1372,13 @@
     <!-- 頁籤與官方公告按鈕 -->
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
       <div class="nav-tabs" style="margin-bottom:0; flex:1; min-width:300px;">
-        <button class="nav-tab active" onclick="showTab('tab-cross', this)">門診跨科比對 (同天同時段 / 不同時段)</button>
-        <button class="nav-tab" onclick="showTab('tab-codes', this)">醫師/科別代碼查詢</button>
+        <button class="nav-tab active" onclick="showTab('tab-cross', this)">
+          <span class="nav-tab-title">門診跨科比對</span>
+          <span class="nav-tab-sub">(同天同時段 / 不同時段)</span>
+        </button>
+        <button class="nav-tab" onclick="showTab('tab-codes', this)">
+          <span class="nav-tab-title">醫師/科別代碼查詢</span>
+        </button>
       </div>
       <div>
         <button type="button" class="btn-official-notice" onclick="openNoticeModal()" title="點擊檢視彰化醫院官方最新停代診公文大圖">
@@ -1322,7 +1391,10 @@
     <!-- ==================== 功能 1: 某科別醫師門診時段 vs 其他科別門診查詢 (同天同時段 ＆ 不同時段) ==================== -->
     <div id="tab-cross" class="tab-pane">
       <div class="card">
-        <div class="card-title">某科別醫師門診時段 vs 其他科別門診查詢（同天同時段 ＆ 不同時段）</div>
+        <div class="card-title card-title-cross">
+          <span class="card-title-main">某科別醫師門診時段 vs 其他科別門診查詢</span>
+          <span class="card-title-sub">（同天同時段 ＆ 不同時段）</span>
+        </div>
 
         <!-- 基準醫師選擇 -->
         <label>1. 選擇基準醫師：</label>
@@ -1366,8 +1438,11 @@
         </div>
 
         <div style="display:flex; gap:10px; margin-top:14px;">
-          <button class="btn-main" onclick="runCrossSearch()">查詢同天跨科醫師（同時段 ＋ 跨時段對照）</button>
-          <button type="button" class="btn-reset" onclick="clearCrossTargets()" style="width:100px; padding:10px 14px;">清空</button>
+          <button class="btn-main btn-main-cross" onclick="runCrossSearch()">
+            <span class="btn-text-main">查詢同天跨科醫師</span>
+            <span class="btn-text-sub">（同時段 ＋ 跨時段對照）</span>
+          </button>
+          <button type="button" class="btn-reset" onclick="clearCrossTargets()" style="width:100px; padding:10px 14px; display:flex; align-items:center; justify-content:center;">清空</button>
         </div>
       </div>
 
