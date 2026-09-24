@@ -1,15 +1,13 @@
 name: Daily Schedule & Suspension Notice Update
 
+# 基於公立醫療機構資安合規與防火牆政策，全面停用境外雲端主機排程爬蟲，改由台灣在地合法環境執行
 on:
-  schedule:
-    # 每天 UTC 15:00 (即台灣時間 23:00) 自動執行巡檢與更新
-    - cron: '0 15 * * *'
   workflow_dispatch:
     inputs:
       force_update:
-        description: '手動強制執行更新'
+        description: '手動緊急執行測試 (僅供特定調試)'
         required: false
-        default: true
+        default: false
         type: boolean
 
 permissions:
