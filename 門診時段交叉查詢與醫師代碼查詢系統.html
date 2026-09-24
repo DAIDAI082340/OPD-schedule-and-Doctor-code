@@ -1179,6 +1179,226 @@
       transform: translateY(-1px);
     }
 
+    /* ========================================================
+       官方停代診公文大圖 - 原頁互動放大縮小檢視器 (In-Page Zoom Viewer)
+       ======================================================== */
+    .image-viewer-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(10, 18, 26, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 99999;
+      flex-direction: column;
+      user-select: none;
+      -webkit-user-select: none;
+      animation: ivFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .image-viewer-modal.active {
+      display: flex;
+    }
+    @keyframes ivFadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .image-viewer-toolbar {
+      flex-shrink: 0;
+      background: linear-gradient(180deg, rgba(20, 32, 44, 0.96) 0%, rgba(14, 24, 34, 0.92) 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 10px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+    }
+    .image-viewer-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .image-viewer-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    .image-viewer-hint {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .image-viewer-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .iv-btn {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+    }
+    .iv-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-1px);
+    }
+    .iv-btn:active {
+      transform: translateY(1px);
+    }
+    .iv-btn-text {
+      font-size: 0.85rem;
+      padding: 6px 10px;
+    }
+    .iv-btn-close {
+      background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      font-weight: 800;
+      padding: 6px 16px;
+      box-shadow: 0 2px 8px rgba(225, 29, 72, 0.4);
+    }
+    .iv-btn-close:hover {
+      background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+    }
+    .iv-badge {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      padding: 6px 10px;
+      min-width: 58px;
+      text-align: center;
+    }
+    .image-viewer-viewport {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      touch-action: none;
+    }
+    .image-viewer-viewport.is-dragging {
+      cursor: grabbing;
+    }
+    .image-viewer-stage {
+      position: absolute;
+      transform-origin: center center;
+      transition: transform 0.05s linear;
+      will-change: transform;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .image-viewer-stage.smooth {
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .image-viewer-stage img {
+      max-width: 92vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+      pointer-events: none;
+    }
+    .btn-zoom-inline {
+      background: #1E3545;
+      color: #ffffff;
+      border: none;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 2px 6px rgba(30, 53, 69, 0.25);
+      transition: all 0.2s ease;
+    }
+    .btn-zoom-inline:hover {
+      background: #2D5A5B;
+      transform: translateY(-1px);
+    }
+    .zoom-hover-badge {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #1E3545;
+      color: #ffffff;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      box-shadow: 0 2px 8px rgba(30, 53, 69, 0.25);
+      transition: all 0.2s ease;
+    }
+    .zoom-hover-badge:hover {
+      background: #2D5A5B;
+      transform: scale(1.03);
+    }
+    @media (max-width: 640px) {
+      .image-viewer-toolbar {
+        padding: 8px 10px;
+        gap: 6px;
+      }
+      .image-viewer-title {
+        font-size: 0.88rem;
+        max-width: 140px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .image-viewer-hint {
+        display: none;
+      }
+      .iv-btn {
+        padding: 4px 8px;
+        font-size: 0.85rem;
+        min-height: 32px;
+      }
+      .iv-btn-text {
+        padding: 4px 6px;
+        font-size: 0.78rem;
+      }
+      .iv-badge {
+        padding: 4px 6px;
+        font-size: 0.78rem;
+        min-width: 44px;
+      }
+      .iv-btn-close {
+        padding: 4px 10px;
+      }
+    }
+
     @media (max-width: 600px) {
       .modal-box {
         width: 96% !important;
@@ -1649,6 +1869,29 @@
       <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
         <a id="noticeOfficialLink" href="https://www.chhw.mohw.gov.tw/?aid=320&page_name=detail&iid=15" target="_blank" rel="noopener noreferrer" style="color:#1E3545; font-weight:700; text-decoration:none; font-size:0.95rem;">🌐 前往彰化醫院官方公告專區 ↗</a>
         <button type="button" class="btn-modal-close" onclick="closeNoticeModal()">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 官方停代診公文大圖 - 原頁互動放大縮小檢視器 (In-Page Image Zoom & Pan Lightbox Viewer) -->
+  <div id="imageViewerModal" class="image-viewer-modal" role="dialog" aria-modal="true" aria-label="停代診公告公文原頁放大縮小檢視器">
+    <div class="image-viewer-toolbar">
+      <div class="image-viewer-info">
+        <span class="image-viewer-title" id="imageViewerTitle">📌 醫師停代診公告</span>
+        <span class="image-viewer-hint">💡 滾輪/雙指縮放，拖曳平移</span>
+      </div>
+      <div class="image-viewer-controls">
+        <button type="button" class="iv-btn" onclick="ivZoomOut()" title="縮小 (-)">➖</button>
+        <span class="iv-badge" id="ivScaleBadge">100%</span>
+        <button type="button" class="iv-btn" onclick="ivZoomIn()" title="放大 (+)">➕</button>
+        <button type="button" class="iv-btn iv-btn-text" onclick="ivResetZoom()" title="重設縮放 (0)">↺ 重設</button>
+        <button type="button" class="iv-btn iv-btn-text" onclick="ivFitWidth()" title="最適寬度">↔ 適寬</button>
+        <button type="button" class="iv-btn iv-btn-close" onclick="closeImageViewer()" title="關閉檢視 (Esc)">✕ 關閉</button>
+      </div>
+    </div>
+    <div class="image-viewer-viewport" id="imageViewerViewport">
+      <div class="image-viewer-stage" id="imageViewerStage">
+        <img id="imageViewerImg" src="" alt="停代診公告公文原圖" referrerpolicy="no-referrer" draggable="false" />
       </div>
     </div>
   </div>
@@ -3148,12 +3391,15 @@
               <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 16px; box-shadow: 0 4px 12px rgba(52, 73, 94, 0.08);">
                 <div style="font-size: 1.02rem; font-weight: 800; color: #34495e; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
                   <span>📌 ${img.title || "醫師停代診公告"}</span>
-                  <a href="${imgSrc}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" style="font-size: 0.85rem; color: #1E3545; text-decoration: underline; font-weight: 700;">檢視原解析度大圖 ↗</a>
+                  <button type="button" class="btn-zoom-inline" onclick="openImageViewer('${imgSrc}', '${encodeURIComponent(img.title || '醫師停代診公告')}')" title="點擊在同頁面放大縮小檢視">
+                    🔍 於原頁放大縮小檢視
+                  </button>
                 </div>
-                <div style="text-align: center; background: #f8fafc; border-radius: 8px; padding: 8px; border: 1px solid #e2e8f0;">
-                  <a href="${imgSrc}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" title="點擊檢視原解析度大圖">
-                    <img src="${imgSrc}" alt="${img.title}" referrerpolicy="no-referrer" style="max-width: 100%; height: auto; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: zoom-in;" loading="lazy" onerror="if(this.src!=='${img.url}'){this.src='${img.url}';}" />
-                  </a>
+                <div style="text-align: center; background: #f8fafc; border-radius: 8px; padding: 10px; border: 1px solid #e2e8f0; cursor: zoom-in;" onclick="openImageViewer('${imgSrc}', '${encodeURIComponent(img.title || '醫師停代診公告')}')" title="點擊在同頁面自由放大縮小、平移檢視">
+                  <img src="${imgSrc}" alt="${img.title}" referrerpolicy="no-referrer" style="max-width: 100%; height: auto; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" loading="lazy" onerror="if(this.src!=='${img.url}'){this.src='${img.url}';}" />
+                  <div>
+                    <span class="zoom-hover-badge">🔍 點擊於原頁自由放大、縮小、平移檢視</span>
+                  </div>
                 </div>
               </div>
             `;
@@ -3184,12 +3430,252 @@
       }
     }
 
-    // 支援 ESC 鍵關閉所有彈窗
+    // ==================== 官方停代診公文大圖原頁放大縮小檢視器邏輯 (In-Page Zoom Viewer) ====================
+    let ivScale = 1.0;
+    let ivTranslateX = 0;
+    let ivTranslateY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let pinchStartDist = 0;
+    let pinchStartScale = 1.0;
+    let lastTapTime = 0;
+
+    function openImageViewer(src, titleEncoded) {
+      const modal = document.getElementById("imageViewerModal");
+      const imgEl = document.getElementById("imageViewerImg");
+      const titleEl = document.getElementById("imageViewerTitle");
+      if (!modal || !imgEl) return;
+
+      let displayTitle = "醫師停代診公告";
+      try {
+        if (titleEncoded) displayTitle = decodeURIComponent(titleEncoded);
+      } catch(e) {
+        displayTitle = titleEncoded || "醫師停代診公告";
+      }
+
+      if (titleEl) titleEl.textContent = `📌 ${displayTitle}`;
+      imgEl.src = src;
+
+      ivScale = 1.0;
+      ivTranslateX = 0;
+      ivTranslateY = 0;
+      ivApplyTransform(false);
+
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeImageViewer() {
+      const modal = document.getElementById("imageViewerModal");
+      if (!modal) return;
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+
+    function isImageViewerOpen() {
+      const modal = document.getElementById("imageViewerModal");
+      return modal && modal.classList.contains("active");
+    }
+
+    function ivApplyTransform(smooth) {
+      const stage = document.getElementById("imageViewerStage");
+      const badge = document.getElementById("ivScaleBadge");
+      if (!stage) return;
+      if (smooth) {
+        stage.classList.add("smooth");
+        setTimeout(() => stage.classList.remove("smooth"), 250);
+      } else {
+        stage.classList.remove("smooth");
+      }
+      stage.style.transform = `translate(${ivTranslateX}px, ${ivTranslateY}px) scale(${ivScale})`;
+      if (badge) {
+        badge.textContent = `${Math.round(ivScale * 100)}%`;
+      }
+    }
+
+    function ivZoomIn() {
+      ivScale = Math.min(ivScale * 1.25, 5.0);
+      ivApplyTransform(true);
+    }
+
+    function ivZoomOut() {
+      ivScale = Math.max(ivScale / 1.25, 0.4);
+      ivApplyTransform(true);
+    }
+
+    function ivResetZoom() {
+      ivScale = 1.0;
+      ivTranslateX = 0;
+      ivTranslateY = 0;
+      ivApplyTransform(true);
+    }
+
+    function ivFitWidth() {
+      const viewport = document.getElementById("imageViewerViewport");
+      const imgEl = document.getElementById("imageViewerImg");
+      if (!imgEl || !viewport) return;
+      const vpWidth = viewport.clientWidth;
+      const imgWidth = imgEl.naturalWidth || imgEl.clientWidth || 800;
+      if (imgWidth > 0) {
+        ivScale = Math.min(Math.max((vpWidth * 0.95) / imgWidth, 1.0), 3.5);
+      } else {
+        ivScale = 2.0;
+      }
+      ivTranslateX = 0;
+      ivTranslateY = 0;
+      ivApplyTransform(true);
+    }
+
+    // 初始化檢視器手勢事件監聽
+    (function initImageViewerEvents() {
+      const viewport = document.getElementById("imageViewerViewport");
+      if (!viewport) return;
+
+      // 滾輪縮放 (以滑鼠游標為核心放大)
+      viewport.addEventListener("wheel", function(e) {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 1.15 : 0.87;
+        const oldScale = ivScale;
+        const newScale = Math.min(Math.max(ivScale * delta, 0.4), 5.5);
+
+        const rect = viewport.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left - rect.width / 2;
+        const mouseY = e.clientY - rect.top - rect.height / 2;
+
+        ivTranslateX -= (mouseX - ivTranslateX) * (newScale / oldScale - 1);
+        ivTranslateY -= (mouseY - ivTranslateY) * (newScale / oldScale - 1);
+        ivScale = newScale;
+
+        ivApplyTransform(false);
+      }, { passive: false });
+
+      // 滑鼠拖曳 (Pan)
+      viewport.addEventListener("mousedown", function(e) {
+        if (e.target.closest(".image-viewer-toolbar")) return;
+        isDragging = true;
+        dragStartX = e.clientX - ivTranslateX;
+        dragStartY = e.clientY - ivTranslateY;
+        viewport.classList.add("is-dragging");
+      });
+
+      window.addEventListener("mousemove", function(e) {
+        if (!isDragging) return;
+        ivTranslateX = e.clientX - dragStartX;
+        ivTranslateY = e.clientY - dragStartY;
+        ivApplyTransform(false);
+      });
+
+      window.addEventListener("mouseup", function() {
+        if (isDragging) {
+          isDragging = false;
+          viewport.classList.remove("is-dragging");
+        }
+      });
+
+      // 雙擊放大 / 重設
+      viewport.addEventListener("dblclick", function(e) {
+        if (e.target.closest(".image-viewer-toolbar")) return;
+        if (ivScale <= 1.25) {
+          const rect = viewport.getBoundingClientRect();
+          const clickX = e.clientX - rect.left - rect.width / 2;
+          const clickY = e.clientY - rect.top - rect.height / 2;
+          ivScale = 2.4;
+          ivTranslateX = -clickX * 1.4;
+          ivTranslateY = -clickY * 1.4;
+        } else {
+          ivScale = 1.0;
+          ivTranslateX = 0;
+          ivTranslateY = 0;
+        }
+        ivApplyTransform(true);
+      });
+
+      // 觸控手勢 (Mobile Pinch, Pan & Double Tap)
+      viewport.addEventListener("touchstart", function(e) {
+        if (e.target.closest(".image-viewer-toolbar")) return;
+        if (e.touches.length === 1) {
+          const now = Date.now();
+          if (now - lastTapTime < 300) {
+            // Double Tap
+            if (ivScale <= 1.25) {
+              ivScale = 2.2;
+            } else {
+              ivScale = 1.0;
+              ivTranslateX = 0;
+              ivTranslateY = 0;
+            }
+            ivApplyTransform(true);
+            lastTapTime = 0;
+            return;
+          }
+          lastTapTime = now;
+          isDragging = true;
+          dragStartX = e.touches[0].clientX - ivTranslateX;
+          dragStartY = e.touches[0].clientY - ivTranslateY;
+        } else if (e.touches.length === 2) {
+          isDragging = false;
+          pinchStartDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          pinchStartScale = ivScale;
+        }
+      }, { passive: true });
+
+      viewport.addEventListener("touchmove", function(e) {
+        if (e.touches.length === 1 && isDragging) {
+          ivTranslateX = e.touches[0].clientX - dragStartX;
+          ivTranslateY = e.touches[0].clientY - dragStartY;
+          ivApplyTransform(false);
+        } else if (e.touches.length === 2 && pinchStartDist > 0) {
+          const currentDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          ivScale = Math.min(Math.max(pinchStartScale * (currentDist / pinchStartDist), 0.4), 5.5);
+          ivApplyTransform(false);
+        }
+      }, { passive: true });
+
+      viewport.addEventListener("touchend", function(e) {
+        if (e.touches.length === 0) {
+          isDragging = false;
+          pinchStartDist = 0;
+        }
+      });
+    })();
+
+    // 支援 ESC 鍵與檢視器快捷鍵
     document.addEventListener("keydown", function(e) {
       if (e.key === "Escape") {
+        if (typeof isImageViewerOpen === "function" && isImageViewerOpen()) {
+          closeImageViewer();
+          return;
+        }
         closeDoctorScheduleModal();
         closeNoticeModal();
         closePwaModal();
+      } else if (typeof isImageViewerOpen === "function" && isImageViewerOpen()) {
+        if (e.key === "+" || e.key === "=") {
+          ivZoomIn();
+        } else if (e.key === "-" || e.key === "_") {
+          ivZoomOut();
+        } else if (e.key === "0") {
+          ivResetZoom();
+        } else if (e.key === "ArrowUp") {
+          ivTranslateY += 60;
+          ivApplyTransform(true);
+        } else if (e.key === "ArrowDown") {
+          ivTranslateY -= 60;
+          ivApplyTransform(true);
+        } else if (e.key === "ArrowLeft") {
+          ivTranslateX += 60;
+          ivApplyTransform(true);
+        } else if (e.key === "ArrowRight") {
+          ivTranslateX -= 60;
+          ivApplyTransform(true);
+        }
       }
     });
 
