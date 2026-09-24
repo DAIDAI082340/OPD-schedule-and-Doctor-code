@@ -11,6 +11,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="門診速查">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="apple-touch-icon.png">
+  <link rel="shortcut icon" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800;900&display=swap" rel="stylesheet">
@@ -64,40 +67,166 @@
     header {
       background: linear-gradient(180deg, #1E3545 0%, #152733 100%);
       color: white;
-      padding: 22px 16px 18px 16px;
+      padding: 22px 20px 18px 20px;
       text-align: center;
       box-shadow: 0 4px 18px rgba(36, 56, 68, 0.22);
       border-bottom: 1px solid rgba(255, 255, 255, 0.15);
       position: relative;
     }
+    .header-badge-row {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .header-app-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 7.5px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(231, 198, 118, 0.55);
+      object-fit: cover;
+      flex-shrink: 0;
+      vertical-align: middle;
+    }
     .header-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 3px 14px;
+      padding: 3.5px 14px;
       background: rgba(255, 255, 255, 0.12);
       border: 1px solid rgba(255, 255, 255, 0.22);
       border-radius: 20px;
       font-size: 0.84rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
+      font-weight: 700;
+      letter-spacing: 0.05em;
       color: #e2edf1;
-      margin-bottom: 6px;
       backdrop-filter: blur(4px);
+      white-space: nowrap !important;
     }
     header h1 {
       font-size: clamp(1.05rem, 4.3vw, 1.55rem);
       font-weight: 800;
       letter-spacing: 0.02em;
-      white-space: nowrap;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+      white-space: nowrap !important;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      line-height: 1.35;
+      margin: 0;
     }
     header p {
-      font-size: 0.92rem;
+      font-size: 0.90rem;
       color: #cbdbe1;
       letter-spacing: 0.04em;
       margin-top: 4px;
+      margin-bottom: 0;
       opacity: 0.95;
+      white-space: nowrap !important;
+    }
+    .header-btn-wrap {
+      position: absolute;
+      right: 20px;
+      bottom: 16px;
+      z-index: 10;
+    }
+    .pwa-install-btn {
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #FFFFFF;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(6px);
+      white-space: nowrap !important;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+    .pwa-install-btn:hover {
+      background: rgba(255, 255, 255, 0.26);
+      border-color: rgba(231, 198, 118, 0.65);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+    .pwa-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      backdrop-filter: blur(3px);
+      padding: 16px;
+    }
+    .pwa-modal-card {
+      background: #FFFFFF;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+      animation: pwaFadeIn 0.2s ease-out;
+    }
+    @keyframes pwaFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .pwa-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #E2E8F0;
+      padding-bottom: 10px;
+    }
+    .pwa-modal-confirm-btn {
+      width: 100%;
+      padding: 10px;
+      background: #1E3545;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.92rem;
+      transition: background 0.2s;
+    }
+    .pwa-modal-confirm-btn:hover {
+      background: #152733;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 16px 14px 14px 14px;
+      }
+      .header-app-logo {
+        width: 28px;
+        height: 28px;
+      }
+      .header-badge {
+        font-size: 0.78rem;
+        padding: 3px 11px;
+      }
+      header h1 {
+        font-size: 1.05rem;
+      }
+      header p {
+        font-size: 0.76rem;
+      }
+      .header-btn-wrap {
+        position: static;
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 8px;
+        padding-top: 2px;
+      }
+      .pwa-install-btn {
+        padding: 4px 11px;
+        font-size: 0.78rem;
+      }
     }
 
     .container {
@@ -1362,9 +1491,18 @@
 <body>
 
   <header>
-    <div class="header-badge">✦ 臨床門診排班即時比對系統</div>
+    <div class="header-badge-row">
+      <img src="apple-touch-icon.png" alt="卉 Logo" class="header-app-logo" title="3D 浮雕金框卉字 App Icon">
+      <div class="header-badge">✦ 臨床門診排班即時比對系統</div>
+    </div>
     <h1>門診時段交叉查詢與醫師代碼查詢系統</h1>
     <p>排班交叉查詢・跨科同時段對照・醫師及科別代碼整合</p>
+    <div class="header-btn-wrap">
+      <button id="pwaInstallBtn" class="pwa-install-btn" title="安裝為手機桌面 App">
+        <span>📲</span>
+        <span>安裝 App</span>
+      </button>
+    </div>
   </header>
 
   <div class="container">
@@ -3047,8 +3185,63 @@
       if (e.key === "Escape") {
         closeDoctorScheduleModal();
         closeNoticeModal();
+        closePwaModal();
       }
     });
+
+    // PWA 安裝導引與獨立 App 模式偵測
+    let deferredPrompt = null;
+    const pwaInstallBtn = document.getElementById("pwaInstallBtn");
+    const pwaModal = document.getElementById("pwaModal");
+    const closePwaModalBtn = document.getElementById("closePwaModalBtn");
+
+    function openPwaModal() {
+      if (pwaModal) pwaModal.style.display = "flex";
+    }
+    function closePwaModal() {
+      if (pwaModal) pwaModal.style.display = "none";
+    }
+
+    window.addEventListener("beforeinstallprompt", function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (pwaInstallBtn) pwaInstallBtn.style.display = "inline-flex";
+    });
+
+    if (pwaInstallBtn) {
+      pwaInstallBtn.addEventListener("click", function() {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then(function(choiceResult) {
+            if (choiceResult.outcome === "accepted") {
+              console.log("User accepted the PWA install prompt");
+              pwaInstallBtn.style.display = "none";
+            }
+            deferredPrompt = null;
+          });
+        } else {
+          openPwaModal();
+        }
+      });
+    }
+
+    if (closePwaModalBtn) {
+      closePwaModalBtn.addEventListener("click", closePwaModal);
+    }
+    if (pwaModal) {
+      pwaModal.addEventListener("click", function(e) {
+        if (e.target === pwaModal) closePwaModal();
+      });
+    }
+
+    // 若已處於獨立 PWA App 模式
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+      if (pwaInstallBtn) {
+        pwaInstallBtn.innerHTML = "<span>✅ 離線 App 已就緒</span>";
+        pwaInstallBtn.style.opacity = "0.88";
+        pwaInstallBtn.style.cursor = "default";
+      }
+    }
 
     // PWA Service Worker 註冊 (離線秒開與自動快取)
     if ('serviceWorker' in navigator) {
@@ -3059,5 +3252,23 @@
 
     window.onload = initApp;
   </script>
+
+  <!-- PWA 安裝教學導引彈窗 -->
+  <div id="pwaModal" class="pwa-modal-overlay" style="display: none;">
+    <div class="pwa-modal-card">
+      <div class="pwa-modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <img src="apple-touch-icon.png" alt="Logo" style="width: 28px; height: 28px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.3); vertical-align: middle;">
+          <h3 style="margin: 0; font-size: 1.05rem; color: #1E3545; font-weight: 800;">安裝門診速查 App</h3>
+        </div>
+        <button id="closePwaModalBtn" style="background: none; border: none; font-size: 1.6rem; cursor: pointer; color: #888; line-height: 1; padding: 0 4px;">&times;</button>
+      </div>
+      <div style="margin: 14px 0; font-size: 0.88rem; line-height: 1.6; color: #475569;">
+        <p style="margin-bottom: 10px;"><strong>📱 iPhone / iPad 安裝方式：</strong><br>1. 點擊 Safari 底部工具列的「分享按鈕（向上箭頭 ⎋）」。<br>2. 向下滾動選單並點選「加入主畫面 ⊞」。<br>3. 點擊右上角「新增」，桌面上即刻產生「3D 浮雕金框卉字」獨立 App！</p>
+        <p style="margin: 0;"><strong>🤖 Android / Chrome 安裝方式：</strong><br>直接點擊「新增至主螢幕」即可立即安裝為獨立離線應用程式。</p>
+      </div>
+      <button type="button" class="pwa-modal-confirm-btn" onclick="closePwaModal()">我知道了</button>
+    </div>
+  </div>
 </body>
 </html>

@@ -747,3 +747,39 @@ flowchart TD
 
 
 
+
+
+---
+
+## 18. 版本 v1.0.1 更新紀錄：抬頭 3D 金框「卉」字圖標與零遮擋「安裝 App」功能正式上線 (2026-09-24)
+
+### 18.1 需求背景與使用者指示
+1. **使用者提問與指示**：
+   - 使用者詢問：「為何門診系統的抬頭沒有像臨床抗生素腎功能劑量調整速查系統一樣有那 app icon 圖示?」
+   - 進一步指示：「app icon 在 ✦ 臨床門診排班即時比對系統 的框外」、「安裝 app 放在右上或右下角」。
+   - 在檢視 iPhone 實機模擬後精準指出：「iphone 直式 安裝 app 會擋住下面的字」，並提供電腦版期望截圖指出：「iphone 直式 app icon ✦ 臨床門診排班即時比對系統 置中 安裝 app 放在右下角，電腦 平板的維持上面圖」。
+   - 經最終第五版預覽工具確認無誤後，使用者回覆：**「ok」**。
+
+### 18.2 核心技術與排版實作
+1. **App Icon 框外置中佈局**：
+   - 頂部第一行建立 `.header-badge-row` 水平置中容器。
+   - 左側嵌入高解析 34px「3D 浮雕金框卉字」官方圖示（`.header-app-logo`，框外獨立存在，高光立體金框倒角＋陰影）。
+   - 右側並列「✦ 臨床門診排班即時比對系統」微光膠囊徽章（`.header-badge`）。
+2. **響應式零遮擋排版（Zero-Collision Flex）**：
+   - **電腦／平板寬螢幕**：
+     - 完全 100% 還原使用者截圖指定之佈局。
+     - 頂部圖標＋徽章置中，主標題與副標題居中，安裝按鈕 `.header-btn-wrap` 絕對定位於右下角（`bottom: 16px; right: 20px;`）。
+   - **iPhone / 行動裝置直式窄螢幕（max-width: 768px）**：
+     - 圖標與臨床門診徽章維持置中，文字自適應微調。
+     - 安裝按鈕轉為靜態流式佈局（`position: static; display: flex; justify-content: flex-end;`），坐落於副標題正下方之獨立專屬列靠右。
+     - **徹底解決遮擋問題**：18 字長主標題與副標題 100% 獨立獨佔全寬度，文字零遮蔽、零折行、完整清晰露面！
+3. **電腦瀏覽器 Tab 分頁圖示補齊**：
+   - 在 `<head>` 補齊 `<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">` 與 `<link rel="shortcut icon" href="apple-touch-icon.png">`，使電腦 Chrome/Edge/Safari 分頁標籤亦能顯示 3D 金框卉字圖標。
+4. **PWA 安裝導引與離線體驗升級**：
+   - 新增 `pwaInstallBtn` 點擊事件，支援 Android / Chromium `beforeinstallprompt` 一鍵安裝。
+   - 新增 iOS Safari / Android 互動教學彈窗（`pwaModal`），指引醫護同仁點擊「分享 ⎋ -> 加入主畫面 ⊞」。
+   - 若使用者已由桌面以獨立 App 開啟，按鈕自動轉換為「`✅ 離線 App 已就緒`」。
+5. **Service Worker 快取版本更新**：
+   - 快取名稱升級至 `opd-pwa-v1.0.1`，保證所有使用者裝置自動無感更新。
+6. **孿生檔案 100% SHA-256 同步驗證**：
+   - `index.html` 與 `門診時段交叉查詢與醫師代碼查詢系統.html` 之 SHA-256 雜湊碼完全一致：`B7ECB528DAE4EA8FC3C24DFFC8AE7C2FFAD57F88A38E141EF6C5C0515AB43010`。

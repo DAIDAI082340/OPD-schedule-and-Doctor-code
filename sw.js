@@ -1,5 +1,5 @@
-// 門診時段交叉查詢與醫師代碼查詢系統 - PWA Service Worker (v1.0.0)
-const CACHE_NAME = 'opd-pwa-v1.0.0';
+// 門診時段交叉查詢與醫師代碼查詢系統 - PWA Service Worker (v1.0.1)
+const CACHE_NAME = 'opd-pwa-v1.0.1';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
