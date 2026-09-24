@@ -99,8 +99,8 @@ def get_doctor_codes():
     if not html_text:
         return {}
 
-    # 匹配 GoDoctorList('0262') ... 陳詩典
-    matches = re.findall(r"GoDoctorList\('(\d{4})'\)[^>]*>([\s\S]*?)</a>", html_text)
+    # 匹配 GoDoctorList('0262') 或 GoDoctorList('FB17') 等 4 碼英數字代碼
+    matches = re.findall(r"GoDoctorList\('([A-Za-z0-9]{4})'\)[^>]*>([\s\S]*?)</a>", html_text)
     doc_map = {}
     for code, raw_name in matches:
         clean = html.unescape(raw_name)
@@ -108,6 +108,14 @@ def get_doctor_codes():
         if name_m:
             name = name_m.group(0).strip()
             doc_map[name] = code
+
+    # 永久保護之特殊官方醫師代碼表 (防範醫院掛號系統偶發缺漏)
+    special_doctor_codes = {
+        "陳筠方": "FB17",
+    }
+    for doc_name, doc_code in special_doctor_codes.items():
+        if doc_name not in doc_map or not doc_map[doc_name]:
+            doc_map[doc_name] = doc_code
 
     print(f" -> 成功解析醫師代碼對照表: 共 {len(doc_map)} 位醫師")
     return doc_map

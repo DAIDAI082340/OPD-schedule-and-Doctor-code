@@ -1,14 +1,13 @@
-name: Monthly Schedule & Suspension Notice Update
+name: Daily Schedule & Suspension Notice Update
 
 on:
   schedule:
-    # 每月 28, 29, 30, 31 日 UTC 15:00 (即台灣時間 23:00) 執行
-    # 由 Python 腳本判定是否為當月最後一天，非最後一天自動退出
-    - cron: '0 15 28-31 * *'
+    # 每天 UTC 15:00 (即台灣時間 23:00) 自動執行巡檢與更新
+    - cron: '0 15 * * *'
   workflow_dispatch:
     inputs:
       force_update:
-        description: '強制忽略日期直接執行更新'
+        description: '手動強制執行更新'
         required: false
         default: true
         type: boolean
@@ -35,13 +34,8 @@ jobs:
 
       - name: Run schedule, doctor codes and suspension notice crawler
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "手動觸發執行，跳過最後一天檢查，立即更新..."
-            python scripts/update_schedule.py
-          else
-            echo "定時排程觸發，檢查是否為當月最後一天..."
-            python scripts/update_schedule.py --check-last-day
-          fi
+          echo "啟動每日門診排班、醫師代碼與停代診公告自動更新巡檢..."
+          python scripts/update_schedule.py
 
       - name: Commit and push changes
         run: |
@@ -49,9 +43,9 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html 門診時段交叉查詢與醫師代碼查詢系統.html
           if git diff --staged --quiet; then
-            echo "資料庫與排班無異動，跳過提交。"
+            echo "全院資料庫與排班無任何異動，跳過提交。"
           else
-            echo "檢測到排班或停診異動，正在提交並推播..."
-            git commit -m "chore(auto): monthly schedule, doctor codes & suspension notices update"
+            echo "檢測到排班、停代診或醫師代碼異動，正在自動提交並推播..."
+            git commit -m "chore(auto): daily schedule, doctor codes & suspension notices update"
             git push
           fi
