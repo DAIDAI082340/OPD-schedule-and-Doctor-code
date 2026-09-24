@@ -41,8 +41,17 @@ def fetch_url(url, timeout=30):
         print(f"[警告] 連線失敗 {url}: {e}", file=sys.stderr)
         return ""
 
+def fetch_raw(url, timeout=30):
+    req = urllib.request.Request(url, headers=HEADERS)
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            return response.read()
+    except Exception as e:
+        print(f"[警告] 下載二進位檔案失敗 {url}: {e}", file=sys.stderr)
+        return None
+
 def get_official_suspension_notice():
-    """抓取彰化醫院官方停診、代診公告專頁 (iid=15)"""
+    """抓取彰化醫院官方停診、代診公告專頁 (iid=15) 並自動備份公文大圖至本地"""
     url = "https://www.chhw.mohw.gov.tw/?aid=320&page_name=detail&iid=15"
     print(f"[1/4] 正在抓取官方停代診公告專頁: {url}")
     html_text = fetch_url(url)
@@ -53,10 +62,16 @@ def get_official_suspension_notice():
     title_match = re.search(r'(\d+月[^\s<]*?醫師停[^\s<]*?公告)', html_text)
     title = title_match.group(1) if title_match else "最新醫師停診、代診公告"
 
+    # 確保本地 assets/notices 目錄存在
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    notices_dir = os.path.join(base_dir, "assets", "notices")
+    os.makedirs(notices_dir, exist_ok=True)
+
     # 擷取所有停代診公文大圖 (jpg)
     img_matches = re.findall(r'<a[^>]*href=["\'](/public/news1/320/[^"\']+\.jpg)["\'][^>]*title=["\']([^"\']+)["\']', html_text)
     images = []
     seen_urls = set()
+    idx = 1
     for img_path, img_title in img_matches:
         full_url = "https://www.chhw.mohw.gov.tw" + img_path
         clean_title = re.sub(r'\(另開新視窗\s*\)', '', img_title).strip()
@@ -65,10 +80,23 @@ def get_official_suspension_notice():
             continue
         if full_url not in seen_urls:
             seen_urls.add(full_url)
+            local_fname = f"notice_{idx:02d}.jpg"
+            local_fpath = os.path.join(notices_dir, local_fname)
+            try:
+                raw_bytes = fetch_raw(full_url)
+                if raw_bytes:
+                    with open(local_fpath, "wb") as f:
+                        f.write(raw_bytes)
+                    print(f" -> 成功備份官方公文大圖至本地: {local_fname} ({len(raw_bytes)} bytes)")
+            except Exception as e:
+                print(f"[警告] 備份圖檔失敗: {e}", file=sys.stderr)
+
             images.append({
                 "title": clean_title,
+                "localUrl": f"assets/notices/{local_fname}",
                 "url": full_url
             })
+            idx += 1
 
     # 若未匹配到 a 標籤裡的 title，改從 img 標籤抓取
     if not images:

@@ -41,7 +41,7 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html 門診時段交叉查詢與醫師代碼查詢系統.html
+          git add index.html 門診時段交叉查詢與醫師代碼查詢系統.html assets/notices/
           if git diff --staged --quiet; then
             echo "全院資料庫與排班無任何異動，跳過提交。"
           else

@@ -1787,18 +1787,21 @@
     const officialNotice = {
       title: "09月-11月醫師停診、代診公告",
       sourceUrl: "https://www.chhw.mohw.gov.tw/?aid=320&page_name=detail&iid=15",
-      updateTime: "2026-09-20 13:58",
+      updateTime: "2026-09-24 17:00",
       images: [
         {
           title: "115年09月醫師停代診公告",
-          url: "https://www.chhw.mohw.gov.tw/public/news1/320/ce3ea95b87f481216b9878f833f850b9.jpg"
+          localUrl: "assets/notices/notice_01.jpg",
+          url: "https://www.chhw.mohw.gov.tw/public/news1/320/8afc836f3f213d65f2ae2d1035dfe295.jpg"
         },
         {
           title: "11510醫師停代診公告",
-          url: "https://www.chhw.mohw.gov.tw/public/news1/320/879539465d021cd7b9fbea9620dcddbe.jpg"
+          localUrl: "assets/notices/notice_02.jpg",
+          url: "https://www.chhw.mohw.gov.tw/public/news1/320/030792dec5c025006de715a30498a4ee.jpg"
         },
         {
           title: "11511醫師停代診公告",
+          localUrl: "assets/notices/notice_03.jpg",
           url: "https://www.chhw.mohw.gov.tw/public/news1/320/ec0af688f589cd1969274a414ad0f6d0.jpg"
         }
       ]
@@ -3140,15 +3143,16 @@
         if (validImages.length > 0) {
           body += `<div style="display: flex; flex-direction: column; gap: 20px;">`;
           validImages.forEach((img) => {
+            const imgSrc = img.localUrl || img.url;
             body += `
               <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 16px; box-shadow: 0 4px 12px rgba(52, 73, 94, 0.08);">
-                <div style="font-size: 1.02rem; font-weight: 800; color: #34495e; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="font-size: 1.02rem; font-weight: 800; color: #34495e; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
                   <span>📌 ${img.title || "醫師停代診公告"}</span>
-                  <a href="${img.url}" target="_blank" rel="noopener noreferrer" style="font-size: 0.85rem; color: #1E3545; text-decoration: underline;">檢視原解析度大圖 ↗</a>
+                  <a href="${imgSrc}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" style="font-size: 0.85rem; color: #1E3545; text-decoration: underline; font-weight: 700;">檢視原解析度大圖 ↗</a>
                 </div>
                 <div style="text-align: center; background: #f8fafc; border-radius: 8px; padding: 8px; border: 1px solid #e2e8f0;">
-                  <a href="${img.url}" target="_blank" rel="noopener noreferrer" title="點擊檢視原圖">
-                    <img src="${img.url}" alt="${img.title}" style="max-width: 100%; height: auto; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: zoom-in;" loading="lazy" />
+                  <a href="${imgSrc}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" title="點擊檢視原解析度大圖">
+                    <img src="${imgSrc}" alt="${img.title}" referrerpolicy="no-referrer" style="max-width: 100%; height: auto; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: zoom-in;" loading="lazy" onerror="if(this.src!=='${img.url}'){this.src='${img.url}';}" />
                   </a>
                 </div>
               </div>
