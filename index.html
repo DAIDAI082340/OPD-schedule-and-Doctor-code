@@ -3532,21 +3532,11 @@
       const viewport = document.getElementById("imageViewerViewport");
       if (!viewport) return;
 
-      // 滾輪縮放 (以滑鼠游標為核心放大)
+      // 滾輪縮放 (原地中心錨定，位置完全不位移)
       viewport.addEventListener("wheel", function(e) {
         e.preventDefault();
         const delta = e.deltaY < 0 ? 1.15 : 0.87;
-        const oldScale = ivScale;
-        const newScale = Math.min(Math.max(ivScale * delta, 0.4), 5.5);
-
-        const rect = viewport.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left - rect.width / 2;
-        const mouseY = e.clientY - rect.top - rect.height / 2;
-
-        ivTranslateX -= (mouseX - ivTranslateX) * (newScale / oldScale - 1);
-        ivTranslateY -= (mouseY - ivTranslateY) * (newScale / oldScale - 1);
-        ivScale = newScale;
-
+        ivScale = Math.min(Math.max(ivScale * delta, 0.4), 5.5);
         ivApplyTransform(false);
       }, { passive: false });
 
@@ -3573,16 +3563,11 @@
         }
       });
 
-      // 雙擊放大 / 重設
+      // 雙擊原地放大 / 重設 (位置完全不位移)
       viewport.addEventListener("dblclick", function(e) {
         if (e.target.closest(".image-viewer-toolbar")) return;
         if (ivScale <= 1.25) {
-          const rect = viewport.getBoundingClientRect();
-          const clickX = e.clientX - rect.left - rect.width / 2;
-          const clickY = e.clientY - rect.top - rect.height / 2;
-          ivScale = 2.4;
-          ivTranslateX = -clickX * 1.4;
-          ivTranslateY = -clickY * 1.4;
+          ivScale = 2.2;
         } else {
           ivScale = 1.0;
           ivTranslateX = 0;
