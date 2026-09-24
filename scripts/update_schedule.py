@@ -438,6 +438,11 @@ def main():
     # 4. 抓取並解析門診排班與停診日期 (/DOCTORLIST)
     schedules = scrape_clinic_schedules(depts, doc_code_map)
 
+    # 熔斷保護檢查 (Circuit Breaker Protection)
+    if len(schedules) < 50 or len(depts) == 0:
+        print(f"[嚴重錯誤] 抓取資料筆數異常 (depts={len(depts)}, schedules={len(schedules)})，觸發熔斷保護終止執行，絕對不允許覆寫現有資料庫！", file=sys.stderr)
+        sys.exit(1)
+
     # 5. 建立醫師主檔清單
     master_data = build_master_data(schedules, doc_code_map)
 
