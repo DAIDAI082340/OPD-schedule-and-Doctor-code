@@ -336,10 +336,10 @@ foreach ($k in $grouped.Keys) {
         $note = "10/24看診"
     }
     if ($entry.doctor -eq "張淑鈺" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 6) {
-        $note = "10/10.24看診"
+        $note = "10/10.10/24看診"
     }
     if ($entry.doctor -eq "李學林" -and $entry.dept_code -eq "AB" -and $entry.weekday -eq 6) {
-        $note = "10/10.24看診"
+        $note = "10/10.10/24看診"
     }
     if ($entry.doctor -eq "金椿期" -and $entry.dept_code -eq "40" -and $entry.weekday -eq 6) {
         $note = "10/17看診"

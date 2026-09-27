@@ -1604,10 +1604,10 @@
       color: #ffffff !important;
     }
 
-    /* 原子日期單元：內部絕對禁止斷字折行，換行一律整組完整落於同行 */
+    /* 原子日期單元：內部絕對禁止斷字折行，換行一律整組完整落於同行，無 inline-block 額外空隙 */
     .date-atomic {
-      white-space: nowrap;
-      display: inline-block;
+      white-space: nowrap !important;
+      display: inline !important;
     }
 
     /* 原子網掛不開放單元：內部絕對禁止拆字折行 */
@@ -2044,7 +2044,7 @@
         tags.push(`<span class="suspension-tag-dates-only">📅 ${formatSuspensionNoteHtml(specificDateText)}</span>`);
       }
       if (substituteText) {
-        tags.push(`<span class="suspension-tag-substitute">👤➔ ${formatSuspensionNoteHtml(substituteText)}</span>`);
+        tags.push(`<span class="suspension-tag-substitute">👤 ${formatSuspensionNoteHtml(substituteText)}</span>`);
       }
       if (stopDateText) {
         tags.push(`<span class="suspension-tag-dates">⚠️ ${formatSuspensionNoteHtml(stopDateText)}</span>`);
@@ -2335,7 +2335,7 @@
       { dept_code: "08", dept_name: "泌尿科", doctor: "蔡卓榮", weekday: 1, slot: "上午", room: "18診", note: "9/28.10/26停診" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "李學林", weekday: 2, slot: "上午", room: "6診", note: "" },
       { dept_code: "60", dept_name: "中醫科", doctor: "張煒東", weekday: 1, slot: "上午", room: "35診", note: "" },
-      { dept_code: "AD", dept_name: "腎臟內科", doctor: "張淑鈺", weekday: 6, slot: "上午", room: "88診", note: "10/10.24看診" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "張淑鈺", weekday: 6, slot: "上午", room: "88診", note: "10/10.10/24看診" },
       { dept_code: "60", dept_name: "中醫科", doctor: "張煒東", weekday: 2, slot: "下午", room: "35診", note: "" },
       { dept_code: "01", dept_name: "家醫科", doctor: "廖曜磐", weekday: 4, slot: "上午", room: "8診", note: "9/24.10/8.10/15停診" },
       { dept_code: "AC", dept_name: "胸腔內科", doctor: "高劍虹", weekday: 4, slot: "上午", room: "3診", note: "9/24停診" },
@@ -2582,7 +2582,7 @@
       { dept_code: "AE", dept_name: "風濕免疫科", doctor: "王仕凱", weekday: 1, slot: "夜診", room: "7診", note: "" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "王彥翔", weekday: 2, slot: "夜診", room: "12診", note: "" },
       { dept_code: "04", dept_name: "小兒科", doctor: "馬瑞杉", weekday: 2, slot: "下午", room: "28診", note: "10/20停診" },
-      { dept_code: "AB", dept_name: "心臟內科", doctor: "李學林", weekday: 6, slot: "上午", room: "6診", note: "10/10.24看診" },
+      { dept_code: "AB", dept_name: "心臟內科", doctor: "李學林", weekday: 6, slot: "上午", room: "6診", note: "10/10.10/24看診" },
       { dept_code: "AH", dept_name: "感染科", doctor: "莊佳慧", weekday: 1, slot: "上午", room: "39診", note: "9/28.10/26停診" },
       { dept_code: "FB", dept_name: "放射腫瘤", doctor: "吳俊玠", weekday: 4, slot: "上午", room: "51診", note: "9/24停診" },
       { dept_code: "11", dept_name: "皮膚科", doctor: "郭峰昇", weekday: 1, slot: "下午", room: "61診", note: "9/28.10/5.10/26停診" },
@@ -3207,7 +3207,7 @@
         suspensionAlertBannerHtml = `
           <div class="suspension-alert-banner" style="margin-top: 18px;">
             <div class="suspension-alert-header">
-              <span>📢 門診停診異動</span>
+              <span>📢 門診停診及異動</span>
             </div>
             <div style="overflow-x:auto; margin-top:6px;">
               <table class="suspension-table">
