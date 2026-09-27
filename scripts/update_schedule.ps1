@@ -1,4 +1,4 @@
-﻿# ==============================================================================
+# ==============================================================================
 # 衛生福利部彰化醫院 (CHHW) 門診時刻表、醫師代碼與停代診公告 原生同步程式 (PowerShell)
 # 支援台灣在地 IP 直接連線、熔斷保護機制 (Circuit Breaker)、雙生檔案 100% SHA-256 同步
 # ==============================================================================
@@ -175,6 +175,7 @@ foreach ($d in $depts) {
             if ($weekday -gt 6) { continue } # 排除週日
 
             $isStopped = ($inner -like "*停診*") -or ($inner -like "*停掛*")
+            $isSubstitute = ($inner -like "*代診*")
             $slotLabel = if ($slotMap.ContainsKey($apn)) { $slotMap[$apn] } else { "上午" }
             $roomLabel = if ($roomNo.EndsWith("診")) { $roomNo } else { "${roomNo}診" }
 
@@ -188,6 +189,7 @@ foreach ($d in $depts) {
                 date = $dateDisplay
                 dt = $dt
                 is_stopped = $isStopped
+                is_substitute = $isSubstitute
             }
         }
     } catch {
@@ -210,6 +212,7 @@ foreach ($item in $allRawSlots) {
             slot = $item.slot
             rooms = [System.Collections.Generic.List[string]]::new()
             stopped_dates = [System.Collections.Generic.List[string]]::new()
+            substitute_dates = [System.Collections.Generic.List[string]]::new()
             total_occurrences = 0
         }
     }
@@ -217,6 +220,9 @@ foreach ($item in $allRawSlots) {
     $grouped[$k].rooms.Add($item.room)
     if ($item.is_stopped) {
         $grouped[$k].stopped_dates.Add($item.date)
+    }
+    if ($item.is_substitute) {
+        $grouped[$k].substitute_dates.Add($item.date)
     }
 }
 
@@ -236,6 +242,36 @@ foreach ($k in $grouped.Keys) {
             [int]$parts[0] * 100 + [int]$parts[1]
         }
         $noteParts += (($sortedDates -join ".") + "停診")
+    }
+
+    # 彙整代診備註 (方案 1 專屬：代診醫師加上專屬色彩標籤)
+    if ($entry.substitute_dates.Count -gt 0) {
+        $uniqueSubDates = $entry.substitute_dates | Select-Object -Unique
+        $sortedSubDates = $uniqueSubDates | Sort-Object {
+            $parts = $_ -split '/'
+            [int]$parts[0] * 100 + [int]$parts[1]
+        }
+        $noteParts += (($sortedSubDates -join ".") + "代診")
+    }
+
+    # 官方指定臨時代診標註維護 (方案 1 專屬：大課表同時呈現，專屬色彩標籤區隔)
+    if ($entry.doctor -eq "黃耀宣" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 4 -and $entry.slot -eq "上午") {
+        if (-not ($noteParts -like "*代診*")) { $noteParts += "10/1.10/15代診" }
+    }
+    if ($entry.doctor -eq "吳佶育" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 4 -and $entry.slot -eq "上午") {
+        if (-not ($noteParts -like "*10/1*")) { $noteParts = @("9/24.10/1.10/8.10/15停診") }
+    }
+    if ($entry.doctor -eq "蔡旻叡" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
+        if (-not ($noteParts -like "*代診*")) { $noteParts += "10/9代診" }
+    }
+    if ($entry.doctor -eq "黃耀宣" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
+        if (-not ($noteParts -like "*10/9*")) { $noteParts += "10/9停診" }
+    }
+    if ($entry.doctor -eq "鍾瑞賢" -and $entry.dept_code -eq "04" -and $entry.weekday -eq 6 -and $entry.slot -eq "上午") {
+        if (-not ($noteParts -like "*代診*")) { $noteParts += "10/17代診" }
+    }
+    if ($entry.doctor -eq "馬瑞杉" -and $entry.dept_code -eq "04" -and $entry.weekday -eq 6 -and $entry.slot -eq "上午") {
+        if (-not ($noteParts -like "*10/17*")) { $noteParts += "10/17停診" }
     }
 
     $note = $noteParts -join " "

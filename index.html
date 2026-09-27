@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -1524,7 +1524,32 @@
       box-sizing: border-box;
     }
 
-    /* 多徽章水平並列容器（例如李學林同時有特定看診日與停診）：緊湊並列在同一行，絕無折行段落 */
+    /* 門診膠囊代診高亮標籤（方案 1 專屬：寶石湛藍微浮雕）：置於姓名與診間下方並水平居中，嚴格單行不折行 */
+    .pill-substitute-badge {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      justify-content: center;
+      gap: 2px 4px;
+      background: #0284c7;
+      color: #ffffff !important;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 0.73rem;
+      font-weight: 800;
+      margin-top: 3px;
+      margin-left: 0 !important;
+      letter-spacing: 0;
+      white-space: nowrap !important;
+      word-break: keep-all !important;
+      box-shadow: 0 1.5px 3px rgba(2, 132, 199, 0.35);
+      max-width: 100%;
+      line-height: 1.25;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    /* 多徽章水平並列容器（例如李學林同時有特定看診日與停診，或醫師同時有代診/停診）：緊湊並列在同一行，絕無折行段落 */
     .pill-badges-row {
       display: inline-flex;
       align-items: center;
@@ -1535,6 +1560,7 @@
       max-width: 100%;
     }
     .pill-badges-row .pill-specific-date-badge,
+    .pill-badges-row .pill-substitute-badge,
     .pill-badges-row .pill-suspension-badge {
       margin-top: 0 !important;
       font-size: 0.68rem;
@@ -1959,7 +1985,7 @@
       }
     }
 
-    // 門診大課表膠囊與彈窗專用：解析特定看診日與停診標籤，嚴格 white-space: nowrap，保證單行原子化、絕無折行段落
+    // 門診大課表膠囊與彈窗專用：解析特定看診日、代診日與停診標籤，嚴格 white-space: nowrap，保證單行原子化、絕無折行段落
     function renderPillBadgesHtml(note) {
       if (!note) return "";
 
@@ -1972,33 +1998,55 @@
           if (!text.includes("看診") && !text.includes("開診")) text += "看診";
           specificDateText = text;
         }
-      } else if (/\d{1,2}\/\d{1,2}/.test(note) && !note.includes("停診")) {
+      } else if (/\d{1,2}\/\d{1,2}/.test(note) && !note.includes("停診") && !note.includes("代診")) {
         const m = note.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*)/);
         if (m) {
           specificDateText = m[1] + "看診";
         }
       }
 
-      // 2. 檢查停診（例如 9/26停診、10/1.10/8停診、網掛不開放 10/15停診）
+      // 2. 檢查代診日（方案 1 專屬：例如 10/1代診、10/9代診、10/1.10/15代診）
+      let substituteText = "";
+      if (note.includes("代診")) {
+        const m = note.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*(?:代診)?)/);
+        if (m) {
+          let text = m[1];
+          if (!text.includes("代診")) text += "代診";
+          substituteText = text;
+        } else {
+          substituteText = "代診";
+        }
+      }
+
+      // 3. 檢查停診（例如 9/26停診、10/1.10/8停診、網掛不開放 10/15停診）
       let stopHtml = "";
       if (note.includes("停診") || note.includes("網掛不開放")) {
         let pureStopNote = note;
         if (specificDateText) {
-          pureStopNote = note.replace(specificDateText, "").replace("看診", "").replace("開診", "").trim();
+          pureStopNote = pureStopNote.replace(specificDateText, "").replace("看診", "").replace("開診", "").trim();
+        }
+        if (substituteText) {
+          pureStopNote = pureStopNote.replace(substituteText, "").replace("代診", "").trim();
         }
         stopHtml = renderSuspensionPillBadgeHtml(pureStopNote);
       }
 
-      // 3. 組合輸出（若二者兼具，水平緊湊並列在同一行，絕不換行拆段落）
-      if (specificDateText && stopHtml) {
-        return `<div class="pill-badges-row">
-          <span class="pill-specific-date-badge">📅 ${specificDateText}</span>
-          <span class="pill-suspension-badge">${stopHtml}</span>
-        </div>`;
-      } else if (specificDateText) {
-        return `<span class="pill-specific-date-badge">📅 ${specificDateText}</span>`;
-      } else if (stopHtml) {
-        return `<span class="pill-suspension-badge">${stopHtml}</span>`;
+      // 4. 組合輸出（各標籤水平緊湊並列在同一行，絕不換行拆段落）
+      const badges = [];
+      if (specificDateText) {
+        badges.push(`<span class="pill-specific-date-badge">📅 ${specificDateText}</span>`);
+      }
+      if (substituteText) {
+        badges.push(`<span class="pill-substitute-badge">🔄 ${substituteText}</span>`);
+      }
+      if (stopHtml) {
+        badges.push(`<span class="pill-suspension-badge">${stopHtml}</span>`);
+      }
+
+      if (badges.length > 1) {
+        return `<div class="pill-badges-row">${badges.join("")}</div>`;
+      } else if (badges.length === 1) {
+        return badges[0];
       }
       return "";
     }
@@ -2200,7 +2248,7 @@
       { dept_code: "08", dept_name: "泌尿科", doctor: "劉清耀", weekday: 1, slot: "上午", room: "16診", note: "" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "李翰", weekday: 4, slot: "上午", room: "12診", note: "9/24停診" },
       { dept_code: "03", dept_name: "外科", doctor: "李忠懷", weekday: 3, slot: "上午", room: "13診", note: "" },
-      { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 4, slot: "上午", room: "88診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 4, slot: "上午", room: "88診", note: "10/1.10/15代診" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "李翰", weekday: 4, slot: "夜診", room: "12診", note: "" },
       { dept_code: "13", dept_name: "精神科", doctor: "王鴻松", weekday: 3, slot: "下午", room: "26診", note: "11/25停診" },
       { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 4, slot: "夜診", room: "22診", note: "" },
@@ -2245,7 +2293,7 @@
       { dept_code: "1303", dept_name: "兒童青少年心智科", doctor: "葉騰尹", weekday: 2, slot: "夜診", room: "27診", note: "" },
       { dept_code: "04", dept_name: "小兒科", doctor: "馬瑞杉", weekday: 5, slot: "上午", room: "28診", note: "" },
       { dept_code: "60", dept_name: "中醫科", doctor: "梁惠宇", weekday: 5, slot: "上午", room: "33診", note: "9/25停診" },
-      { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 5, slot: "上午", room: "88診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 5, slot: "上午", room: "88診", note: "10/9停診" },
       { dept_code: "13", dept_name: "精神科", doctor: "陳羿行", weekday: 2, slot: "下午", room: "26診", note: "" },
       { dept_code: "82", dept_name: "放射診斷科", doctor: "王憶芬", weekday: 2, slot: "上午", room: "7診", note: "" },
       { dept_code: "00", dept_name: "高年科", doctor: "梁垠盤", weekday: 1, slot: "上午", room: "9診", note: "9/28停診" },
@@ -2285,7 +2333,7 @@
       { dept_code: "15", dept_name: "整形外科", doctor: "呂明川", weekday: 1, slot: "下午", room: "62診", note: "10/5.10/19停診" },
       { dept_code: "10", dept_name: "眼科", doctor: "粘展瑋", weekday: 1, slot: "下午", room: "20診", note: "" },
       { dept_code: "08", dept_name: "泌尿科", doctor: "林憲治", weekday: 1, slot: "下午", room: "18診", note: "10/26停診" },
-      { dept_code: "AD", dept_name: "腎臟內科", doctor: "吳佶育", weekday: 4, slot: "上午", room: "88診", note: "9/24.10/8停診" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "吳佶育", weekday: 4, slot: "上午", room: "88診", note: "9/24.10/1.10/8.10/15停診" },
       { dept_code: "0303", dept_name: "乳房外科", doctor: "李忠懷", weekday: 5, slot: "下午", room: "30診", note: "" },
       { dept_code: "40", dept_name: "牙科", doctor: "金椿期", weekday: 3, slot: "下午", room: "23診", note: "" },
       { dept_code: "60", dept_name: "中醫科", doctor: "馮天祥", weekday: 3, slot: "上午", room: "32診", note: "" },
@@ -2309,7 +2357,7 @@
       { dept_code: "13", dept_name: "精神科", doctor: "葉騰尹", weekday: 5, slot: "上午", room: "26診", note: "10/16停診" },
       { dept_code: "AD", dept_name: "腎臟內科", doctor: "蔡旻叡", weekday: 1, slot: "上午", room: "88診", note: "9/28停診" },
       { dept_code: "AA", dept_name: "腸胃內科", doctor: "王棋新", weekday: 4, slot: "上午", room: "2診", note: "9/24停診" },
-      { dept_code: "AD", dept_name: "腎臟內科", doctor: "蔡旻叡", weekday: 5, slot: "上午", room: "88診", note: "" },
+      { dept_code: "AD", dept_name: "腎臟內科", doctor: "蔡旻叡", weekday: 5, slot: "上午", room: "88診", note: "10/9代診" },
       { dept_code: "08", dept_name: "泌尿科", doctor: "林憲治", weekday: 2, slot: "上午", room: "18診", note: "" },
       { dept_code: "05", dept_name: "婦產科", doctor: "林茂", weekday: 3, slot: "下午", room: "29診", note: "" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "王彥翔", weekday: 1, slot: "上午", room: "11診", note: "" },
@@ -2393,7 +2441,7 @@
       { dept_code: "06", dept_name: "骨科", doctor: "李文宏", weekday: 2, slot: "夜診", room: "17診", note: "" },
       { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 3, slot: "上午", room: "22診", note: "" },
       { dept_code: "AA", dept_name: "腸胃內科", doctor: "蔡安順", weekday: 3, slot: "下午", room: "2診", note: "" },
-      { dept_code: "04", dept_name: "小兒科", doctor: "馬瑞杉", weekday: 6, slot: "上午", room: "28診", note: "" },
+      { dept_code: "04", dept_name: "小兒科", doctor: "馬瑞杉", weekday: 6, slot: "上午", room: "28診", note: "10/17停診" },
       { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 5, slot: "上午", room: "22診", note: "9/25.10/9停診" },
       { dept_code: "AH03", dept_name: "M痘疫苗特診", doctor: "莊佳慧", weekday: 2, slot: "夜診", room: "96診", note: "" },
       { dept_code: "1303", dept_name: "兒童青少年心智科", doctor: "王鴻松", weekday: 3, slot: "夜診", room: "26診", note: "" },
@@ -2438,7 +2486,7 @@
       { dept_code: "FB", dept_name: "放射腫瘤", doctor: "吳俊玠", weekday: 4, slot: "上午", room: "51診", note: "9/24停診" },
       { dept_code: "11", dept_name: "皮膚科", doctor: "郭峰昇", weekday: 1, slot: "下午", room: "61診", note: "9/28.10/5.10/26停診" },
       { dept_code: "13", dept_name: "精神科", doctor: "李景嶽", weekday: 3, slot: "上午", room: "26診", note: "" },
-      { dept_code: "04", dept_name: "小兒科", doctor: "鍾瑞賢", weekday: 6, slot: "上午", room: "28診", note: "" },
+      { dept_code: "04", dept_name: "小兒科", doctor: "鍾瑞賢", weekday: 6, slot: "上午", room: "28診", note: "10/17代診" },
       { dept_code: "BC", dept_name: "胸腔外科", doctor: "林聿騰", weekday: 3, slot: "上午", room: "30診", note: "" },
       { dept_code: "AD", dept_name: "腎臟內科", doctor: "蔡旻叡", weekday: 5, slot: "下午", room: "88診", note: "9/25.10/9.11/27停診" },
       { dept_code: "14", dept_name: "復健科", doctor: "廖宜新", weekday: 4, slot: "上午", room: "25診", note: "9/24停診" },
@@ -3115,11 +3163,12 @@
           baseMatches.forEach(bm => {
             const hasStop = bm.note && bm.note.includes("停診");
             const hasSpecificDate = bm.note && (bm.note.includes("看診") || bm.note.includes("開診") || /\d{1,2}\/\d{1,2}/.test(bm.note));
-            const nonStopNote = (bm.note && !hasStop && !hasSpecificDate && !bm.note.includes("代診")) ? " / " + bm.note : "";
+            const hasSub = bm.note && bm.note.includes("代診");
+            const nonStopNote = (bm.note && !hasStop && !hasSpecificDate && !hasSub) ? " / " + bm.note : "";
             const roomText = `(${bm.room || "診間"}${nonStopNote})`;
             const dObj = masterData.find(m => m.deptCode === bm.dept_code);
             const badgesHtml = renderPillBadgesHtml(bm.note);
-            html += `<span class="matrix-doc-pill base-doc-pill clickable ${hasStop ? 'has-suspension' : ''}" style="background:${baseDoctorColor.bg}; border:none; color:${baseDoctorColor.text}; box-shadow:${baseDoctorColor.shadow};" onclick="showDoctorScheduleModal('${bm.doctor}', '${bm.dept_code}', '${dObj ? dObj.dept : ''}', '${findDocCode(bm.doctor) || ''}')" title="點擊查看 ${bm.doctor} 醫師每週門診表">
+            html += `<span class="matrix-doc-pill base-doc-pill clickable ${hasStop ? 'has-suspension' : ''} ${hasSub ? 'has-substitute' : ''}" style="background:${baseDoctorColor.bg}; border:none; color:${baseDoctorColor.text}; box-shadow:${baseDoctorColor.shadow};" onclick="showDoctorScheduleModal('${bm.doctor}', '${bm.dept_code}', '${dObj ? dObj.dept : ''}', '${findDocCode(bm.doctor) || ''}')" title="點擊查看 ${bm.doctor} 醫師每週門診表">
               <span class="matrix-doc-info">
                 <span class="matrix-doc-name">${bm.doctor}</span>
                 <span class="matrix-doc-room">${roomText}</span>
@@ -3133,10 +3182,11 @@
             const pal = docColorMap.get(`${td.dept_code}___${td.doctor}`) || departmentPalette[0];
             const hasStop = td.note && td.note.includes("停診");
             const hasSpecificDate = td.note && (td.note.includes("看診") || td.note.includes("開診") || /\d{1,2}\/\d{1,2}/.test(td.note));
-            const nonStopNote = (td.note && !hasStop && !hasSpecificDate && !td.note.includes("代診")) ? " / " + td.note : "";
+            const hasSub = td.note && td.note.includes("代診");
+            const nonStopNote = (td.note && !hasStop && !hasSpecificDate && !hasSub) ? " / " + td.note : "";
             const roomText = `(${td.room || "診間"}${nonStopNote})`;
             const badgesHtml = renderPillBadgesHtml(td.note);
-            html += `<span class="matrix-doc-pill clickable ${hasStop ? 'has-suspension' : ''}" style="background:${pal.bg}; border:${pal.border || 'none'}; color:${pal.text}; box-shadow:${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
+            html += `<span class="matrix-doc-pill clickable ${hasStop ? 'has-suspension' : ''} ${hasSub ? 'has-substitute' : ''}" style="background:${pal.bg}; border:${pal.border || 'none'}; color:${pal.text}; box-shadow:${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
               <span class="matrix-doc-info">
                 <span class="matrix-doc-name">${td.doctor}</span>
                 <span class="matrix-doc-room">${roomText}</span>
@@ -3329,13 +3379,19 @@
                 }
 
                 const hasStop = m.note && m.note.includes("停診");
+                const hasSub = m.note && m.note.includes("代診");
                 const badgesHtml = renderPillBadgesHtml(m.note);
-                bodyHtml += `<div class="modal-slot-card ${slotClass}" style="${hasStop ? 'border: 2px solid #ef4444; position:relative;' : ''}">
+                let cardStyle = "";
+                if (hasStop) {
+                  cardStyle = "border: 2px solid #ef4444; position:relative;";
+                } else if (hasSub) {
+                  cardStyle = "border: 2px solid #0284c7; position:relative;";
+                }
+                bodyHtml += `<div class="modal-slot-card ${slotClass}" style="${cardStyle}">
                   <span style="font-size: 0.96rem; font-weight: 800; letter-spacing: 0.04em; color: #1E3545;">${slotLabel}</span>
                   <strong style="font-size: 1.16rem; color: #1E3545; font-weight: 800;">${m.room || "看診中"}</strong>
                   ${badgesHtml ? `<div style="margin-top: 3px; display:flex; justify-content:center;">${badgesHtml}</div>` : (
-                    (m.note && !m.note.includes("代診")) ? 
-                    `<span style="font-size: 0.84rem; background: rgba(30,53,69,0.08); color: #1E3545; padding: 2px 7px; border-radius: 4px; font-weight: 800; margin-top: 3px;">${m.note}</span>` : ""
+                    m.note ? `<span style="font-size: 0.84rem; background: rgba(30,53,69,0.08); color: #1E3545; padding: 2px 7px; border-radius: 4px; font-weight: 800; margin-top: 3px;">${m.note}</span>` : ""
                   )}
                 </div>`;
               });
