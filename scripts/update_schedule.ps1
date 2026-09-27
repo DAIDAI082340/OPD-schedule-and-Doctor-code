@@ -1,4 +1,4 @@
-# ==============================================================================
+﻿# ==============================================================================
 # 衛生福利部彰化醫院 (CHHW) 門診時刻表、醫師代碼與停代診公告 原生同步程式 (PowerShell)
 # 支援台灣在地 IP 直接連線、熔斷保護機制 (Circuit Breaker)、雙生檔案 100% SHA-256 同步
 # ==============================================================================
@@ -259,7 +259,13 @@ foreach ($k in $grouped.Keys) {
         if (-not ($noteParts -like "*代診*")) { $noteParts += "10/1.10/15代診" }
     }
     if ($entry.doctor -eq "吳佶育" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 4 -and $entry.slot -eq "上午") {
-        if (-not ($noteParts -like "*10/1*")) { $noteParts = @("9/24.10/1.10/8.10/15停診") }
+        $noteParts = @("網掛不開放 9/24.10/1.10/8.10/15停診")
+    }
+    if ($entry.doctor -eq "陳詩典" -and $entry.dept_code -eq "AA" -and $entry.weekday -eq 4 -and $entry.slot -eq "下午") {
+        $noteParts = @("網掛不開放 9/24.10/8.10/15停診")
+    }
+    if ($entry.doctor -eq "李文宏" -and $entry.dept_code -eq "06" -and $entry.weekday -eq 4 -and $entry.slot -eq "上午") {
+        $noteParts = @("網掛不開放")
     }
     if ($entry.doctor -eq "蔡旻叡" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
         if (-not ($noteParts -like "*代診*")) { $noteParts += "10/9代診" }
@@ -308,10 +314,12 @@ foreach ($k in $grouped.Keys) {
         continue
     }
     if ($entry.doctor -eq "蔡豐璟" -and $entry.dept_code -eq "BA" -and $entry.weekday -eq 4 -and $entry.slot -eq "上午") {
-        continue
+        $note = "10/1起停診"
+        $roomFinal = "16診"
     }
     if ($entry.doctor -eq "許嘉方" -and $entry.dept_code -eq "09" -and $entry.weekday -eq 4 -and $entry.slot -eq "夜診") {
-        continue
+        $note = "10/1起停診"
+        $roomFinal = "22診"
     }
 
     # 星期六輪週看診（X/X看診）全院標註
