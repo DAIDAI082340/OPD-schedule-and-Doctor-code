@@ -1474,70 +1474,72 @@
       50% { transform: scale(1.25); opacity: 0.75; }
     }
 
-    /* 門診膠囊停診高亮標籤：置於姓名與診間下方並水平居中 */
+    /* 門診膠囊停診高亮標籤（經典高對比紅）：置於姓名與診間下方並水平居中，圖文距離 3px，尾端隨字結束不拉長 */
     .pill-suspension-badge {
       display: inline-flex;
       align-items: center;
       flex-wrap: nowrap;
       justify-content: center;
-      gap: 2px 4px;
+      gap: 3px !important;
       background: #b91c1c;
       color: #ffffff;
-      padding: 2px 7px;
+      padding: 1.5px 5.5px;
       border-radius: 6px;
-      font-size: 0.73rem;
+      font-size: 0.68rem;
       font-weight: 800;
-      margin-top: 3px;
+      margin-top: 2px;
       margin-left: 0 !important;
       letter-spacing: 0;
       white-space: nowrap !important;
       word-break: keep-all !important;
       box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+      width: fit-content !important;
       max-width: 100%;
       line-height: 1.25;
       text-align: center;
       box-sizing: border-box;
     }
 
-    /* 門診膠囊特定看診日高亮標籤（經典珠寶玫瑰金）：置於姓名與診間下方並水平居中，嚴格單行不折行 */
+    /* 門診膠囊特定看診日高亮標籤（經典珠寶玫瑰金）：置於姓名與診間下方並水平居中，圖文距離 3px，尾端隨字結束不拉長 */
     .pill-specific-date-badge {
       display: inline-flex;
       align-items: center;
       flex-wrap: nowrap;
       justify-content: center;
-      gap: 2px 4px;
+      gap: 3px !important;
       background: #B76E79;
       color: #ffffff;
-      padding: 2px 7px;
+      padding: 1.5px 5.5px;
       border-radius: 6px;
-      font-size: 0.73rem;
+      font-size: 0.68rem;
       font-weight: 800;
-      margin-top: 3px;
+      margin-top: 2px;
       margin-left: 0 !important;
       letter-spacing: 0;
       white-space: nowrap !important;
       word-break: keep-all !important;
       box-shadow: 0 1.5px 3px rgba(0,0,0,0.25);
+      width: fit-content !important;
       max-width: 100%;
       line-height: 1.25;
       text-align: center;
       box-sizing: border-box;
     }
 
-    /* 門診膠囊代診高亮標籤（純實心琥珀橙，與停診/看診尺寸完全等大、無陰影無邊框）：置於姓名與診間下方並水平居中，嚴格單行不折行 */
+    /* 門診膠囊代診高亮標籤（純實心琥珀橙，與停診/看診尺寸完全等大、無陰影無邊框）：圖文距離 3px，尾端隨字結束不拉長 */
     .pill-substitute-badge {
       display: inline-flex;
       align-items: center;
       flex-wrap: nowrap;
       justify-content: center;
-      gap: 2px 4px;
+      gap: 3px !important;
       background: #C66E00 !important;
       color: #ffffff !important;
-      padding: 2px 7px;
+      padding: 1.5px 5.5px;
       border-radius: 6px;
-      font-size: 0.73rem;
+      font-size: 0.68rem;
       font-weight: 800;
-      margin-top: 3px;
+      margin-top: 2px;
       margin-left: 0 !important;
       letter-spacing: 0;
       white-space: nowrap !important;
@@ -1545,30 +1547,36 @@
       box-shadow: none !important;
       border: none !important;
       text-shadow: none !important;
+      width: fit-content !important;
       max-width: 100%;
       line-height: 1.25;
       text-align: center;
       box-sizing: border-box;
     }
 
-    /* 多徽章水平並列容器（例如李學林同時有特定看診日與停診，或醫師同時有代診/停診）：緊湊並列在同一行，絕無折行段落 */
+    /* 多徽章垂直排列容器（上下層整齊向下排列、開頭絕對平行齊頭、整組置中、尾端隨字結束不拉長顏色） */
     .pill-badges-row {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      flex-wrap: nowrap;
-      margin-top: 3px;
-      max-width: 100%;
+      display: inline-flex !important;
+      flex-direction: column !important; /* ★ 唯一差別：垂直向下排列！★ */
+      align-items: flex-start !important; /* ★ 上下層開頭絕對平行齊頭！★ */
+      justify-content: center !important;
+      gap: 3px !important;
+      width: fit-content !important;      /* ★ 容器寬度隨最長標籤自適應，尾端絕不拉長 ★ */
+      max-width: 100% !important;
+      margin: 3px auto 0 auto !important; /* ★ 整組居中於時段卡片中 ★ */
+      box-sizing: border-box !important;
     }
     .pill-badges-row .pill-specific-date-badge,
     .pill-badges-row .pill-substitute-badge,
     .pill-badges-row .pill-suspension-badge {
       margin-top: 0 !important;
-      font-size: 0.68rem;
-      padding: 1.5px 5.5px;
+      font-size: 0.68rem !important;
+      padding: 1.5px 5.5px !important;
       white-space: nowrap !important;
       word-break: keep-all !important;
+      width: fit-content !important;       /* ★ 尾端隨字長度結束，絕不拉長 ★ */
+      box-sizing: border-box !important;
+      gap: 3px !important;
     }
 
     /* 原子日期單元：內部絕對禁止斷字折行，換行一律整組完整落於同行 */
@@ -1983,6 +1991,10 @@
       } else if (isWebClosed) {
         return `<span class="web-closed-atomic">⚠️ 網掛不開放</span>`;
       } else {
+        const isMultiDate = (note.match(/\//g) || []).length > 1;
+        if (!isMultiDate) {
+          return `<span>⚠️</span><span>${note}</span>`;
+        }
         return `<span class="suspension-badge-wrap">⚠️ ${formatSuspensionNoteHtml(note)}</span>`;
       }
     }
@@ -2029,10 +2041,10 @@
         stopHtml = renderSuspensionPillBadgeHtml(pureStopNote);
       }
 
-      // 4. 組合輸出（各標籤水平緊湊並列在同一行，絕不換行拆段落）
+      // 4. 組合輸出（各標籤垂直向下排列、開頭絕對平行齊頭、各層圖文 gap: 3px、尾端隨字結束不拉長）
       const badges = [];
       if (specificDateText) {
-        badges.push(`<span class="pill-specific-date-badge">📅 ${specificDateText}</span>`);
+        badges.push(`<span class="pill-specific-date-badge"><span>📅</span><span>${specificDateText}</span></span>`);
       }
       if (substituteText) {
         badges.push(`<span class="pill-substitute-badge"><svg viewBox="0 0 100 100" width="14.5" height="14.5" fill="#FFFFFF" style="flex-shrink:0; vertical-align: -1.5px;"><circle cx="40" cy="25" r="21"/><path d="M 10 90 C 10 71 20 58 35 55 C 38 54 42 54.5 46 55 C 52 54 57 54.5 62 56 C 65 57 66 59 67 61 C 60 65 56 71 56 78 C 56 84 60 90 67 93 H 17 C 13 93 10 90 10 86 Z"/><path d="M 62 71.5 H 77 V 62 C 77 60.5 78.8 59.5 80 60.5 L 96 73 C 97 73.8 97 75.2 96 76 L 80 88.5 C 78.8 89.5 77 88.5 77 87 V 77.5 H 62 C 60 77.5 59 76 59 74.5 C 59 73 60 71.5 62 71.5 Z"/></svg><span>${substituteText}</span></span>`);
