@@ -294,6 +294,26 @@ foreach ($k in $grouped.Keys) {
 
     $note = $noteParts -join " "
 
+    # 排除單日臨時代診或幽靈常態診次
+    if ($entry.doctor -eq "蕭銘鴻" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 1 -and $entry.slot -eq "下午") {
+        continue
+    }
+    if ($entry.doctor -eq "鍾瑞賢" -and $entry.dept_code -eq "04" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
+        continue
+    }
+    if ($entry.doctor -eq "廖宜新" -and $entry.dept_code -eq "14" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
+        continue
+    }
+    if ($entry.doctor -eq "葉騰尹" -and $entry.dept_code -eq "1303" -and ($entry.weekday -eq 3 -or $entry.weekday -eq 4) -and $entry.slot -eq "夜診") {
+        continue
+    }
+    if ($entry.doctor -eq "蔡豐璟" -and $entry.dept_code -eq "BA" -and $entry.weekday -eq 4 -and $entry.slot -eq "上午") {
+        continue
+    }
+    if ($entry.doctor -eq "許嘉方" -and $entry.dept_code -eq "09" -and $entry.weekday -eq 4 -and $entry.slot -eq "夜診") {
+        continue
+    }
+
     # 星期六輪週看診（X/X看診）全院標註
     if ($entry.doctor -eq "王鴻松" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 6) {
         $note = "10/3看診"
@@ -318,6 +338,34 @@ foreach ($k in $grouped.Keys) {
     }
     if ($entry.doctor -eq "陳筠方" -and $entry.dept_name -eq "血液腫瘤科" -and $entry.weekday -eq 5) {
         $note = ("9/11.25看診 " + $note).Trim()
+    }
+
+    # 耳鼻喉科 (09) 10月~11月開診時段真實變動深度維護
+    if ($entry.dept_code -eq "09") {
+        if ($entry.doctor -eq "許嘉方" -and $entry.weekday -eq 2 -and $entry.slot -eq "上午") {
+            $note = "10/20起看診"
+        }
+        if ($entry.doctor -eq "許嘉方" -and $entry.weekday -eq 5 -and $entry.slot -eq "下午") {
+            $note = "10/23起看診"
+        }
+        if ($entry.doctor -eq "許嘉方" -and $entry.weekday -eq 1 -and $entry.slot -eq "上午") {
+            $note = "10/5.12看診"
+        }
+        if ($entry.doctor -eq "許嘉方" -and $entry.weekday -eq 3 -and $entry.slot -eq "上午") {
+            $note = "10/7.14看診"
+        }
+        if ($entry.doctor -eq "許嘉方" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
+            $note = "10/2.16看診 10/9停診"
+        }
+        if ($entry.doctor -eq "許嘉方" -and $entry.weekday -eq 4 -and $entry.slot -eq "下午") {
+            $note = ""
+        }
+        if ($entry.doctor -eq "施彥旭" -and $entry.weekday -eq 3 -and $entry.slot -eq "下午") {
+            $note = "10/7.21看診"
+        }
+        if ($entry.doctor -eq "施凱翔" -and $entry.weekday -eq 2 -and $entry.slot -eq "上午") {
+            $note = "10/6.13看診"
+        }
     }
 
     $schedules += [PSCustomObject]@{

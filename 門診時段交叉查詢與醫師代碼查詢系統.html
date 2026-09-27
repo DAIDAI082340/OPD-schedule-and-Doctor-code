@@ -1524,16 +1524,16 @@
       box-sizing: border-box;
     }
 
-    /* 門診膠囊代診高亮標籤（圖 2 專屬：焦糖金珀暖微浮雕）：置於姓名與診間下方並水平居中，嚴格單行不折行 */
+    /* 門診膠囊代診高亮標籤（純實心琥珀橙，與停診/看診尺寸完全等大、無陰影無邊框）：置於姓名與診間下方並水平居中，嚴格單行不折行 */
     .pill-substitute-badge {
       display: inline-flex;
       align-items: center;
       flex-wrap: nowrap;
       justify-content: center;
-      gap: 3px;
-      background: linear-gradient(135deg, #C66E00 0%, #9E5600 100%);
+      gap: 2px 4px;
+      background: #C66E00 !important;
       color: #ffffff !important;
-      padding: 2px 7.5px;
+      padding: 2px 7px;
       border-radius: 6px;
       font-size: 0.73rem;
       font-weight: 800;
@@ -1542,13 +1542,13 @@
       letter-spacing: 0;
       white-space: nowrap !important;
       word-break: keep-all !important;
-      box-shadow: 0 1.5px 3.5px rgba(198, 110, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.35);
+      box-shadow: none !important;
+      border: none !important;
+      text-shadow: none !important;
       max-width: 100%;
       line-height: 1.25;
       text-align: center;
       box-sizing: border-box;
-      text-shadow: 0 1px 1px rgba(0,0,0,0.2);
     }
 
     /* 多徽章水平並列容器（例如李學林同時有特定看診日與停診，或醫師同時有代診/停診）：緊湊並列在同一行，絕無折行段落 */
@@ -1946,7 +1946,7 @@
       if (!note) return "";
       let cleanNote = note;
       if (cleanNote.includes("看診") || cleanNote.includes("開診")) {
-        cleanNote = cleanNote.replace(/\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*(?:看診|開診)?/g, "").trim();
+        cleanNote = cleanNote.replace(/\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*(?:起)?\s*(?:看診|開診)/g, "").trim();
       }
       const isWebClosed = cleanNote.includes("網掛不開放");
       const datePart = cleanNote.replace("網掛不開放", "").trim();
@@ -1991,14 +1991,12 @@
     function renderPillBadgesHtml(note) {
       if (!note) return "";
 
-      // 1. 檢查特定看診日（例如 9/11.25看診、9/12.26看診、9/11.9/25看診）
+      // 1. 檢查特定看診日（例如 9/11.25看診、9/12.26看診、9/11.9/25看診、10/20起看診）
       let specificDateText = "";
       if (note.includes("看診") || note.includes("開診")) {
-        const m = note.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*(?:看診|開診)?)/);
+        const m = note.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*(?:起)?)\s*(?:看診|開診)/);
         if (m) {
-          let text = m[1];
-          if (!text.includes("看診") && !text.includes("開診")) text += "看診";
-          specificDateText = text;
+          specificDateText = m[1] + "看診";
         }
       } else if (/\d{1,2}\/\d{1,2}/.test(note) && !note.includes("停診") && !note.includes("代診")) {
         const m = note.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*)/);
@@ -2007,14 +2005,12 @@
         }
       }
 
-      // 2. 檢查代診日（方案 1 專屬：例如 10/1代診、10/9代診、10/1.10/15代診）
+      // 2. 檢查代診日（方案 1 專屬：例如 10/1代診、10/9代診、10/1.10/15代診、10/17代診）
       let substituteText = "";
       if (note.includes("代診")) {
-        const m = note.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*(?:代診)?)/);
+        const m = note.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*)\s*代診/);
         if (m) {
-          let text = m[1];
-          if (!text.includes("代診")) text += "代診";
-          substituteText = text;
+          substituteText = m[1] + "代診";
         } else {
           substituteText = "代診";
         }
@@ -2039,7 +2035,7 @@
         badges.push(`<span class="pill-specific-date-badge">📅 ${specificDateText}</span>`);
       }
       if (substituteText) {
-        badges.push(`<span class="pill-substitute-badge"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="flex-shrink:0; vertical-align: -1px;"><circle cx="8" cy="7" r="3.2"/><path d="M2.5 18c0-3 2.5-5 5.5-5h1c.8 0 1.5.2 2.2.5-.2.5-.2 1-.2 1.5 0 .9.3 1.8.8 2.5H2.5v.5z"/><path d="M13.5 13.5h4.2v-2l4.8 3.5-4.8 3.5v-2h-4.2v-3z"/></svg><span>${substituteText}</span></span>`);
+        badges.push(`<span class="pill-substitute-badge"><svg viewBox="0 0 100 100" width="14.5" height="14.5" fill="#FFFFFF" style="flex-shrink:0; vertical-align: -1.5px;"><circle cx="40" cy="25" r="21"/><path d="M 10 90 C 10 71 20 58 35 55 C 38 54 42 54.5 46 55 C 52 54 57 54.5 62 56 C 65 57 66 59 67 61 C 60 65 56 71 56 78 C 56 84 60 90 67 93 H 17 C 13 93 10 90 10 86 Z"/><path d="M 62 71.5 H 77 V 62 C 77 60.5 78.8 59.5 80 60.5 L 96 73 C 97 73.8 97 75.2 96 76 L 80 88.5 C 78.8 89.5 77 88.5 77 87 V 77.5 H 62 C 60 77.5 59 76 59 74.5 C 59 73 60 71.5 62 71.5 Z"/></svg><span>${substituteText}</span></span>`);
       }
       if (stopHtml) {
         badges.push(`<span class="pill-suspension-badge">${stopHtml}</span>`);
@@ -2235,11 +2231,10 @@
       { dept_code: "AD", dept_name: "腎臟內科", doctor: "張淑鈺", weekday: 6, slot: "上午", room: "88診", note: "10/10.24看診" },
       { dept_code: "60", dept_name: "中醫科", doctor: "張煒東", weekday: 2, slot: "下午", room: "35診", note: "" },
       { dept_code: "01", dept_name: "家醫科", doctor: "廖曜磐", weekday: 4, slot: "上午", room: "8診", note: "9/24.10/8.10/15停診" },
-      { dept_code: "1303", dept_name: "兒童青少年心智科", doctor: "葉騰尹", weekday: 3, slot: "夜診", room: "26診", note: "" },
       { dept_code: "AC", dept_name: "胸腔內科", doctor: "高劍虹", weekday: 4, slot: "上午", room: "3診", note: "9/24停診" },
       { dept_code: "4001", dept_name: "無障礙牙科特診", doctor: "金椿期", weekday: 5, slot: "上午", room: "60診", note: "10/9停診" },
       { dept_code: "60", dept_name: "中醫科", doctor: "梁惠宇", weekday: 3, slot: "上午", room: "33診", note: "" },
-      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 5, slot: "下午", room: "22診", note: "" },
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 5, slot: "下午", room: "22診", note: "10/23起看診" },
       { dept_code: "08", dept_name: "泌尿科", doctor: "陳文銘", weekday: 3, slot: "下午", room: "18診", note: "" },
       { dept_code: "BC", dept_name: "胸腔外科", doctor: "林聿騰", weekday: 5, slot: "上午", room: "30診", note: "9/25.10/9停診" },
       { dept_code: "BC", dept_name: "胸腔外科", doctor: "李佳穎", weekday: 4, slot: "下午", room: "11診", note: "9/24停診" },
@@ -2253,7 +2248,6 @@
       { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 4, slot: "上午", room: "88診", note: "10/1.10/15代診" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "李翰", weekday: 4, slot: "夜診", room: "12診", note: "" },
       { dept_code: "13", dept_name: "精神科", doctor: "王鴻松", weekday: 3, slot: "下午", room: "26診", note: "11/25停診" },
-      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 4, slot: "夜診", room: "22診", note: "" },
       { dept_code: "AC", dept_name: "胸腔內科", doctor: "張子晏", weekday: 3, slot: "夜診", room: "5診", note: "" },
       { dept_code: "AA", dept_name: "腸胃內科", doctor: "楊智超", weekday: 5, slot: "下午", room: "2診", note: "9/25停診" },
       { dept_code: "13", dept_name: "精神科", doctor: "葉騰尹", weekday: 1, slot: "下午", room: "27診", note: "9/28.10/26停診" },
@@ -2269,7 +2263,6 @@
       { dept_code: "AC", dept_name: "胸腔內科", doctor: "余養豪", weekday: 2, slot: "夜診", room: "5診", note: "" },
       { dept_code: "01", dept_name: "家醫科", doctor: "郭馨鎂", weekday: 5, slot: "下午", room: "8診", note: "9/25停診" },
       { dept_code: "AD", dept_name: "腎臟內科", doctor: "張淑鈺", weekday: 2, slot: "上午", room: "88診", note: "" },
-      { dept_code: "04", dept_name: "小兒科", doctor: "鍾瑞賢", weekday: 5, slot: "上午", room: "28診", note: "" },
       { dept_code: "1305", dept_name: "藥癮門診(美沙冬)", doctor: "蕭銘鴻", weekday: 4, slot: "上午", room: "41診", note: "9/24停診" },
       { dept_code: "07", dept_name: "神經外科/脊椎外科(微創)", doctor: "方鵬翔", weekday: 2, slot: "夜診", room: "38診", note: "" },
       { dept_code: "AC", dept_name: "胸腔內科", doctor: "黃伊文", weekday: 3, slot: "上午", room: "5診", note: "" },
@@ -2277,7 +2270,6 @@
       { dept_code: "01", dept_name: "家醫科", doctor: "廖曜磐", weekday: 4, slot: "夜診", room: "8診", note: "9/24.10/8.10/15停診" },
       { dept_code: "AF", dept_name: "血液腫瘤科", doctor: "陳筠方", weekday: 5, slot: "上午", room: "52診", note: "9/11.25看診" },
       { dept_code: "40", dept_name: "牙科", doctor: "金椿期", weekday: 6, slot: "上午", room: "23診", note: "10/17看診" },
-      { dept_code: "BA", dept_name: "大腸直腸外科", doctor: "蔡豐璟", weekday: 4, slot: "上午", room: "16診", note: "9/24停診" },
       { dept_code: "AF", dept_name: "血液腫瘤科", doctor: "張哲豪", weekday: 4, slot: "上午", room: "52診", note: "9/24.10/8停診" },
       { dept_code: "13", dept_name: "精神科", doctor: "梁孫源", weekday: 5, slot: "上午", room: "27診", note: "9/25.10/9.11/27停診" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "李學林", weekday: 4, slot: "下午", room: "6診", note: "9/24停診" },
@@ -2307,14 +2299,13 @@
       { dept_code: "AA", dept_name: "腸胃內科", doctor: "蔡安順", weekday: 2, slot: "夜診", room: "2診", note: "" },
       { dept_code: "AC", dept_name: "胸腔內科", doctor: "黃伊文", weekday: 4, slot: "下午", room: "5診", note: "9/24停診" },
       { dept_code: "FB", dept_name: "放射腫瘤", doctor: "吳俊玠", weekday: 1, slot: "上午", room: "51診", note: "" },
-      { dept_code: "14", dept_name: "復健科", doctor: "廖宜新", weekday: 5, slot: "上午", room: "25診", note: "" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "何東錦", weekday: 3, slot: "上午", room: "12診", note: "" },
       { dept_code: "FB", dept_name: "放射腫瘤", doctor: "張博竣", weekday: 3, slot: "下午", room: "51診", note: "" },
       { dept_code: "07", dept_name: "神經外科/脊椎外科(微創)", doctor: "賴肇康", weekday: 1, slot: "上午", room: "38診", note: "10/19停診" },
       { dept_code: "04", dept_name: "小兒科", doctor: "鍾瑞賢", weekday: 1, slot: "夜診", room: "28診", note: "" },
       { dept_code: "1305", dept_name: "藥癮門診(美沙冬)", doctor: "蕭銘鴻", weekday: 1, slot: "上午", room: "41診", note: "" },
       { dept_code: "60", dept_name: "中醫科", doctor: "馮天祥", weekday: 5, slot: "下午", room: "32診", note: "9/25.11/27停診" },
-      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 2, slot: "上午", room: "22診", note: "" },
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 2, slot: "上午", room: "22診", note: "10/20起看診" },
       { dept_code: "AA", dept_name: "腸胃內科", doctor: "楊智超", weekday: 3, slot: "夜診", room: "2診", note: "" },
       { dept_code: "AA", dept_name: "腸胃內科", doctor: "王棋新", weekday: 6, slot: "上午", room: "2診", note: "9/26.10/10停診" },
       { dept_code: "60", dept_name: "中醫科", doctor: "馮天祥", weekday: 1, slot: "夜診", room: "32診", note: "" },
@@ -2346,9 +2337,8 @@
       { dept_code: "14", dept_name: "復健科", doctor: "林昭宏", weekday: 2, slot: "下午", room: "25診", note: "" },
       { dept_code: "14", dept_name: "復健科", doctor: "廖宜新", weekday: 3, slot: "上午", room: "25診", note: "" },
       { dept_code: "AC", dept_name: "胸腔內科", doctor: "林澤宏", weekday: 5, slot: "上午", room: "5診", note: "" },
-      { dept_code: "13", dept_name: "精神科", doctor: "蕭銘鴻", weekday: 1, slot: "下午", room: "26診", note: "" },
       { dept_code: "11", dept_name: "皮膚科", doctor: "郭峰昇", weekday: 2, slot: "上午", room: "61診", note: "10/6.11/17停診" },
-      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 1, slot: "上午", room: "22診", note: "" },
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 1, slot: "上午", room: "22診", note: "10/5.12看診" },
       { dept_code: "13", dept_name: "精神科", doctor: "蕭銘鴻", weekday: 1, slot: "上午", room: "27診", note: "" },
       { dept_code: "12", dept_name: "神經內科", doctor: "羅健寧", weekday: 1, slot: "下午", room: "1診", note: "9/28.10/26停診" },
       { dept_code: "AH", dept_name: "感染科", doctor: "莊佳慧", weekday: 3, slot: "上午", room: "39診", note: "" },
@@ -2379,7 +2369,7 @@
       { dept_code: "10", dept_name: "眼科", doctor: "曾士豪", weekday: 4, slot: "上午", room: "20診", note: "9/24.11/5停診" },
       { dept_code: "40", dept_name: "牙科", doctor: "金椿期", weekday: 5, slot: "上午", room: "23診", note: "10/9停診" },
       { dept_code: "01", dept_name: "家醫科", doctor: "吳偉", weekday: 3, slot: "下午", room: "8診", note: "" },
-      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "施彥旭", weekday: 3, slot: "下午", room: "22診", note: "" },
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "施彥旭", weekday: 3, slot: "下午", room: "22診", note: "10/7.21看診" },
       { dept_code: "13", dept_name: "精神科", doctor: "李景嶽", weekday: 5, slot: "下午", room: "26診", note: "10/9代診" },
       { dept_code: "13", dept_name: "精神科", doctor: "王鴻松", weekday: 6, slot: "上午", room: "26診", note: "10/3看診" },
       { dept_code: "08", dept_name: "泌尿科", doctor: "蔡卓榮", weekday: 5, slot: "下午", room: "18診", note: "9/25.10/9停診" },
@@ -2428,23 +2418,23 @@
       { dept_code: "AH", dept_name: "感染科", doctor: "莊佳慧", weekday: 2, slot: "夜診", room: "3診", note: "" },
       { dept_code: "13", dept_name: "精神科", doctor: "王鴻松", weekday: 5, slot: "下午", room: "26診", note: "10/9.11/27停診" },
       { dept_code: "AE", dept_name: "風濕免疫科", doctor: "高堅凱", weekday: 4, slot: "上午", room: "7診", note: "9/24.11/5停診" },
-      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "施凱翔", weekday: 2, slot: "上午", room: "22診", note: "" },
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "施凱翔", weekday: 2, slot: "上午", room: "22診", note: "10/6.13看診" },
       { dept_code: "06", dept_name: "骨科", doctor: "王守吉", weekday: 3, slot: "夜診", room: "17診", note: "" },
       { dept_code: "13", dept_name: "精神科", doctor: "葉騰尹", weekday: 6, slot: "上午", room: "26診", note: "10/24看診" },
       { dept_code: "AD", dept_name: "腎臟內科", doctor: "張淑鈺", weekday: 1, slot: "下午", room: "88診", note: "10/26停診" },
       { dept_code: "60", dept_name: "中醫科", doctor: "張煒東", weekday: 4, slot: "下午", room: "35診", note: "9/24停診" },
       { dept_code: "01", dept_name: "家醫科", doctor: "吳偉", weekday: 5, slot: "上午", room: "8診", note: "9/25.10/9停診" },
-      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 4, slot: "下午", room: "22診", note: "9/24停診" },
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 4, slot: "下午", room: "22診", note: "" },
       { dept_code: "AB", dept_name: "心臟內科", doctor: "李學林", weekday: 4, slot: "上午", room: "6診", note: "9/24停診" },
       { dept_code: "12", dept_name: "神經內科", doctor: "林嶸洲", weekday: 3, slot: "上午", room: "1診", note: "" },
       { dept_code: "1303", dept_name: "兒童青少年心智科", doctor: "梁孫源", weekday: 4, slot: "夜診", room: "26診", note: "" },
       { dept_code: "04", dept_name: "小兒科", doctor: "鍾瑞賢", weekday: 3, slot: "下午", room: "28診", note: "" },
       { dept_code: "11", dept_name: "皮膚科", doctor: "郭峰昇", weekday: 3, slot: "上午", room: "61診", note: "10/7.10/14.11/11停診" },
       { dept_code: "06", dept_name: "骨科", doctor: "李文宏", weekday: 2, slot: "夜診", room: "17診", note: "" },
-      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 3, slot: "上午", room: "22診", note: "" },
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 3, slot: "上午", room: "22診", note: "10/7.14看診" },
       { dept_code: "AA", dept_name: "腸胃內科", doctor: "蔡安順", weekday: 3, slot: "下午", room: "2診", note: "" },
       { dept_code: "04", dept_name: "小兒科", doctor: "馬瑞杉", weekday: 6, slot: "上午", room: "28診", note: "10/10看診 10/17代診" },
-      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 5, slot: "上午", room: "22診", note: "9/25.10/9停診" },
+      { dept_code: "09", dept_name: "耳鼻喉科", doctor: "許嘉方", weekday: 5, slot: "上午", room: "22診", note: "10/2.16看診 10/9停診" },
       { dept_code: "AH03", dept_name: "M痘疫苗特診", doctor: "莊佳慧", weekday: 2, slot: "夜診", room: "96診", note: "" },
       { dept_code: "1303", dept_name: "兒童青少年心智科", doctor: "王鴻松", weekday: 3, slot: "夜診", room: "26診", note: "" },
       { dept_code: "10", dept_name: "眼科", doctor: "許紘睿", weekday: 1, slot: "上午", room: "20診", note: "10/19停診" },
@@ -2469,7 +2459,6 @@
       { dept_code: "03", dept_name: "外科", doctor: "蘇美旭", weekday: 1, slot: "上午", room: "13診", note: "" },
       { dept_code: "AD", dept_name: "腎臟內科", doctor: "黃耀宣", weekday: 2, slot: "下午", room: "88診", note: "" },
       { dept_code: "12", dept_name: "神經內科", doctor: "林嶸洲", weekday: 2, slot: "下午", room: "1診", note: "" },
-      { dept_code: "1303", dept_name: "兒童青少年心智科", doctor: "葉騰尹", weekday: 4, slot: "夜診", room: "26診", note: "" },
       { dept_code: "4001", dept_name: "無障礙牙科特診", doctor: "陳信利", weekday: 3, slot: "上午", room: "60診", note: "" },
       { dept_code: "4001", dept_name: "無障礙牙科特診", doctor: "鍾先揚", weekday: 2, slot: "上午", room: "60診", note: "" },
       { dept_code: "00", dept_name: "高年科", doctor: "梁垠盤", weekday: 3, slot: "上午", room: "9診", note: "" },
