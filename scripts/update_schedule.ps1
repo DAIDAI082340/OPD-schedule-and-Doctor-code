@@ -254,7 +254,7 @@ foreach ($k in $grouped.Keys) {
         $noteParts += (($sortedSubDates -join ".") + "代診")
     }
 
-    # 官方指定臨時代診標註維護 (方案 1 專屬：大課表同時呈現，專屬色彩標籤區隔)
+    # 官方指定臨時代診與停診雙向交叉比對維護 (圖 2 焦糖金珀代診框 & 官方 Ground-Truth 停診)
     if ($entry.doctor -eq "黃耀宣" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 4 -and $entry.slot -eq "上午") {
         if (-not ($noteParts -like "*代診*")) { $noteParts += "10/1.10/15代診" }
     }
@@ -267,24 +267,57 @@ foreach ($k in $grouped.Keys) {
     if ($entry.doctor -eq "黃耀宣" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
         if (-not ($noteParts -like "*10/9*")) { $noteParts += "10/9停診" }
     }
+    # 小兒科 10/17 停代診校正 (鍾瑞賢請假停診、馬瑞杉臨時代診)
     if ($entry.doctor -eq "鍾瑞賢" -and $entry.dept_code -eq "04" -and $entry.weekday -eq 6 -and $entry.slot -eq "上午") {
-        if (-not ($noteParts -like "*代診*")) { $noteParts += "10/17代診" }
+        $noteParts = @("10/3.24.31看診", "10/17停診")
     }
     if ($entry.doctor -eq "馬瑞杉" -and $entry.dept_code -eq "04" -and $entry.weekday -eq 6 -and $entry.slot -eq "上午") {
-        if (-not ($noteParts -like "*10/17*")) { $noteParts += "10/17停診" }
+        $noteParts = @("10/10看診", "10/17代診")
+    }
+    # 精神科 10/9 李景嶽代診、葉騰尹停診、王鴻松停診
+    if ($entry.doctor -eq "李景嶽" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
+        if (-not ($noteParts -like "*代診*")) { $noteParts += "10/9代診" }
+    }
+    if ($entry.doctor -eq "葉騰尹" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
+        $noteParts = @("10/9.10/16停診")
+    }
+    if ($entry.doctor -eq "李景嶽" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 5 -and $entry.slot -eq "下午") {
+        if (-not ($noteParts -like "*代診*")) { $noteParts += "10/9代診" }
+    }
+    if ($entry.doctor -eq "王鴻松" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 5 -and $entry.slot -eq "下午") {
+        $noteParts = @("10/9.11/27停診")
+    }
+    # 復健科 10/16 林昭宏停診 (廖宜新本有門診免代診框)
+    if ($entry.doctor -eq "林昭宏" -and $entry.dept_code -eq "14" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
+        if (-not ($noteParts -like "*10/16*")) { $noteParts += "10/16停診" }
     }
 
     $note = $noteParts -join " "
 
-    # 永久保留重要特定開診日標註 (若院方排班手冊特別標示)
+    # 星期六輪週看診（X/X看診）全院標註
+    if ($entry.doctor -eq "王鴻松" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 6) {
+        $note = "10/3看診"
+    }
+    if ($entry.doctor -eq "梁孫源" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 6) {
+        $note = "10/10.31看診"
+    }
+    if ($entry.doctor -eq "蕭銘鴻" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 6) {
+        $note = "10/17看診"
+    }
+    if ($entry.doctor -eq "葉騰尹" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 6) {
+        $note = "10/24看診"
+    }
+    if ($entry.doctor -eq "張淑鈺" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 6) {
+        $note = "10/10.24看診"
+    }
+    if ($entry.doctor -eq "李學林" -and $entry.dept_code -eq "AB" -and $entry.weekday -eq 6) {
+        $note = "10/10.24看診"
+    }
+    if ($entry.doctor -eq "金椿期" -and $entry.dept_code -eq "40" -and $entry.weekday -eq 6) {
+        $note = "10/17看診"
+    }
     if ($entry.doctor -eq "陳筠方" -and $entry.dept_name -eq "血液腫瘤科" -and $entry.weekday -eq 5) {
         $note = ("9/11.25看診 " + $note).Trim()
-    }
-    if ($entry.doctor -eq "張淑鈺" -and $entry.dept_name -eq "腎臟內科" -and $entry.weekday -eq 6) {
-        $note = ("9/12.26看診 " + $note).Trim()
-    }
-    if ($entry.doctor -eq "李學林" -and $entry.dept_name -eq "心臟內科" -and $entry.weekday -eq 6) {
-        $note = ("9/12.26看診 " + $note).Trim()
     }
 
     $schedules += [PSCustomObject]@{
