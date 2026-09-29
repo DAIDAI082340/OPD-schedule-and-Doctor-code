@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -1816,16 +1816,21 @@
     .suspension-tag-substitute {
       display: inline-flex;
       align-items: center;
-      gap: 3px;
-      background: #fffbeb;
-      border: 1px solid #fde68a;
-      color: #b45309;
-      padding: 2px 8px;
-      border-radius: 5px;
+      gap: 5px;
+      background: linear-gradient(180deg, #fffdf7 0%, #fef3c7 100%);
+      border: 1px solid #fcd34d;
+      color: #92400e;
+      padding: 3px 9px;
+      border-radius: 6px;
       font-weight: 800;
       font-size: 0.82rem;
-      white-space: nowrap;
-      box-shadow: 0 1px 2px rgba(180, 83, 9, 0.06);
+      white-space: nowrap !important;
+      word-break: keep-all !important;
+      box-shadow: 0 1px 2px rgba(180, 83, 9, 0.08);
+    }
+    .suspension-tag-substitute svg {
+      fill: #b45309;
+      flex-shrink: 0;
     }
     .suspension-date-tag {
       display: inline-flex;
@@ -1843,16 +1848,21 @@
     .suspension-tag-added {
       display: inline-flex;
       align-items: center;
-      gap: 3px;
-      background: #f0fdfa;
-      border: 1px solid #99f6e4;
+      gap: 5px;
+      background: linear-gradient(180deg, #f7fefc 0%, #ccfbf1 100%);
+      border: 1px solid #5eead4;
       color: #0f766e;
-      padding: 2px 8px;
-      border-radius: 5px;
+      padding: 3px 9px;
+      border-radius: 6px;
       font-weight: 800;
       font-size: 0.82rem;
-      white-space: nowrap;
+      white-space: nowrap !important;
+      word-break: keep-all !important;
       box-shadow: 0 1px 2px rgba(13, 148, 136, 0.08);
+    }
+    .suspension-tag-added svg {
+      fill: #0d9488;
+      flex-shrink: 0;
     }
 
     .doctor-code-badge {
@@ -2265,13 +2275,13 @@
         tags.push(`<span class="suspension-tag-warning">⚠️ 網掛不開放</span>`);
       }
       if (addedDateText) {
-        tags.push(`<span class="suspension-tag-added">🕒➕ ${formatSuspensionNoteHtml(addedDateText)}</span>`);
+        tags.push(`<span class="suspension-tag-added"><svg viewBox="0 0 24 24" width="13" height="13"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 4a1.5 1.5 0 0 1 1.5 1.5V10.5H18.5a1.5 1.5 0 0 1 0 3H13.5v5a1.5 1.5 0 0 1-3 0v-5H5.5a1.5 1.5 0 0 1 0-3H10.5V5.5A1.5 1.5 0 0 1 12 4z"/></svg><span>${formatSuspensionNoteHtml(addedDateText)}</span></span>`);
       }
       if (specificDateText) {
         tags.push(`<span class="suspension-tag-dates-only">📅 ${formatSuspensionNoteHtml(specificDateText)}</span>`);
       }
       if (substituteText) {
-        tags.push(`<span class="suspension-tag-substitute">👤 ${formatSuspensionNoteHtml(substituteText)}</span>`);
+        tags.push(`<span class="suspension-tag-substitute"><svg viewBox="0 0 24 24" width="13" height="13"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span>${formatSuspensionNoteHtml(substituteText)}</span></span>`);
       }
       if (stopDateText) {
         tags.push(`<span class="suspension-tag-dates">⚠️ ${formatSuspensionNoteHtml(stopDateText)}</span>`);
@@ -2376,9 +2386,9 @@
         badges.push(`<span class="pill-suspension-badge" style="background:#dc2626 !important;"><span class="badge-icon">⚠️</span><span class="badge-text">網掛不開放</span></span>`);
       }
 
-      // 加診徽章 (翡翠湖水綠 #088F89 + 時鐘圓盤鏤空指針十字加號 SVG - 100% 官方標準復刻)
+      // 加診徽章 (翡翠湖水綠 #088F89 + 純淨圓角十字加號 SVG - 移除時鐘更簡潔)
       if (addedDateText) {
-        badges.push(`<span class="pill-added-badge" style="background:#088F89 !important;"><span class="badge-icon"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" style="flex-shrink:0;"><path fill="#FFFFFF" fill-rule="evenodd" clip-rule="evenodd" d="M10 2C5.58 2 2 5.58 2 10c0 4.42 3.58 8 8 8 1.15 0 2.24-.24 3.22-.68-.14-.58-.22-1.19-.22-1.82 0-3.37 2.33-6.19 5.48-6.9C17.76 4.96 14.18 2 10 2zm1 4a1 1 0 0 0-2 0v4.25c0 .35.18.67.48.85l3.25 1.95a1 1 0 0 0 1.02-1.72l-2.75-1.65V6z"/><path fill="#FFFFFF" d="M18 13.5a1.25 1.25 0 0 0-1.25 1.25v2H14.75a1.25 1.25 0 1 0 0 2.5h2v2a1.25 1.25 0 1 0 2.5 0v-2h2a1.25 1.25 0 1 0 0-2.5h-2v-2c0-.69-.56-1.25-1.25-1.25z"/></svg></span><span class="badge-text">${addedDateText}</span></span>`);
+        badges.push(`<span class="pill-added-badge" style="background:#088F89 !important;"><span class="badge-icon"><svg viewBox="0 0 24 24" width="13" height="13" fill="#FFFFFF" style="flex-shrink:0;"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 4a1.5 1.5 0 0 1 1.5 1.5V10.5H18.5a1.5 1.5 0 0 1 0 3H13.5v5a1.5 1.5 0 0 1-3 0v-5H5.5a1.5 1.5 0 0 1 0-3H10.5V5.5A1.5 1.5 0 0 1 12 4z"/></svg></span><span class="badge-text">${addedDateText}</span></span>`);
       }
 
       // 特定看診日徽章
@@ -2386,9 +2396,9 @@
         badges.push(`<span class="pill-specific-date-badge"><span class="badge-icon">📅</span><span class="badge-text">${specificDateText}</span></span>`);
       }
 
-      // 代診徽章 (沉穩琥珀橙 #C66E00 + 人形平起實心箭頭 SVG - 100% 官方標準復刻)
+      // 代診徽章 (沉穩琥珀橙 #C66E00 + 實心典雅醫師人形剪影 SVG - 100% 官方標準復刻)
       if (substituteText) {
-        badges.push(`<span class="pill-substitute-badge" style="background:#C66E00 !important;"><span class="badge-icon"><svg viewBox="0 0 24 24" width="13" height="13" fill="#FFFFFF" style="flex-shrink:0;"><circle cx="7.5" cy="6.5" r="3.5"/><path d="M 2.5 19 C 2.5 14.5 4.5 12 7.5 12 C 9.5 12 11.2 13 12.2 14.5 C 11.5 15.3 11 16.4 11 17.5 L 11 19 Z"/><path d="M 13 16.5 L 18 16.5 L 18 14 L 22.5 17.5 L 18 21 L 18 18.5 L 13 18.5 Z"/></svg></span><span class="badge-text">${substituteText}</span></span>`);
+        badges.push(`<span class="pill-substitute-badge" style="background:#C66E00 !important;"><span class="badge-icon"><svg viewBox="0 0 24 24" width="13" height="13" fill="#FFFFFF" style="flex-shrink:0;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span><span class="badge-text">${substituteText}</span></span>`);
       }
 
       // 停診徽章
