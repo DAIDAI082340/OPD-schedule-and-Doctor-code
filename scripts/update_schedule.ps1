@@ -1,4 +1,4 @@
-﻿# ==============================================================================
+# ==============================================================================
 # 衛生福利部彰化醫院 (CHHW) 門診時刻表、醫師代碼與停代診公告 原生同步程式 (PowerShell)
 # 支援台灣在地 IP 直接連線、熔斷保護機制 (Circuit Breaker)、雙生檔案 100% SHA-256 同步
 # ==============================================================================
@@ -296,6 +296,18 @@ foreach ($k in $grouped.Keys) {
     # 復健科 10/16 林昭宏停診 (廖宜新本有門診免代診框)
     if ($entry.doctor -eq "林昭宏" -and $entry.dept_code -eq "14" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
         if (-not ($noteParts -like "*10/16*")) { $noteParts += "10/16停診" }
+    }
+    # 胸腔內科 10/9 林澤宏停診 (網路掛號即時比對防漏)
+    if ($entry.doctor -eq "林澤宏" -and $entry.dept_code -eq "AC" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
+        if (-not ($noteParts -like "*10/9*")) { $noteParts += "10/9停診" }
+    }
+    # 胸腔內科 10/20 余養豪加診 (公文新增加診)
+    if ($entry.doctor -eq "余養豪" -and $entry.dept_code -eq "AC" -and $entry.weekday -eq 2 -and $entry.slot -eq "下午") {
+        if (-not ($noteParts -like "*10/20*")) { $noteParts += "10/20加診" }
+    }
+    # 牙科 10/17 金椿期加診 (公文新增加診)
+    if ($entry.doctor -eq "金椿期" -and $entry.dept_code -eq "40" -and $entry.weekday -eq 6 -and $entry.slot -eq "上午") {
+        $noteParts = @("10/17加診")
     }
 
     $note = $noteParts -join " "
