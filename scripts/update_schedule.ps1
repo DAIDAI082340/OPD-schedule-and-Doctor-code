@@ -1,4 +1,4 @@
-# ==============================================================================
+﻿# ==============================================================================
 # 衛生福利部彰化醫院 (CHHW) 門診時刻表、醫師代碼與停代診公告 原生同步程式 (PowerShell)
 # 支援台灣在地 IP 直接連線、熔斷保護機制 (Circuit Breaker)、雙生檔案 100% SHA-256 同步
 # ==============================================================================
@@ -175,18 +175,21 @@ foreach ($d in $depts) {
 
             if ($weekday -gt 6) { continue } # 排除週日
 
-            $isStopped = ($inner -like "*停診*") -or ($inner -like "*停掛*")
-            $isSubstitute = ($inner -like "*代診*")
-            $slotLabel = if ($slotMap.ContainsKey($apn)) { $slotMap[$apn] } else { "上午" }
-            $roomLabel = if ($roomNo.EndsWith("診")) { $roomNo } else { "${roomNo}診" }
-
             $count = $null
             if ($inner -match '已掛(\d+)人') {
                 $count = [int]$Matches[1]
             }
+
+            # 嚴格停診判斷：只有文字明確標示「停診」且完全沒有掛號人數時，才列為停診
+            # 絕對禁止將「預約已額滿」、「網掛不開放」、或 disabled 誤判為停診！
+            $isStopped = ($inner -like "*停診*") -and ($count -eq $null)
+            $isSubstitute = ($inner -like "*代診*")
+            $slotLabel = if ($slotMap.ContainsKey($apn)) { $slotMap[$apn] } else { "上午" }
+            $roomLabel = if ($roomNo.EndsWith("診")) { $roomNo } else { "${roomNo}診" }
+
             $cleanKey = "$month/$day"
             $padKey = "{0:D2}/{1:D2}" -f $month, $day
-            $val = if ($isStopped) { "停" } else { $count }
+            $val = if ($isStopped) { "停" } elseif ($count -ne $null) { $count } else { $null }
             if ($val -ne $null) {
                 $liveCountsMap["$docName|$cleanKey|$slotLabel"] = $val
                 $liveCountsMap["$docName|$padKey|$slotLabel"] = $val

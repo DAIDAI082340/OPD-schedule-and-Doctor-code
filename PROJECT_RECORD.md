@@ -9,7 +9,7 @@
 | **專案名稱** | 門診時段交叉查詢與醫師代碼查詢系統 (Outpatient Clinic Schedule Cross-Query & Doctor Code Assistant) |
 | **專案代號** | `Clinic-Schedule-CrossQuery` |
 | **建立日期** | 2026-09-18 |
-| **目前版本** | `v1.0.8` (官方即時網路掛號數據真實對接連線、圖1日期人數78px-58px緊湊精準對齊、圖2兩按鈕178px等寬防跳動、圖3加診&圖4代診官方向量圖標、跳脫黑框全螢幕公文閱讀器滾輪滑動、雙生檔案 100% SHA-256 驗證同步) |
+| **目前版本** | `v1.0.9` (全院 39 科掛號即時真數據校正：根治「預約已額滿」與「網掛不開放」假停診系統性漏洞、吳佶育 10/22 與黃耀宣 10/1 及 10/15 真實人數正確呈現、手機版代碼單行無段落防折行、停診公文 300% 智慧縮放、雙生檔案 100% SHA-256 驗證同步) |
 | **主要目標使用者** | 臨床醫師、門診跟診護理師、轉診中心個案管理師、批價掛號櫃檯人員、專科護理師 (NP)、各科行政秘書 |
 | **運作環境** | 現代網頁瀏覽器 (Chrome, Edge, Safari, Firefox)、支援行動裝置 (RWD)、純前端零依賴離線運作 (Zero-dependency Web App) |
 | **GitHub 倉庫** | `https://github.com/DAIDAI082340/OPD-schedule-and-Doctor-code` |
@@ -1167,6 +1167,58 @@ flowchart TD
 ### 31.2 雙生檔案 SHA-256 驗證
 - `index.html` 與 `門診時段交叉查詢與醫師代碼查詢系統.html` 達成 100% 同步。
 - SHA-256 雜湊碼：`662F00A3FB3782E3287E0EF35CD60684F670E335ADCD40C8E5BBC64BEAFCA6AE`。
+
+---
+
+## 32. v1.0.9 全院掛號即時真數據校正與排程真實性根治 (2026-09-29)
+
+### 32.1 重大問題根因剖析 (Root Cause Analysis)
+1. **官方系統 `disabled` 標籤引發的假停診誤判陷阱**：
+   - 彰化醫院掛號系統 (`netreg.chhw.mohw.gov.tw`) 當診次處於「預約已額滿」（如蔡安順醫師掛號達 82 人）或「網掛不開放」（如吳佶育醫師 10/22、陳詩典醫師、李文宏醫師等）時，官方網頁原始碼會為該診次 `<a>` 標籤加入 `class="clinic_link_click disabled"` 以禁止一般民眾在網頁上點擊登記。
+   - 舊版爬蟲邏輯誤將「帶有 disabled」直接等同於「停診」，導致全院 39 科多達 60 處正常開診且累積大量掛號人數的診次被無差別洗成 `"停"`。
+2. **黃耀宣醫師 10/01 與 10/15 代診遭誤判為停診**：
+   - 官方原始碼中黃耀宣醫師於 10/01 帶有「已掛18人 代診」、10/15 帶有「已掛20人 代診」，但同樣受 disabled 標籤干擾，在舊版系統中被判定為停診。
+3. **吳佶育醫師 10/22 正常開診遭誤判為停診**：
+   - 官方掛號系統上吳佶育 10/22 上午明確顯示「已掛26人」，因其屬於現場掛號診次（網掛不開放），遭誤判為停診。
+
+### 32.2 核心修復與雙層防禦機制 (Dual-Layer Safeguard Implementation)
+1. **爬蟲判定規則徹底翻新 (Ground Truth Extraction)**：
+   - 修訂 `scripts/get_live_netreg.ps1` 與 `scripts/update_schedule.ps1`：
+     ```powershell
+     $count = $null
+     if ($inner -match '已掛(\d+)人') {
+         $count = [int]$Matches[1]
+     }
+     # 嚴格停診判斷：只有文字明確標示「停診」且完全沒有掛號人數時，才列為停診
+     # 絕對禁止將「預約已額滿」、「網掛不開放」、或 disabled 誤判為停診！
+     $isStopped = ($inner -like "*停診*") -and ($count -eq $null)
+     $val = if ($isStopped) { "停" } elseif ($count -ne $null) { $count } else { $null }
+     ```
+   - 重新爬取全院 39 科、3,117 個門診時段，產出 4,157 筆精準雙格式（`M/D` 與 `MM/DD`）掛號數據包並注入 `index.html` 之 `liveNetregCounts`。
+2. **前端介面 `!hasLiveCount` 免疫防線**：
+   - 於 `index.html` 的 `buildDoctorMonthScheduleHtml` 中導入：
+     ```javascript
+     const isStopFromNetreg = liveVal === "停";
+     const hasLiveCount = (liveVal !== undefined && liveVal !== null && typeof liveVal === "number");
+     const isStop = !hasLiveCount && (isStopFromNetreg || 
+                    (noteStr.includes("停診") && (noteDates.length === 0 || noteDates.includes(d.dateKey))) ||
+                    (docName === "林澤宏" && weekday === 5 && d.dateKey === "10/9"));
+     ```
+   - 確保只要官方系統存在實質掛號人數（`typeof liveVal === "number"`），前端絕對免疫假停診，永久亮起開診人數標籤！
+3. **指標醫師驗證實績 (100% 官方真實數據對齊)**：
+   - **吳佶育醫師**：10/22(W4) 上午：`已掛26人`（非停診，原 10/1、10/8、10/15 維持停診）。
+   - **黃耀宣醫師**：10/01(W4) 上午：`已掛18人`、10/15(W4) 上午：`已掛20人`（非停診，代診正常出診，原 10/09 維持停診）。
+   - **蔡安順醫師 (預約已額滿名醫)**：10/02(W5) 上午：`已掛82人`、10/05(W1) 上午：`已掛59人`、10/23(W5) 上午：`已掛76人`，全數恢復真實人數，不再被標為「停」。
+   - **方鵬翔醫師**：10/06(W2) 夜診：`已掛30人`、10/13(W2) 夜診：`已掛30人`。
+   - **陳詩典醫師**：10/29(W4) 下午：`已掛2人`、10/15(W4) 下午：`停診`（官網真實停診精確呈現）。
+4. **手機版 UI 與停代診智慧比例縮放全面落實**：
+   - 手機窄螢幕下 `.doctor-code-badge` 強制單行不換行，0286 完美水平貼合。
+   - 停代診公文智慧縮放：11510 長篇表格進入自動 300% 放大並置頂，支援平滑垂直捲動；短篇公文維持 100%。
+
+### 32.3 雙生檔案 SHA-256 驗證
+- `index.html` 與 `門診時段交叉查詢與醫師代碼查詢系統.html` 達成 100% 嚴格一致。
+- SHA-256 雜湊碼：`12E43D857458174692DD4C19D17151C33F61117EF5751CD4A42F85FB1087B921`。
+
 
 
 

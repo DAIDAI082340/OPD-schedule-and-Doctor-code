@@ -56,13 +56,17 @@ foreach ($d in $depts) {
             } else { continue }
             
             $slotLabel = if ($slotMap.ContainsKey($apn)) { $slotMap[$apn] } else { "上午" }
-            $isStopped = ($inner -like "*停診*") -or ($inner -like "*停掛*") -or ($fullA -like "*disabled*")
-            $isSubstitute = ($inner -like "*代診*")
             
+            # 優先提取官方真實掛號人數（無論是否額滿或網掛不開放）
             $count = $null
             if ($inner -match '已掛(\d+)人') {
                 $count = [int]$Matches[1]
             }
+
+            # 嚴格停診判斷：只有文字明確包含「停診」且完全沒有掛號人數時，才列為停診
+            # 絕對禁止將「預約已額滿」、「網掛不開放」或 disabled 誤判為停診！
+            $isStopped = ($inner -like "*停診*") -and ($count -eq $null)
+            $isSubstitute = ($inner -like "*代診*")
             
             $mapKey = "$docName|$dateKey|$slotLabel"
             $liveMap[$mapKey] = @{
