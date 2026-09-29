@@ -137,6 +137,7 @@ Write-Host " -> 成功解析全院臨床專科: 共 $($depts.Count) 個科別" -
 Write-Host "[4/4] 正在遍歷各科門診時刻表與停診狀態 (共 $($depts.Count) 科)..." -ForegroundColor Yellow
 $slotMap = @{ "1" = "上午"; "2" = "下午"; "3" = "夜診" }
 $allRawSlots = @()
+$liveCountsMap = @{}
 
 foreach ($d in $depts) {
     $dCode = $d.code
@@ -178,6 +179,18 @@ foreach ($d in $depts) {
             $isSubstitute = ($inner -like "*代診*")
             $slotLabel = if ($slotMap.ContainsKey($apn)) { $slotMap[$apn] } else { "上午" }
             $roomLabel = if ($roomNo.EndsWith("診")) { $roomNo } else { "${roomNo}診" }
+
+            $count = $null
+            if ($inner -match '已掛(\d+)人') {
+                $count = [int]$Matches[1]
+            }
+            $cleanKey = "$month/$day"
+            $padKey = "{0:D2}/{1:D2}" -f $month, $day
+            $val = if ($isStopped) { "停" } else { $count }
+            if ($val -ne $null) {
+                $liveCountsMap["$docName|$cleanKey|$slotLabel"] = $val
+                $liveCountsMap["$docName|$padKey|$slotLabel"] = $val
+            }
 
             $allRawSlots += [PSCustomObject]@{
                 dept_code = $dCode
@@ -490,6 +503,12 @@ $indexContent = [regex]::Replace($indexContent, "const officialNotice =[\s\S]*?;
 $indexContent = [regex]::Replace($indexContent, "const masterData = \[[^;]*?\];", $masterJsBlock)
 # 替換 schedules
 $indexContent = [regex]::Replace($indexContent, "const schedules = \[[^;]*?\];", $scheduleJsBlock)
+# 替換 liveNetregCounts
+if ($liveCountsMap.Count -gt 0) {
+    $liveJson = ($liveCountsMap | ConvertTo-Json -Compress)
+    $indexContent = [regex]::Replace($indexContent, "const liveNetregCounts = \{[\s\S]*?\};", "const liveNetregCounts = $liveJson;")
+    Write-Host " -> 成功更新 liveNetregCounts (共 $($liveCountsMap.Count) 筆官方即時掛號數據)" -ForegroundColor Green
+}
 
 [System.IO.File]::WriteAllText($indexPath, $indexContent, [System.Text.Encoding]::UTF8)
 Write-Host " -> 成功更新 index.html" -ForegroundColor Green
