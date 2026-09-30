@@ -1455,27 +1455,40 @@
       }
     }
 
-    /* 官方停代診公告按鈕與角標 */
+    /* 官方停代診公告按鈕與即時同步按鈕（垂直上下堆疊同底色規範） */
+    .header-action-col {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      align-items: stretch;
+      min-width: 220px;
+    }
     .btn-official-notice {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
-      padding: 9px 18px;
+      padding: 8px 16px;
       background: linear-gradient(135deg, #f8fafc 0%, #eef3f6 100%);
       border: 1.5px solid #cbd5e1;
       color: #34495e;
       border-radius: 20px;
-      font-size: 0.95rem;
-      font-weight: 700;
+      font-size: 0.92rem;
+      font-weight: 800;
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(52, 73, 94, 0.08);
       transition: all 0.2s ease;
+      white-space: nowrap !important;
+      text-decoration: none;
     }
     .btn-official-notice:hover {
       background: linear-gradient(135deg, #eef3f6 0%, #e2eaf0 100%);
       border-color: #94a3b8;
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(52, 73, 94, 0.16);
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
     }
     .notice-badge-dot {
       display: inline-block;
@@ -2031,19 +2044,19 @@
       border-radius: 4px;
     }
     .reg-date-item.holiday-stop-item {
-      background: rgba(239, 68, 68, 0.08) !important;
-      border: 1px solid rgba(239, 68, 68, 0.25) !important;
-      padding: 2px 4px !important;
-      margin: 1px 0 !important;
+      background: transparent !important;
+      border: none !important;
+      padding: 1px 4px !important;
+      margin: 0 !important;
     }
     .reg-date-item.holiday-stop-item .reg-date-label {
-      color: #b91c1c !important;
+      color: #0E5E6F !important;
     }
     .reg-date-item.holiday-stop-item .reg-stop-val {
-      color: #dc2626 !important;
-      background: #fee2e2 !important;
-      padding: 1px 5px !important;
-      border-radius: 4px !important;
+      color: #b91c1c !important;
+      background: transparent !important;
+      padding: 0 !important;
+      border-radius: 0 !important;
     }
     .reg-date-label {
       font-weight: 900 !important;
@@ -2131,10 +2144,14 @@
           <span class="nav-tab-title">醫師/科別代碼查詢</span>
         </button>
       </div>
-      <div>
+      <div class="header-action-col">
         <button type="button" class="btn-official-notice" onclick="openNoticeModal()" title="點擊檢視彰化醫院官方最新停代診公文大圖">
           <span class="notice-badge-dot"></span>
           <span>📋 官方醫師停診、代診公告</span>
+        </button>
+        <button type="button" id="btnGlobalLiveSync" class="btn-official-notice" onclick="triggerGlobalLiveSync(this)" title="立即連線同步衛福部最新即時掛號人數與全院最新停代診異動快訊">
+          <span id="globalSyncIcon" style="font-size: 0.95rem; color: #0284c7; display: inline-block;">🔄</span>
+          <span id="globalSyncText">即時同步官方數據</span>
         </button>
       </div>
     </div>
@@ -2396,18 +2413,19 @@
     }
 
     // 門診大課表膠囊與彈窗專用：解析特定看診日、代診日、加診日與停診標籤，嚴格 white-space: nowrap，保證單行原子化、絕無折行段落、字體 100% 自動等大
-    function renderPillBadgesHtml(note) {
-      if (!note) return "";
+    function renderPillBadgesHtml(note, extraStopDates) {
+      if (!note && (!extraStopDates || extraStopDates.length === 0)) return "";
+      const noteStr = note || "";
 
       // 1. 檢查特定看診日（例如 9/11.25看診、9/12.26看診、9/11.9/25看診、10/20起看診）
       let specificDateText = "";
-      if (note.includes("看診") || note.includes("開診")) {
-        const m = note.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*(?:起)?)\s*(?:看診|開診)/);
+      if (noteStr.includes("看診") || noteStr.includes("開診")) {
+        const m = noteStr.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*(?:起)?)\s*(?:看診|開診)/);
         if (m) {
           specificDateText = m[1] + "看診";
         }
-      } else if (/\d{1,2}\/\d{1,2}/.test(note) && !note.includes("停診") && !note.includes("代診") && !note.includes("加診")) {
-        const m = note.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*)/);
+      } else if (/\d{1,2}\/\d{1,2}/.test(noteStr) && !noteStr.includes("停診") && !noteStr.includes("代診") && !noteStr.includes("加診")) {
+        const m = noteStr.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*)/);
         if (m) {
           specificDateText = m[1] + "看診";
         }
@@ -2415,21 +2433,21 @@
 
       // 2. 檢查加診日 (例如 10/20加診、10/17加診)
       let addedDateText = "";
-      if (note.includes("加診") || note.includes("新增")) {
-        const addedM = note.match(/(?:新增)?(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*)?(?:上午|下午|夜診|門診)?\s*加診/);
+      if (noteStr.includes("加診") || noteStr.includes("新增")) {
+        const addedM = noteStr.match(/(?:新增)?(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*)?(?:上午|下午|夜診|門診)?\s*加診/);
         if (addedM && addedM[1]) {
           addedDateText = addedM[1] + "加診";
         } else {
-          const m = note.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*)\s*加診/);
+          const m = noteStr.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*)\s*加診/);
           if (m) addedDateText = m[1] + "加診";
-          else if (note.includes("加診")) addedDateText = "加診";
+          else if (noteStr.includes("加診")) addedDateText = "加診";
         }
       }
 
       // 3. 檢查代診日（方案 1 專屬：例如 10/1代診、10/9代診、10/1.10/15代診、10/17代診）
       let substituteText = "";
-      if (note.includes("代診")) {
-        const m = note.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*)\s*代診/);
+      if (noteStr.includes("代診")) {
+        const m = noteStr.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*)\s*代診/);
         if (m) {
           substituteText = m[1] + "代診";
         } else {
@@ -2439,12 +2457,12 @@
 
       // 4. 檢查停診（例如 9/26停診、10/1.10/8停診、10/1起停診）
       let stopDateText = "";
-      if (note.includes("停診")) {
-        const m = note.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*(?:起)?\s*停診)/);
+      if (noteStr.includes("停診")) {
+        const m = noteStr.match(/(\d{1,2}\/\d{1,2}(?:[\.\d\/]+)*(?:起)?\s*停診)/);
         if (m) {
           stopDateText = m[1].replace(/\s+/g, "");
         } else {
-          let pureStopNote = note;
+          let pureStopNote = noteStr;
           if (specificDateText) {
             pureStopNote = pureStopNote.replace(specificDateText, "").replace("看診", "").replace("開診", "").trim();
           }
@@ -2460,9 +2478,9 @@
       }
 
       // 5. 檢查網掛不開放
-      const isWebClosed = note.includes("網掛不開放") || note.includes("網路不開放");
+      const isWebClosed = noteStr.includes("網掛不開放") || noteStr.includes("網路不開放");
 
-      // 6. 組合輸出（各標籤垂直向下排列、開頭絕對平行齊頭、各層圖文 gap: 3px、尾端隨字結束不拉長、字體 100% 等大 0.68rem）
+      // 6. 組合輸出（停診警示標籤居上優先醒目、特定看診/代診/加診於下，開頭絕對平行齊頭）
       const badges = [];
 
       // 網掛不開放徽章
@@ -2470,14 +2488,22 @@
         badges.push(`<span class="pill-suspension-badge" style="background:#dc2626 !important;"><span class="badge-icon">⚠️</span><span class="badge-text">網掛不開放</span></span>`);
       }
 
+      // 動態即時停診徽章（例如 10/10停診、10/09 國定假日停診，疊加於最上層優先警示）
+      if (Array.isArray(extraStopDates) && extraStopDates.length > 0) {
+        extraStopDates.forEach(sd => {
+          const sText = sd.includes("停診") ? sd : `${sd}停診`;
+          badges.push(`<span class="pill-suspension-badge" style="background:#dc2626 !important;"><span class="badge-icon">⚠️</span><span class="badge-text">${sText}</span></span>`);
+        });
+      }
+
+      // 原始排班之停診徽章
+      if (stopDateText) {
+        badges.push(`<span class="pill-suspension-badge"><span class="badge-icon">⚠️</span><span class="badge-text">${stopDateText}</span></span>`);
+      }
+
       // 加診徽章 (翡翠湖水綠 #088F89 + 時鐘圓盤鏤空指針十字加號 SVG - 100% 官方標準復刻)
       if (addedDateText) {
         badges.push(`<span class="pill-added-badge" style="background:#088F89 !important;"><span class="badge-icon"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" style="flex-shrink:0;"><path fill="#FFFFFF" fill-rule="evenodd" clip-rule="evenodd" d="M10 2C5.58 2 2 5.58 2 10c0 4.42 3.58 8 8 8 1.15 0 2.24-.24 3.22-.68-.14-.58-.22-1.19-.22-1.82 0-3.37 2.33-6.19 5.48-6.9C17.76 4.96 14.18 2 10 2zm1 4a1 1 0 0 0-2 0v4.25c0 .35.18.67.48.85l3.25 1.95a1 1 0 0 0 1.02-1.72l-2.75-1.65V6z"/><path fill="#FFFFFF" d="M18 13.5a1.25 1.25 0 0 0-1.25 1.25v2H14.75a1.25 1.25 0 1 0 0 2.5h2v2a1.25 1.25 0 1 0 2.5 0v-2h2a1.25 1.25 0 1 0 0-2.5h-2v-2c0-.69-.56-1.25-1.25-1.25z"/></svg></span><span class="badge-text">${addedDateText}</span></span>`);
-      }
-
-      // 特定看診日徽章
-      if (specificDateText) {
-        badges.push(`<span class="pill-specific-date-badge"><span class="badge-icon">📅</span><span class="badge-text">${specificDateText}</span></span>`);
       }
 
       // 代診徽章 (沉穩琥珀橙 #C66E00 + 人形平起實心箭頭 SVG - 100% 官方標準復刻)
@@ -2485,9 +2511,9 @@
         badges.push(`<span class="pill-substitute-badge" style="background:#C66E00 !important;"><span class="badge-icon"><svg viewBox="0 0 24 24" width="13" height="13" fill="#FFFFFF" style="flex-shrink:0;"><circle cx="7.5" cy="6.5" r="3.5"/><path d="M 2.5 19 C 2.5 14.5 4.5 12 7.5 12 C 9.5 12 11.2 13 12.2 14.5 C 11.5 15.3 11 16.4 11 17.5 L 11 19 Z"/><path d="M 13 16.5 L 18 16.5 L 18 14 L 22.5 17.5 L 18 21 L 18 18.5 L 13 18.5 Z"/></svg></span><span class="badge-text">${substituteText}</span></span>`);
       }
 
-      // 停診徽章
-      if (stopDateText) {
-        badges.push(`<span class="pill-suspension-badge"><span class="badge-icon">⚠️</span><span class="badge-text">${stopDateText}</span></span>`);
+      // 特定看診日徽章
+      if (specificDateText) {
+        badges.push(`<span class="pill-specific-date-badge"><span class="badge-icon">📅</span><span class="badge-text">${specificDateText}</span></span>`);
       }
 
       if (badges.length > 1) {
@@ -3446,8 +3472,14 @@
       // 收集本次比對範圍內之停診/異動提醒 (基準醫師 + 比對目標醫師)
       const suspensionAlerts = [];
       docSlots.forEach(s => {
-        if (s.note && isScheduleAlert(s.note)) {
+        const liveStops = getLiveStopsForSlot(s.doctor, s.dept_code, s.weekday, s.slot, s.note);
+        if ((s.note && isScheduleAlert(s.note)) || liveStops.length > 0) {
           const dObj = masterData.find(m => m.deptCode === s.dept_code);
+          let combinedNote = s.note || "";
+          if (liveStops.length > 0) {
+            const stopStr = `${liveStops.join(".")}停診`;
+            combinedNote = combinedNote ? `${stopStr} (原 ${combinedNote})` : stopStr;
+          }
           suspensionAlerts.push({
             doctor: s.doctor,
             dept: dObj ? dObj.dept : s.dept_code,
@@ -3457,13 +3489,19 @@
             slot: formatSlot(s.slot),
             slotRank: slotRank[s.slot] || 1,
             room: s.room,
-            note: s.note,
+            note: combinedNote,
             isBase: true
           });
         }
       });
       allTargetSchedules.forEach(s => {
-        if (s.note && isScheduleAlert(s.note)) {
+        const liveStops = getLiveStopsForSlot(s.doctor, s.dept_code, s.weekday, s.slot, s.note);
+        if ((s.note && isScheduleAlert(s.note)) || liveStops.length > 0) {
+          let combinedNote = s.note || "";
+          if (liveStops.length > 0) {
+            const stopStr = `${liveStops.join(".")}停診`;
+            combinedNote = combinedNote ? `${stopStr} (原 ${combinedNote})` : stopStr;
+          }
           suspensionAlerts.push({
             doctor: s.doctor,
             dept: s.dept_name,
@@ -3473,7 +3511,7 @@
             slot: formatSlot(s.slot),
             slotRank: slotRank[s.slot] || 1,
             room: s.room,
-            note: s.note,
+            note: combinedNote,
             isBase: false
           });
         }
@@ -3613,13 +3651,22 @@
 
           // 若有基準醫師/科別出診，放於頂部（深墨青海藍 #284E59，白字加粗無邊框）
           baseMatches.forEach(bm => {
-            const hasStop = bm.note && bm.note.includes("停診");
+            const liveStops = getLiveStopsForSlot(bm.doctor, bm.dept_code, bm.weekday, bm.slot, bm.note);
+            const extraStops = [...liveStops];
+            if (sl === "夜診" || (bm.slot && (bm.slot.includes("夜") || bm.slot.includes("晚")))) {
+              const upcomingHolidays = getUpcomingHolidaysForNightSlot(bm.weekday, bm.slot);
+              if (upcomingHolidays.length > 0) {
+                const datesStr = upcomingHolidays.map(h => h.formattedDate).join(", ");
+                extraStops.unshift(`${datesStr} 國定假日`);
+              }
+            }
+            const hasStop = (bm.note && bm.note.includes("停診")) || extraStops.length > 0;
             const hasSpecificDate = bm.note && (bm.note.includes("看診") || bm.note.includes("開診") || /\d{1,2}\/\d{1,2}/.test(bm.note));
             const hasSub = bm.note && bm.note.includes("代診");
             const nonStopNote = (bm.note && !hasStop && !hasSpecificDate && !hasSub) ? " / " + bm.note : "";
             const roomText = `(${bm.room || "診間"}${nonStopNote})`;
             const dObj = masterData.find(m => m.deptCode === bm.dept_code);
-            const badgesHtml = renderPillBadgesHtml(bm.note);
+            const badgesHtml = renderPillBadgesHtml(bm.note, extraStops);
             html += `<span class="matrix-doc-pill base-doc-pill clickable ${hasStop ? 'has-suspension' : ''} ${hasSub ? 'has-substitute' : ''}" style="background:${baseDoctorColor.bg}; border:none; color:${baseDoctorColor.text}; box-shadow:${baseDoctorColor.shadow};" onclick="showDoctorScheduleModal('${bm.doctor}', '${bm.dept_code}', '${dObj ? dObj.dept : ''}', '${findDocCode(bm.doctor) || ''}')" title="點擊查看 ${bm.doctor} 醫師每週門診表">
               <span class="matrix-doc-info">
                 <span class="matrix-doc-name">${bm.doctor}</span>
@@ -3632,12 +3679,21 @@
           // 比對醫師依序放於下方（使用彩虹馬卡龍色彩池，微軟正黑體粗體，細緻邊框浮凸感）
           targetMatches.forEach(td => {
             const pal = docColorMap.get(`${td.dept_code}___${td.doctor}`) || departmentPalette[0];
-            const hasStop = td.note && td.note.includes("停診");
+            const liveStops = getLiveStopsForSlot(td.doctor, td.dept_code, td.weekday, td.slot, td.note);
+            const extraStops = [...liveStops];
+            if (sl === "夜診" || (td.slot && (td.slot.includes("夜") || td.slot.includes("晚")))) {
+              const upcomingHolidays = getUpcomingHolidaysForNightSlot(td.weekday, td.slot);
+              if (upcomingHolidays.length > 0) {
+                const datesStr = upcomingHolidays.map(h => h.formattedDate).join(", ");
+                extraStops.unshift(`${datesStr} 國定假日`);
+              }
+            }
+            const hasStop = (td.note && td.note.includes("停診")) || extraStops.length > 0;
             const hasSpecificDate = td.note && (td.note.includes("看診") || td.note.includes("開診") || /\d{1,2}\/\d{1,2}/.test(td.note));
             const hasSub = td.note && td.note.includes("代診");
             const nonStopNote = (td.note && !hasStop && !hasSpecificDate && !hasSub) ? " / " + td.note : "";
             const roomText = `(${td.room || "診間"}${nonStopNote})`;
-            const badgesHtml = renderPillBadgesHtml(td.note);
+            const badgesHtml = renderPillBadgesHtml(td.note, extraStops);
             html += `<span class="matrix-doc-pill clickable ${hasStop ? 'has-suspension' : ''} ${hasSub ? 'has-substitute' : ''}" style="background:${pal.bg}; border:${pal.border || 'none'}; color:${pal.text}; box-shadow:${pal.shadow};" onclick="showDoctorScheduleModal('${td.doctor}', '${td.dept_code}', '${td.dept_name}', '${findDocCode(td.doctor) || ''}')" title="點擊查看 ${td.doctor} 醫師每週門診表">
               <span class="matrix-doc-info">
                 <span class="matrix-doc-name">${td.doctor}</span>
@@ -3901,6 +3957,44 @@
       return res;
     }
 
+    // 智慧即時感知引擎：查詢特定醫師與時段在衛福部即時網掛中是否有異動為「停診」之日期
+    function getLiveStopsForSlot(docName, deptCode, weekday, slot, existingNote) {
+      if (typeof liveNetregCounts === "undefined" || !liveNetregCounts) return [];
+      const dates = getUpcomingFourDates(weekday);
+      const altSlot = slot === "上午" ? "上午診" : (slot === "下午" ? "下午診" : ((slot && slot.includes("夜")) ? "夜診" : slot));
+      const stops = [];
+      const noteStr = existingNote || "";
+
+      dates.forEach(d => {
+        const cleanDateKey = `${d.monthNum}/${d.dayNum}`;
+        const kd1 = `${deptCode}|${docName}|${d.dateKey}|${slot}`;
+        const kd2 = `${deptCode}|${docName}|${cleanDateKey}|${slot}`;
+        const kd3 = `${deptCode}|${docName}|${d.dateKey}|${altSlot}`;
+        const kd4 = `${deptCode}|${docName}|${cleanDateKey}|${altSlot}`;
+        const k1 = `${docName}|${d.dateKey}|${slot}`;
+        const k2 = `${docName}|${cleanDateKey}|${slot}`;
+        const k3 = `${docName}|${d.dateKey}|${altSlot}`;
+        const k4 = `${docName}|${cleanDateKey}|${altSlot}`;
+
+        const liveVal = liveNetregCounts[kd1] !== undefined ? liveNetregCounts[kd1] :
+                       (liveNetregCounts[kd2] !== undefined ? liveNetregCounts[kd2] :
+                       (liveNetregCounts[kd3] !== undefined ? liveNetregCounts[kd3] :
+                       (liveNetregCounts[kd4] !== undefined ? liveNetregCounts[kd4] :
+                       (liveNetregCounts[k1] !== undefined ? liveNetregCounts[k1] :
+                       (liveNetregCounts[k2] !== undefined ? liveNetregCounts[k2] :
+                       (liveNetregCounts[k3] !== undefined ? liveNetregCounts[k3] : liveNetregCounts[k4]))))));
+
+        if (liveVal === "停") {
+          // 檢查原排班備註是否已經標註該停診日；若原備註已有「停診」且包含該日期，則不重複新增
+          const alreadyNotedStop = noteStr.includes("停診") && (noteStr.includes(d.dateKey) || noteStr.includes(cleanDateKey));
+          if (!alreadyNotedStop) {
+            stops.push(d.dateKey);
+          }
+        }
+      });
+      return stops;
+    }
+
     // 從備註中提取所有 M/D 日期格式
     function extractDatesFromNote(text) {
       if (!text) return [];
@@ -3979,7 +4073,7 @@
                        (docName === "林澤宏" && weekday === 5 && d.dateKey === "10/9")));
         
         if (isStop) {
-          const stopLabel = isHolidayNightStop ? "停診 (國定假日)" : "停診";
+          const stopLabel = isHolidayNightStop ? "國定假日停診" : "停診";
           const itemClass = isHolidayNightStop ? "reg-date-item holiday-stop-item" : "reg-date-item";
           return `
             <div class="${itemClass}" data-date="${d.dateKey}" data-clean-date="${cleanDateKey}" data-slot="${slot}" data-alt-slot="${altSlot}" data-dept="${deptCode}" data-doc="${docName}">
@@ -4053,7 +4147,13 @@
                        (freshMap[k3] !== undefined ? freshMap[k3] : freshMap[k4]))))));
 
           const valEl = item.querySelector(".reg-count-val");
-          if (valEl && liveVal !== undefined && liveVal !== null && typeof liveVal === "number") {
+          if (liveVal === "停") {
+            if (valEl) {
+              valEl.className = "reg-stop-val";
+              valEl.textContent = "停診";
+              updatedItemsCount++;
+            }
+          } else if (valEl && liveVal !== undefined && liveVal !== null && typeof liveVal === "number") {
             const oldVal = parseInt(valEl.getAttribute("data-count"), 10);
             if (oldVal !== liveVal) {
               valEl.textContent = `已掛${liveVal}人`;
@@ -4077,6 +4177,53 @@
         if (statusEl) {
           statusEl.innerHTML = `<span style="color:#475569;">官方掛號數據已即時呈現（最後同步：${timeStr}）</span>`;
         }
+      }
+    }
+
+    // 全域首頁即時同步官方數據：免進入醫師彈窗，一鍵連線刷新全院最新已掛人數與停代診異動快訊
+    async function triggerGlobalLiveSync(btn) {
+      const icon = document.getElementById("globalSyncIcon");
+      const text = document.getElementById("globalSyncText");
+      if (btn) btn.disabled = true;
+      if (icon) {
+        icon.style.animation = "spin 0.8s linear infinite";
+      }
+      if (text) text.textContent = "同步官方數據中...";
+
+      try {
+        const res = await fetch("live_registration.json?_t=" + Date.now(), { cache: "no-store" });
+        if (res.ok) {
+          const freshMap = await res.json();
+          if (typeof liveNetregCounts !== "undefined") {
+            Object.assign(liveNetregCounts, freshMap);
+          } else {
+            window.liveNetregCounts = freshMap;
+          }
+        }
+      } catch (e) {
+        console.warn("無法取得最新掛號快照，維持目前資料庫數據", e);
+      }
+
+      // 若當前大課表已有查詢結果，原地重新執行以動態更新標籤與停診狀態
+      if (typeof doQuery === "function") {
+        const resultArea = document.getElementById("resultArea");
+        if (resultArea && resultArea.innerHTML.trim() !== "") {
+          doQuery();
+        }
+      }
+
+      const now = new Date();
+      const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+
+      if (icon) {
+        icon.style.animation = "none";
+      }
+      if (text) {
+        text.textContent = `已同步 (${timeStr})`;
+        setTimeout(() => {
+          text.textContent = "即時同步官方數據";
+          if (btn) btn.disabled = false;
+        }, 3000);
       }
     }
 
@@ -4193,9 +4340,10 @@
                   slotLabel = "夜診";
                 }
 
-                const hasStop = m.note && m.note.includes("停診");
+                const liveStops = getLiveStopsForSlot(m.doctor, m.dept_code, m.weekday, m.slot, m.note);
+                const hasStop = (m.note && m.note.includes("停診")) || liveStops.length > 0;
                 const hasSub = m.note && m.note.includes("代診");
-                const badgesHtml = renderPillBadgesHtml(m.note);
+                const badgesHtml = renderPillBadgesHtml(m.note, liveStops);
                 const monthListHtml = buildDoctorMonthScheduleHtml(m.doctor, m.dept_code, m.weekday, m.slot, m.note);
                 let cardStyle = "";
                 if (hasStop) {
