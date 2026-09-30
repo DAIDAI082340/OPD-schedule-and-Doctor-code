@@ -1315,9 +1315,53 @@ flowchart TD
 
 ---
 
-### 34.5 雙生檔案 SHA-256 驗證
+---
+
+### 34.5 雙生檔案 SHA-256 驗證 (v1.1.0)
 - `index.html` 與 `門診時段交叉查詢與醫師代碼查詢系統.html` 達成 100% 嚴格一致。
 - **SHA-256 雜湊碼**：`BB3D031878B8CCCB880AA07191C3E4DB89BCDC864646873DBB16679DB815429D`。
+
+---
+
+## 35. 彈窗夜診贅詞去化與一個月清單絕對齊頭垂直對齊修復 (v1.1.1 - 2026-09-30)
+
+### 35.1 修復背景與問題根因
+使用者在檢視「李學林 醫師門診時刻表」展開已掛人數後，提出兩項關鍵微調反饋：
+1. **圖 1 彈窗夜診卡片內部紅框「夜診」贅詞去化**：
+   - 原文為 `⚠️ 10/09 國定假日夜診停診`，使用者要求夜診時段已在夜診卡片中，應精簡為 **`⚠️ 10/09 國定假日停診`**。
+2. **圖 2 停診段落錯位鋸齒問題（還原圖 3 規格）**：
+   - 原 `.reg-date-item` 樣式為 `grid-template-columns: 78px auto`，而外層容器 `.one-month-reg-list` 設定為 `align-items: center`。
+   - 因第二欄為 `auto`，每行總寬度各異（如「已掛13人」約 128px、「國定假日停診」約 166px、「停診」約 106px）。
+   - 在置中對齊下，每行依自身寬度各自獨立居中，導致行首日期（第一欄）前後凹凸錯位、左右鋸齒晃動。
+
+### 35.2 修正方案與技術實現
+1. **彈窗卡片警示文字去化**：
+   - 於 `index.html` 彈窗渲染邏輯中，將 `slot-badge-holiday-night` 格式統一為：
+     `⚠️ ${datesStr} 國定假日停診`。
+2. **雙欄固定寬度排版（絕對垂直齊頭對齊）**：
+   - 將 `.reg-date-item` 設定為固定雙欄與固定總寬：
+     ```css
+     .reg-date-item {
+       display: grid !important;
+       grid-template-columns: 82px 92px !important;
+       width: 174px !important;
+       align-items: center !important;
+       box-sizing: border-box !important;
+       padding: 1.5px 0 !important;
+       margin: 0 auto !important;
+       white-space: nowrap !important;
+       ...
+     }
+     ```
+   - 第一欄（日期）固定 82px，行首完全貼齊；第二欄（狀態文字）固定 92px，完全垂直對齊；每行總寬均為 174px，於置中容器內嚴格重合。
+
+### 35.3 驗證與雙生檔案同步
+- **無頭瀏覽器視覺截圖驗證**：已生成 `preview_alignment_and_holiday_badge.png`，確認週五與週六所有段落及標籤均 100% 垂直對齊。
+- **雙生檔案 SHA-256 一致性校驗**：
+  - `index.html`：`9CC33C2E83A82D0DC49F70B8C4743CA8C883A847DE50ADFF343B329340846C5B`
+  - `門診時段交叉查詢與醫師代碼查詢系統.html`：`9CC33C2E83A82D0DC49F70B8C4743CA8C883A847DE50ADFF343B329340846C5B`
+  - 兩者 SHA-256 達成 100% 絕對一致。
+
 
 
 
