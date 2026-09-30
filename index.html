@@ -1989,7 +1989,7 @@
       color: #047857 !important;
     }
 
-    /* 國定假日夜診停診警示膠囊標籤（前方動態顯示日期如 ⚠️ 10/09 國定假日夜診停診） */
+    /* 國定假日停診警示膠囊標籤（前方動態顯示日期如 ⚠️ 10/09 國定假日停診） */
     .slot-badge-holiday-night {
       display: inline-flex;
       align-items: center;
@@ -2027,7 +2027,8 @@
     }
     .reg-date-item {
       display: grid !important;
-      grid-template-columns: 78px auto !important;
+      grid-template-columns: 82px 92px !important;
+      width: 174px !important;
       align-items: center !important;
       font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif !important;
       font-size: 0.85rem !important;
@@ -2035,10 +2036,12 @@
       color: #0E5E6F !important;
       background: transparent !important;
       border: none !important;
-      padding: 1px 4px !important;
+      padding: 1.5px 0 !important;
+      margin: 0 auto !important;
       line-height: 1.35 !important;
       white-space: nowrap !important;
       box-shadow: none !important;
+      box-sizing: border-box !important;
       -webkit-font-smoothing: subpixel-antialiased !important;
       text-rendering: geometricPrecision !important;
       border-radius: 4px;
@@ -2046,8 +2049,8 @@
     .reg-date-item.holiday-stop-item {
       background: transparent !important;
       border: none !important;
-      padding: 1px 4px !important;
-      margin: 0 !important;
+      padding: 1.5px 0 !important;
+      margin: 0 auto !important;
     }
     .reg-date-item.holiday-stop-item .reg-date-label {
       color: #0E5E6F !important;
@@ -4352,13 +4355,13 @@
                   cardStyle = "border: 2px solid #C66E00; position:relative;";
                 }
 
-                // 國定假日夜診停診警示標籤（前方動態顯示日期如 ⚠️ 10/09 國定假日夜診停診）
+                // 國定假日停診警示標籤（夜診時段前方動態顯示日期如 ⚠️ 10/09 國定假日停診，去化夜診贅詞）
                 let holidayNightBadgeHtml = "";
                 if (sl === "夜診" || (m.slot && (m.slot.includes("夜") || m.slot.includes("晚")))) {
                   const upcomingHolidays = getUpcomingHolidaysForNightSlot(m.weekday, m.slot);
                   if (upcomingHolidays.length > 0) {
                     const datesStr = upcomingHolidays.map(h => h.formattedDate).join(", ");
-                    holidayNightBadgeHtml = `<div class="slot-badge-holiday-night"><span>⚠️ ${datesStr} 國定假日夜診停診</span></div>`;
+                    holidayNightBadgeHtml = `<div class="slot-badge-holiday-night"><span>⚠️ ${datesStr} 國定假日停診</span></div>`;
                   }
                 }
 
