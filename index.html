@@ -1976,6 +1976,26 @@
       color: #047857 !important;
     }
 
+    /* 國定假日夜診停診警示膠囊標籤（前方動態顯示日期如 ⚠️ 10/09 國定假日夜診停診） */
+    .slot-badge-holiday-night {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+      color: #ffffff !important;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 12px;
+      margin: 4px auto 5px auto;
+      width: fit-content;
+      box-shadow: 0 2px 5px rgba(185, 28, 28, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      white-space: nowrap !important;
+      word-break: keep-all !important;
+      letter-spacing: 0.02em;
+    }
+
     /* 接下來一個月含日期已掛人數樣式（深海藍湖水色 #0E5E6F、微軟正黑粗體 900、無底色、雙欄固定齊頭對齊） */
     .one-month-reg-list {
       display: none;
@@ -1994,7 +2014,7 @@
     }
     .reg-date-item {
       display: grid !important;
-      grid-template-columns: 78px 58px !important;
+      grid-template-columns: 78px auto !important;
       align-items: center !important;
       font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif !important;
       font-size: 0.85rem !important;
@@ -2002,12 +2022,28 @@
       color: #0E5E6F !important;
       background: transparent !important;
       border: none !important;
-      padding: 1px 0 !important;
+      padding: 1px 4px !important;
       line-height: 1.35 !important;
       white-space: nowrap !important;
       box-shadow: none !important;
       -webkit-font-smoothing: subpixel-antialiased !important;
       text-rendering: geometricPrecision !important;
+      border-radius: 4px;
+    }
+    .reg-date-item.holiday-stop-item {
+      background: rgba(239, 68, 68, 0.08) !important;
+      border: 1px solid rgba(239, 68, 68, 0.25) !important;
+      padding: 2px 4px !important;
+      margin: 1px 0 !important;
+    }
+    .reg-date-item.holiday-stop-item .reg-date-label {
+      color: #b91c1c !important;
+    }
+    .reg-date-item.holiday-stop-item .reg-stop-val {
+      color: #dc2626 !important;
+      background: #fee2e2 !important;
+      padding: 1px 5px !important;
+      border-radius: 4px !important;
     }
     .reg-date-label {
       font-weight: 900 !important;
@@ -3746,10 +3782,123 @@
           dateStr: `${mm}/${dd}(W${weekday})`,
           monthNum: mNum,
           dayNum: dNum,
-          dateKey: `${mNum}/${dNum}`
+          dateKey: `${mNum}/${dNum}`,
+          year: d.getFullYear(),
+          formattedDate: `${mm}/${dd}`,
+          isoDate: `${d.getFullYear()}-${mm}-${dd}`
         });
       }
       return dates;
+    }
+
+    // 台灣法定國定假日與補假對照表 (2025 ~ 2027 年)
+    const TAIWAN_NATIONAL_HOLIDAYS = {
+      // 2025 年
+      "2025-01-01": "元旦",
+      "2025-01-27": "農曆小年夜",
+      "2025-01-28": "農曆除夕",
+      "2025-01-29": "春節初一",
+      "2025-01-30": "春節初二",
+      "2025-01-31": "春節初三",
+      "2025-02-28": "和平紀念日",
+      "2025-04-03": "兒童節連假",
+      "2025-04-04": "兒童節",
+      "2025-04-05": "清明節",
+      "2025-05-01": "勞動節",
+      "2025-05-30": "端午連假",
+      "2025-05-31": "端午節",
+      "2025-10-06": "中秋節",
+      "2025-10-10": "國慶日",
+
+      // 2026 年
+      "2026-01-01": "元旦",
+      "2026-02-16": "農曆小年夜",
+      "2026-02-17": "農曆除夕",
+      "2026-02-18": "春節初一",
+      "2026-02-19": "春節初二",
+      "2026-02-20": "春節初三",
+      "2026-02-21": "春節初四",
+      "2026-02-27": "和平紀念日連假",
+      "2026-02-28": "和平紀念日",
+      "2026-04-03": "兒童節補假",
+      "2026-04-04": "兒童節",
+      "2026-04-05": "清明節",
+      "2026-04-06": "清明節補假",
+      "2026-05-01": "勞動節",
+      "2026-06-19": "端午節",
+      "2026-09-25": "中秋節",
+      "2026-10-09": "國慶連假",
+      "2026-10-10": "國慶日",
+
+      // 2027 年
+      "2027-01-01": "元旦",
+      "2027-02-05": "農曆小年夜",
+      "2027-02-06": "農曆除夕",
+      "2027-02-07": "春節初一",
+      "2027-02-08": "春節初二",
+      "2027-02-09": "春節初三",
+      "2027-02-26": "和平紀念日連假",
+      "2027-02-28": "和平紀念日",
+      "2027-04-02": "清明連假",
+      "2027-04-04": "兒童節",
+      "2027-04-05": "清明節",
+      "2027-05-01": "勞動節",
+      "2027-06-09": "端午節",
+      "2027-09-15": "中秋節",
+      "2027-10-08": "國慶連假",
+      "2027-10-10": "國慶日"
+    };
+
+    // 判斷特定日期是否為國定假日
+    function getNationalHolidayName(dateObjOrKey) {
+      if (!dateObjOrKey) return null;
+      if (typeof dateObjOrKey === "object" && dateObjOrKey.isoDate) {
+        if (TAIWAN_NATIONAL_HOLIDAYS[dateObjOrKey.isoDate]) {
+          return TAIWAN_NATIONAL_HOLIDAYS[dateObjOrKey.isoDate];
+        }
+      }
+      let y = new Date().getFullYear();
+      let m = 0, d = 0;
+      if (typeof dateObjOrKey === "string") {
+        if (dateObjOrKey.includes("-")) {
+          return TAIWAN_NATIONAL_HOLIDAYS[dateObjOrKey] || null;
+        }
+        const parts = dateObjOrKey.split("/");
+        if (parts.length === 2) {
+          m = parseInt(parts[0], 10);
+          d = parseInt(parts[1], 10);
+        } else if (parts.length === 3) {
+          y = parseInt(parts[0], 10);
+          m = parseInt(parts[1], 10);
+          d = parseInt(parts[2], 10);
+        }
+      } else if (typeof dateObjOrKey === "object" && dateObjOrKey.monthNum) {
+        y = dateObjOrKey.year || y;
+        m = dateObjOrKey.monthNum;
+        d = dateObjOrKey.dayNum;
+      }
+      const iso = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      return TAIWAN_NATIONAL_HOLIDAYS[iso] || null;
+    }
+
+    // 查詢特定星期與時段在未來 4 週內是否有遇上國定假日（供夜診停診警示標籤動態注入具體日期）
+    function getUpcomingHolidaysForNightSlot(weekday, slot) {
+      if (!slot) return [];
+      const isNight = slot.includes("夜") || slot.includes("晚");
+      if (!isNight) return [];
+      const dates = getUpcomingFourDates(weekday);
+      const res = [];
+      dates.forEach(d => {
+        const hName = getNationalHolidayName(d);
+        if (hName) {
+          res.push({
+            dateKey: d.dateKey,
+            formattedDate: d.formattedDate || `${String(d.monthNum).padStart(2, '0')}/${String(d.dayNum).padStart(2, '0')}`,
+            holidayName: hName
+          });
+        }
+      });
+      return res;
     }
 
     // 從備註中提取所有 M/D 日期格式
@@ -3781,11 +3930,14 @@
         targetDates = allDates.filter(d => noteDates.includes(d.dateKey));
         if (targetDates.length === 0) {
           const firstTarget = noteDates[0];
+          const mNum = parseInt(firstTarget.split('/')[0], 10);
+          const dNum = parseInt(firstTarget.split('/')[1], 10);
           targetDates = [{
             dateStr: `${firstTarget.padStart(5, '0')}(W${weekday})`,
             dateKey: firstTarget,
-            monthNum: parseInt(firstTarget.split('/')[0], 10),
-            dayNum: parseInt(firstTarget.split('/')[1], 10)
+            monthNum: mNum,
+            dayNum: dNum,
+            formattedDate: `${String(mNum).padStart(2, '0')}/${String(dNum).padStart(2, '0')}`
           }];
         }
       }
@@ -3817,15 +3969,22 @@
 
         const isStopFromNetreg = liveVal === "停";
         const hasLiveCount = (liveVal !== undefined && liveVal !== null && typeof liveVal === "number");
-        const isStop = !hasLiveCount && (isStopFromNetreg || 
+        const holidayName = getNationalHolidayName(d);
+        const isNightSlot = slot.includes("夜") || slot.includes("晚");
+        const isHolidayNightStop = isNightSlot && !!holidayName;
+
+        // 國定假日夜診一律為停診（院方核心鐵律，強制優先於官方數據）
+        const isStop = isHolidayNightStop || (!hasLiveCount && (isStopFromNetreg || 
                        (noteStr.includes("停診") && (noteDates.length === 0 || noteDates.includes(d.dateKey))) ||
-                       (docName === "林澤宏" && weekday === 5 && d.dateKey === "10/9"));
+                       (docName === "林澤宏" && weekday === 5 && d.dateKey === "10/9")));
         
         if (isStop) {
+          const stopLabel = isHolidayNightStop ? "停診 (國定假日)" : "停診";
+          const itemClass = isHolidayNightStop ? "reg-date-item holiday-stop-item" : "reg-date-item";
           return `
-            <div class="reg-date-item" data-date="${d.dateKey}" data-clean-date="${cleanDateKey}" data-slot="${slot}" data-alt-slot="${altSlot}" data-dept="${deptCode}" data-doc="${docName}">
+            <div class="${itemClass}" data-date="${d.dateKey}" data-clean-date="${cleanDateKey}" data-slot="${slot}" data-alt-slot="${altSlot}" data-dept="${deptCode}" data-doc="${docName}">
               <span class="reg-date-label">${d.dateStr}</span>
-              <span class="reg-stop-val">停診</span>
+              <span class="reg-stop-val">${stopLabel}</span>
             </div>
           `;
         } else {
@@ -3866,6 +4025,7 @@
         const items = modal.querySelectorAll(".reg-date-item");
         let updatedItemsCount = 0;
         items.forEach(item => {
+          if (item.classList.contains("holiday-stop-item")) return;
           const dKey = item.getAttribute("data-date");
           const cKey = item.getAttribute("data-clean-date");
           const sSlot = item.getAttribute("data-slot");
@@ -4043,9 +4203,21 @@
                 } else if (hasSub) {
                   cardStyle = "border: 2px solid #C66E00; position:relative;";
                 }
+
+                // 國定假日夜診停診警示標籤（前方動態顯示日期如 ⚠️ 10/09 國定假日夜診停診）
+                let holidayNightBadgeHtml = "";
+                if (sl === "夜診" || (m.slot && (m.slot.includes("夜") || m.slot.includes("晚")))) {
+                  const upcomingHolidays = getUpcomingHolidaysForNightSlot(m.weekday, m.slot);
+                  if (upcomingHolidays.length > 0) {
+                    const datesStr = upcomingHolidays.map(h => h.formattedDate).join(", ");
+                    holidayNightBadgeHtml = `<div class="slot-badge-holiday-night"><span>⚠️ ${datesStr} 國定假日夜診停診</span></div>`;
+                  }
+                }
+
                 bodyHtml += `<div class="modal-slot-card ${slotClass}" style="${cardStyle}">
                   <span style="font-size: 0.96rem; font-weight: 800; letter-spacing: 0.04em; color: #1E3545;">${slotLabel}</span>
                   <strong style="font-size: 1.16rem; color: #1E3545; font-weight: 800;">${m.room || "看診中"}</strong>
+                  ${holidayNightBadgeHtml}
                   ${badgesHtml ? `<div style="margin-top: 3px; display:flex; justify-content:center;">${badgesHtml}</div>` : (
                     m.note ? `<span style="font-size: 0.84rem; background: rgba(30,53,69,0.08); color: #1E3545; padding: 2px 7px; border-radius: 4px; font-weight: 800; margin-top: 3px;">${m.note}</span>` : ""
                   )}
