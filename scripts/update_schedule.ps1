@@ -191,8 +191,14 @@ foreach ($d in $depts) {
             $padKey = "{0:D2}/{1:D2}" -f $month, $day
             $val = if ($isStopped) { "停" } elseif ($count -ne $null) { $count } else { $null }
             if ($val -ne $null) {
-                $liveCountsMap["$docName|$cleanKey|$slotLabel"] = $val
-                $liveCountsMap["$docName|$padKey|$slotLabel"] = $val
+                # 複合科別專屬唯一鍵（徹底杜絕跨科特診覆寫）
+                $liveCountsMap["$dCode|$docName|$cleanKey|$slotLabel"] = $val
+                $liveCountsMap["$dCode|$docName|$padKey|$slotLabel"] = $val
+                # 全域醫師鍵回退（優先保留主要門診科別人數）
+                if (-not $liveCountsMap.ContainsKey("$docName|$cleanKey|$slotLabel") -or $dCode.Length -le 2) {
+                    $liveCountsMap["$docName|$cleanKey|$slotLabel"] = $val
+                    $liveCountsMap["$docName|$padKey|$slotLabel"] = $val
+                }
             }
 
             $allRawSlots += [PSCustomObject]@{
@@ -511,6 +517,13 @@ if ($liveCountsMap.Count -gt 0) {
     $liveJson = ($liveCountsMap | ConvertTo-Json -Compress)
     $indexContent = [regex]::Replace($indexContent, "const liveNetregCounts = \{[\s\S]*?\};", "const liveNetregCounts = $liveJson;")
     Write-Host " -> 成功更新 liveNetregCounts (共 $($liveCountsMap.Count) 筆官方即時掛號數據)" -ForegroundColor Green
+
+    # 同步寫出獨立 JSON 供前端無快取非同步即時更新
+    $livePrettyJson = ($liveCountsMap | ConvertTo-Json -Depth 3)
+    [System.IO.File]::WriteAllText((Join-Path $baseDir "live_registration.json"), $livePrettyJson, [System.Text.Encoding]::UTF8)
+    $dataDir = Join-Path $baseDir "assets\data"
+    if (-not (Test-Path $dataDir)) { New-Item -ItemType Directory -Path $dataDir -Force | Out-Null }
+    [System.IO.File]::WriteAllText((Join-Path $dataDir "live_netreg.json"), $livePrettyJson, [System.Text.Encoding]::UTF8)
 }
 
 [System.IO.File]::WriteAllText($indexPath, $indexContent, [System.Text.Encoding]::UTF8)
@@ -535,7 +548,7 @@ Write-Host " -> 雙生檔案 100% SHA-256 驗證通過: $hash1" -ForegroundColor
 # ------------------------------------------------------------------------------
 Write-Host "[5/5] 檢查 Git 異動與自動推播..." -ForegroundColor Yellow
 Set-Location $baseDir
-git add index.html 門診時段交叉查詢與醫師代碼查詢系統.html assets/notices/
+git add index.html 門診時段交叉查詢與醫師代碼查詢系統.html assets/notices/ live_registration.json assets/data/
 
 git diff --staged --quiet
 if ($LASTEXITCODE -eq 0) {

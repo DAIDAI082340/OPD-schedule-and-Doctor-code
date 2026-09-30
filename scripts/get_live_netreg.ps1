@@ -68,8 +68,10 @@ foreach ($d in $depts) {
             $isStopped = ($inner -like "*停診*") -and ($count -eq $null)
             $isSubstitute = ($inner -like "*代診*")
             
+            $compositeKey = "$dCode|$docName|$dateKey|$slotLabel"
             $mapKey = "$docName|$dateKey|$slotLabel"
-            $liveMap[$mapKey] = @{
+            $entryObj = @{
+                deptCode = $dCode
                 doctor = $docName
                 date = $dateKey
                 dateFormatted = $dateFormatted
@@ -77,6 +79,10 @@ foreach ($d in $depts) {
                 count = $count
                 isStopped = $isStopped
                 isSubstitute = $isSubstitute
+            }
+            $liveMap[$compositeKey] = $entryObj
+            if (-not $liveMap.ContainsKey($mapKey) -or $dCode.Length -le 2) {
+                $liveMap[$mapKey] = $entryObj
             }
         }
     } catch {
