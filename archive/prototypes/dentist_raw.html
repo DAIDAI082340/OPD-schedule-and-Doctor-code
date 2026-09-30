@@ -1,0 +1,2941 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en">
+<script>
+    function isIE() {
+        if (!!window.ActiveXObject || "ActiveXObject" in window) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    if (isIE()) {
+        location.href = '/Public/Denied';
+        //alert("請使用非IE的瀏覽器");
+        //location.href = 'https://www.mil.mohw.gov.tw/';
+    }
+</script>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>&#x885B;&#x751F;&#x798F;&#x5229;&#x90E8;&#x5F70;&#x5316;&#x91AB;&#x9662; - 網路掛號</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+
+    <link href="/lib/bootstrap@5.1.1/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="/lib/bootstrap@5.1.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/jquery-ajax-unobtrusive-master/jquery-ajax-unobtrusive-master/dist/jquery.unobtrusive-ajax.min.js"></script>
+
+
+    <link href="/lib/kendo@2022.2.802/styles/kendo.bootstrap-v4.min.css" rel="stylesheet" type="text/css" />
+    <script src="/lib/kendo@2022.2.802/js/jszip.min.js"></script>
+    <script src="/lib/kendo@2022.2.802/js/kendo.all.min.js"></script>
+    <script src="/lib/kendo@2022.2.802/js/kendo.aspnetmvc.min.js"></script>
+    <script src="/lib/kendo@2022.2.802/js/messages/kendo.messages.zh-TW.min.js"></script>
+
+
+    <script src="/js/site.js?v=QvwqLMoggKig0Dc4zURe9GVkyhuM7bzlO7G2fM10ci0"></script>
+    <script src="/js/jquery-spinner.min.js"></script>
+    <script src="/js/sweetalert.min.js"></script>
+    <script src="/js/WebSocketApp.js"></script>
+    <script src="/lib/jquery-validation-1.19.5/dist/jquery.validate.min.js"></script>
+
+    <link rel="stylesheet" href="/css/jquery-spinner.min.css" />
+    <link rel="stylesheet" href="/css/site.css?v=6K2woI3t081IDyiIA-jEo4QYqSTK3VrHh7DEJ6DwEDw" />
+    <link rel="stylesheet" href="/css/public.css?v=vNFGI9s0y2A-Kg2H94tlB3u8GXjszcc27aX1SSqC0HY" />
+
+
+    <script>
+        var spinner = null
+
+        $(document).ready(function () {
+            spinner = new jQuerySpinner({
+                parentId: 'spinner-container'
+            });
+
+
+        })
+
+
+    </script>
+
+</head>
+<body>
+    <div id="spinner-container">
+    </div>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">&#x885B;&#x751F;&#x798F;&#x5229;&#x90E8;&#x5F70;&#x5316;&#x91AB;&#x9662; - 網路掛號系統</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link text-dark" href="/">網路掛號</a>
+
+                        <a class="nav-link text-dark" href="/QUERY">查詢、取消掛號</a>
+
+                        <a class="nav-link text-dark" href="/VIEW">看診進度</a>
+
+                        <a class="nav-link text-dark" href="/PUBLIC/Hosptail">醫院首頁</a>
+
+                        <a class="nav-link text-dark" href="/DIRECTIONS">掛號說明</a>
+
+                        <a class="nav-link text-dark" href="/EMGBOARD">急診動態顯示</a>
+
+                        <a class="nav-link text-dark" href="/MED">慢箋預約領藥</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="col-md-4 d-md-inline-flex text-left">
+            &ensp;
+
+
+
+<div title="Request culture provider: AcceptLanguageHeaderRequestCultureProvider">
+    <form id="selectLanguage" method="post" class="form-horizontal" role="form" action="/Home/SetLanguage?returnUrl=~%2FDOCTORLIST%3Frole%3DDIV%26key_code%3D40">
+        <label for="requestCulture_RequestCulture_UICulture_Name">語言:</label>
+                <select name="culture" onchange="this.form.submit();" data-val="true" data-val-required="The Name field is required." id="requestCulture_RequestCulture_UICulture_Name"><option value="en">English</option>
+<option selected="selected" value="zh-TW">&#x4E2D;&#x6587;(&#x53F0;&#x7063;)</option>
+</select>
+    <input name="__RequestVerificationToken" type="hidden" value="CfDJ8FWzwwbjrV5Epf1pEkn6UJ44pvciovHoRSbSSbEgw9LdIfuv1x07zfleOSG697DymRA62PMUdLTeSqwW5MUYhFpx9XJKTb81opPSA-d3wFD-Xhg_JTH9DEbR26UpXstWBABrwnhRbbvP8iCPZfTavLk" /></form>
+</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            
+
+<link rel="stylesheet" href="/css/doctorliststyle.css?v=ElqqzlsMXom8zWUGOeR8mg3LOD5avx4_vR9PB5s7gJo" />
+
+<style type="text/css">
+    #gotop {
+        position: fixed;
+        border-radius: 50px;
+        right: 20px;
+        bottom: 30px;
+        padding: 10px 16px;
+        font-size: 25px;
+        background: rgba(228, 211, 211, 0.36);
+        color: #FAFCFD;
+        cursor: pointer;
+        z-index: 1000;
+    }
+</style>
+
+<script>
+    var all_data = 'Y';
+
+    function search_NEWS(){
+        return {
+            web_div_no: '40',
+        };
+    }
+    
+    function parseData_NEWS(result) {
+
+        if (result.items.length == 0)
+        {
+            $("#AnnouncementDIV").empty();
+        }
+        return result.items;
+    }
+
+</script>
+
+<div id="gotop" style="opacity: 1; display: none;">
+    回頂端
+    <img src="/images/arrow-up-circle.svg" width="32" height="32" />
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="gap-lg-2 mx-auto justify-content-center">
+            <button class="btn btn-primary m-2 xs-100 btn-lg btn-animated" type="button" id="home_bbtn">網路掛號</button>
+            <button class="btn btn-success m-2 xs-100 btn-lg btn-animated" type="button" id="query_bbtn">查詢、取消掛號</button>
+            <button class="btn btn-info m-2 xs-100 btn-lg btn-animated" type="button" id="view_bbtn">看診進度</button>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="AnnouncementDIV">
+    <h5 class="text-center text-danger">&#x516C;&#x544A;</h5>
+    <div>
+        <div id="news_grid" name="news_grid"></div><script>kendo.syncReady(function(){jQuery("#news_grid").kendoGrid({"autoBind":false,"columns":[{"title":"日期","width":"120px","field":"post_date","filterable":{"messages":{"selectedItemsFormat":"{0} selected items"},"checkAll":false},"encoded":true},{"title":"內容","encoded":false,"field":"news","filterable":{"messages":{"selectedItemsFormat":"{0} selected items"},"checkAll":false}}],"resizable":true,"scrollable":{"height":"400px"},"dataSource":{"type":"aspnetmvc-ajax","transport":{"read":{"url":"/DOCTORLIST/Read_NEWS","data":search_NEWS,"type":"POST"}},"error":error_handler,"schema":{"model":{"fields":{"post_date":{"type":"string"},"news":{"type":"string"}}},"parse":parseData_NEWS}},"height":"270px"});});</script>
+            
+    </div>
+</div>
+
+<div class=" w-100 p-3 h-100">
+    <div class="row m-2">
+        <h3>&#x9078;&#x64C7;&#x6B21;&#x79D1;&#x5225;:&#x7259;&#x79D1;</h3>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-10">
+
+            <form id="GoWeek" action="DOCTORLIST" class="form-group">
+                <input type="hidden" name="role" id="role" value="DIV" />
+                <input type="hidden" name="key_code" id="key_code" value="40" />
+                <input type="hidden" name="start_date" id="start_date" />
+
+                        <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                            <input type="radio" value="0" name="select_week" checked="checked" onchange="OnWeekChange(this); this.form.submit();" />
+                            <label for="select_week_0" class="text-success">全部</label>
+                        </div>
+                                <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                                    <input type="radio" value="1150928" name="select_week" id="select_week_1150928" onchange="OnWeekChange(this); this.form.submit();" />
+                                    <label for="select_week_1150928" class="text-success">09/28 ~ 10/04</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                                    <input type="radio" value="1151005" name="select_week" id="select_week_1151005" onchange="OnWeekChange(this); this.form.submit();" />
+                                    <label for="select_week_1151005" class="text-success">10/05 ~ 10/11</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                                    <input type="radio" value="1151012" name="select_week" id="select_week_1151012" onchange="OnWeekChange(this); this.form.submit();" />
+                                    <label for="select_week_1151012" class="text-success">10/12 ~ 10/18</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                                    <input type="radio" value="1151019" name="select_week" id="select_week_1151019" onchange="OnWeekChange(this); this.form.submit();" />
+                                    <label for="select_week_1151019" class="text-success">10/19 ~ 10/25</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                                    <input type="radio" value="1151026" name="select_week" id="select_week_1151026" onchange="OnWeekChange(this); this.form.submit();" />
+                                    <label for="select_week_1151026" class="text-success">10/26 ~ 11/01</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                                    <input type="radio" value="1151102" name="select_week" id="select_week_1151102" onchange="OnWeekChange(this); this.form.submit();" />
+                                    <label for="select_week_1151102" class="text-success">11/02 ~ 11/08</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                                    <input type="radio" value="1151109" name="select_week" id="select_week_1151109" onchange="OnWeekChange(this); this.form.submit();" />
+                                    <label for="select_week_1151109" class="text-success">11/09 ~ 11/15</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                                    <input type="radio" value="1151116" name="select_week" id="select_week_1151116" onchange="OnWeekChange(this); this.form.submit();" />
+                                    <label for="select_week_1151116" class="text-success">11/16 ~ 11/22</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                                    <input type="radio" value="1151123" name="select_week" id="select_week_1151123" onchange="OnWeekChange(this); this.form.submit();" />
+                                    <label for="select_week_1151123" class="text-success">11/23 ~ 11/29</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                                    <input type="radio" value="1151130" name="select_week" id="select_week_1151130" onchange="OnWeekChange(this); this.form.submit();" />
+                                    <label for="select_week_1151130" class="text-success">11/30 ~ 12/06</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                                    <input type="radio" value="1151207" name="select_week" id="select_week_1151207" onchange="OnWeekChange(this); this.form.submit();" />
+                                    <label for="select_week_1151207" class="text-success">12/07 ~ 12/13</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                                    <input type="radio" value="1151214" name="select_week" id="select_week_1151214" onchange="OnWeekChange(this); this.form.submit();" />
+                                    <label for="select_week_1151214" class="text-success">12/14 ~ 12/20</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="min-width:180px; font-weight:600; font-size:18px">
+                                    <input type="radio" value="1151221" name="select_week" id="select_week_1151221" onchange="OnWeekChange(this); this.form.submit();" />
+                                    <label for="select_week_1151221" class="text-success">12/21 ~ 12/27</label>
+                                </div>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-mobilefriendly cart-list-check">
+                        <div>09/28 ~ 10/04</div>
+
+                    <div class="title-desktop table_week">
+                        <div class="item">
+
+                        </div>
+                            <div class="item">
+                                <p>09/28</p>
+                                <span>&#x9031;&#x4E00;</span>
+                            </div>
+                            <div class="item table_today">
+                                <p>09/29</p>
+                                <span>&#x9031;&#x4E8C;</span>
+                            </div>
+                            <div class="item">
+                                <p>09/30</p>
+                                <span>&#x9031;&#x4E09;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/01</p>
+                                <span>&#x9031;&#x56DB;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/02</p>
+                                <span>&#x9031;&#x4E94;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>10/03</p>
+                                <span>&#x9031;&#x516D;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>10/04</p>
+                                <span>&#x9031;&#x65E5;</span>
+                            </div>
+                    </div>
+                    <div class="item-content">
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">上午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">09/28&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">09/29&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1150929', '1', '21', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small></small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x505C;&#x639B;</small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">09/30&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/01&nbsp;(&#x9031;&#x56DB;)</span>
+                                        <a href="javascript:GoClinic('1151001', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;5&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/02&nbsp;(&#x9031;&#x4E94;)</span>
+                                        <a href="javascript:GoClinic('1151002', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;4&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151002', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;13&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/03&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/04&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">下午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">09/28&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">09/29&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1150929', '2', '23', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9EC3;&#x60E0;&#x5A1F;
+                                                <small class="text-muted"><small></small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x505C;&#x639B;</small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">09/30&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1150930', '2', '23', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;18&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x5DF2;&#x984D;&#x6EFF;</small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/01&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/02&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/03&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/04&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">晚上</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">09/28&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">09/29&nbsp;(&#x9031;&#x4E8C;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">09/30&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1150930', '3', '23', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;12&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x5DF2;&#x984D;&#x6EFF;</small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/01&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/02&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/03&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/04&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-mobilefriendly cart-list-check">
+                        <div>10/05 ~ 10/11</div>
+
+                    <div class="title-desktop table_week">
+                        <div class="item">
+
+                        </div>
+                            <div class="item">
+                                <p>10/05</p>
+                                <span>&#x9031;&#x4E00;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/06</p>
+                                <span>&#x9031;&#x4E8C;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/07</p>
+                                <span>&#x9031;&#x4E09;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/08</p>
+                                <span>&#x9031;&#x56DB;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/09</p>
+                                <span>&#x9031;&#x4E94;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>10/10</p>
+                                <span>&#x9031;&#x516D;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>10/11</p>
+                                <span>&#x9031;&#x65E5;</span>
+                            </div>
+                    </div>
+                    <div class="item-content">
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">上午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/05&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151005', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151005', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;7&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/06&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151006', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;2&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/07&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/08&nbsp;(&#x9031;&#x56DB;)</span>
+                                        <a href="javascript:GoClinic('1151008', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/09&nbsp;(&#x9031;&#x4E94;)</span>
+                                        <a href="javascript:GoClinic('1151009', '1', '21', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small></small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x505C;&#x8A3A;</small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151009', '1', '23', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small></small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x505C;&#x8A3A;</small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/10&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/11&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">下午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/05&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151005', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;5&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/06&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151006', '2', '23', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9EC3;&#x60E0;&#x5A1F;
+                                                <small class="text-muted"><small></small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x505C;&#x8A3A;</small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/07&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151007', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;6&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/08&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/09&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/10&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/11&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">晚上</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/05&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/06&nbsp;(&#x9031;&#x4E8C;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/07&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151007', '3', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/08&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/09&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/10&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/11&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-mobilefriendly cart-list-check">
+                        <div>10/12 ~ 10/18</div>
+
+                    <div class="title-desktop table_week">
+                        <div class="item">
+
+                        </div>
+                            <div class="item">
+                                <p>10/12</p>
+                                <span>&#x9031;&#x4E00;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/13</p>
+                                <span>&#x9031;&#x4E8C;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/14</p>
+                                <span>&#x9031;&#x4E09;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/15</p>
+                                <span>&#x9031;&#x56DB;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/16</p>
+                                <span>&#x9031;&#x4E94;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>10/17</p>
+                                <span>&#x9031;&#x516D;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>10/18</p>
+                                <span>&#x9031;&#x65E5;</span>
+                            </div>
+                    </div>
+                    <div class="item-content">
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">上午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/12&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151012', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151012', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;6&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/13&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151013', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;2&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151013', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9673;&#x8070;&#x6D32;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/14&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/15&nbsp;(&#x9031;&#x56DB;)</span>
+                                        <a href="javascript:GoClinic('1151015', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/16&nbsp;(&#x9031;&#x4E94;)</span>
+                                        <a href="javascript:GoClinic('1151016', '1', '21', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small></small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x505C;&#x8A3A;</small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151016', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;5&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/17&nbsp;(&#x9031;&#x516D;)</span>
+                                        <a href="javascript:GoClinic('1151017', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;4&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/18&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">下午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/12&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151012', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;2&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/13&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151013', '2', '23', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9EC3;&#x60E0;&#x5A1F;
+                                                <small class="text-muted"><small></small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x505C;&#x8A3A;</small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/14&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151014', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/15&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/16&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/17&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/18&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">晚上</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/12&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/13&nbsp;(&#x9031;&#x4E8C;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/14&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151014', '3', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/15&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/16&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/17&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/18&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-mobilefriendly cart-list-check">
+                        <div>10/19 ~ 10/25</div>
+
+                    <div class="title-desktop table_week">
+                        <div class="item">
+
+                        </div>
+                            <div class="item">
+                                <p>10/19</p>
+                                <span>&#x9031;&#x4E00;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/20</p>
+                                <span>&#x9031;&#x4E8C;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/21</p>
+                                <span>&#x9031;&#x4E09;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/22</p>
+                                <span>&#x9031;&#x56DB;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/23</p>
+                                <span>&#x9031;&#x4E94;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>10/24</p>
+                                <span>&#x9031;&#x516D;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>10/25</p>
+                                <span>&#x9031;&#x65E5;</span>
+                            </div>
+                    </div>
+                    <div class="item-content">
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">上午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/19&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151019', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151019', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/20&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151020', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/21&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/22&nbsp;(&#x9031;&#x56DB;)</span>
+                                        <a href="javascript:GoClinic('1151022', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/23&nbsp;(&#x9031;&#x4E94;)</span>
+                                        <a href="javascript:GoClinic('1151023', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151023', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;3&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/24&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/25&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">下午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/19&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151019', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/20&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151020', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9EC3;&#x60E0;&#x5A1F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;3&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/21&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151021', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/22&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/23&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/24&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/25&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">晚上</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/19&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/20&nbsp;(&#x9031;&#x4E8C;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/21&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151021', '3', '23', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small></small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x505C;&#x8A3A;</small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/22&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/23&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/24&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/25&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-mobilefriendly cart-list-check">
+                        <div>10/26 ~ 11/01</div>
+
+                    <div class="title-desktop table_week">
+                        <div class="item">
+
+                        </div>
+                            <div class="item">
+                                <p>10/26</p>
+                                <span>&#x9031;&#x4E00;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/27</p>
+                                <span>&#x9031;&#x4E8C;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/28</p>
+                                <span>&#x9031;&#x4E09;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/29</p>
+                                <span>&#x9031;&#x56DB;</span>
+                            </div>
+                            <div class="item">
+                                <p>10/30</p>
+                                <span>&#x9031;&#x4E94;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>10/31</p>
+                                <span>&#x9031;&#x516D;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>11/01</p>
+                                <span>&#x9031;&#x65E5;</span>
+                            </div>
+                    </div>
+                    <div class="item-content">
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">上午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/26&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151026', '1', '21', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small></small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x505C;&#x8A3A;</small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151026', '1', '23', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small></small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x505C;&#x8A3A;</small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/27&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151027', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/28&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/29&nbsp;(&#x9031;&#x56DB;)</span>
+                                        <a href="javascript:GoClinic('1151029', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/30&nbsp;(&#x9031;&#x4E94;)</span>
+                                        <a href="javascript:GoClinic('1151030', '1', '21', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small></small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x505C;&#x8A3A;</small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151030', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;3&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/31&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/01&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">下午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/26&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/27&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151027', '2', '23', '40', 'A')" class="clinic_link_click disabled">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9EC3;&#x60E0;&#x5A1F;
+                                                <small class="text-muted"><small></small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small>&#x505C;&#x8A3A;</small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/28&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151028', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;2&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/29&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/30&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/31&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/01&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">晚上</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/26&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/27&nbsp;(&#x9031;&#x4E8C;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/28&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151028', '3', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/29&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/30&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">10/31&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/01&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-mobilefriendly cart-list-check">
+                        <div>11/02 ~ 11/08</div>
+
+                    <div class="title-desktop table_week">
+                        <div class="item">
+
+                        </div>
+                            <div class="item">
+                                <p>11/02</p>
+                                <span>&#x9031;&#x4E00;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/03</p>
+                                <span>&#x9031;&#x4E8C;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/04</p>
+                                <span>&#x9031;&#x4E09;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/05</p>
+                                <span>&#x9031;&#x56DB;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/06</p>
+                                <span>&#x9031;&#x4E94;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>11/07</p>
+                                <span>&#x9031;&#x516D;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>11/08</p>
+                                <span>&#x9031;&#x65E5;</span>
+                            </div>
+                    </div>
+                    <div class="item-content">
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">上午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/02&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151102', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151102', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/03&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151103', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/04&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/05&nbsp;(&#x9031;&#x56DB;)</span>
+                                        <a href="javascript:GoClinic('1151105', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/06&nbsp;(&#x9031;&#x4E94;)</span>
+                                        <a href="javascript:GoClinic('1151106', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151106', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/07&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/08&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">下午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/02&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151102', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/03&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151103', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9EC3;&#x60E0;&#x5A1F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/04&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151104', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/05&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/06&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/07&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/08&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">晚上</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/02&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/03&nbsp;(&#x9031;&#x4E8C;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/04&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151104', '3', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/05&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/06&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/07&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/08&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-mobilefriendly cart-list-check">
+                        <div>11/09 ~ 11/15</div>
+
+                    <div class="title-desktop table_week">
+                        <div class="item">
+
+                        </div>
+                            <div class="item">
+                                <p>11/09</p>
+                                <span>&#x9031;&#x4E00;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/10</p>
+                                <span>&#x9031;&#x4E8C;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/11</p>
+                                <span>&#x9031;&#x4E09;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/12</p>
+                                <span>&#x9031;&#x56DB;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/13</p>
+                                <span>&#x9031;&#x4E94;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>11/14</p>
+                                <span>&#x9031;&#x516D;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>11/15</p>
+                                <span>&#x9031;&#x65E5;</span>
+                            </div>
+                    </div>
+                    <div class="item-content">
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">上午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/09&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151109', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151109', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/10&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151110', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151110', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9673;&#x8070;&#x6D32;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/11&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/12&nbsp;(&#x9031;&#x56DB;)</span>
+                                        <a href="javascript:GoClinic('1151112', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/13&nbsp;(&#x9031;&#x4E94;)</span>
+                                        <a href="javascript:GoClinic('1151113', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151113', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/14&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/15&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">下午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/09&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151109', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/10&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151110', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9EC3;&#x60E0;&#x5A1F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/11&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151111', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/12&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/13&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/14&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/15&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">晚上</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/09&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/10&nbsp;(&#x9031;&#x4E8C;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/11&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151111', '3', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/12&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/13&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/14&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/15&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-mobilefriendly cart-list-check">
+                        <div>11/16 ~ 11/22</div>
+
+                    <div class="title-desktop table_week">
+                        <div class="item">
+
+                        </div>
+                            <div class="item">
+                                <p>11/16</p>
+                                <span>&#x9031;&#x4E00;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/17</p>
+                                <span>&#x9031;&#x4E8C;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/18</p>
+                                <span>&#x9031;&#x4E09;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/19</p>
+                                <span>&#x9031;&#x56DB;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/20</p>
+                                <span>&#x9031;&#x4E94;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>11/21</p>
+                                <span>&#x9031;&#x516D;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>11/22</p>
+                                <span>&#x9031;&#x65E5;</span>
+                            </div>
+                    </div>
+                    <div class="item-content">
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">上午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/16&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151116', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151116', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/17&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151117', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/18&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/19&nbsp;(&#x9031;&#x56DB;)</span>
+                                        <a href="javascript:GoClinic('1151119', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/20&nbsp;(&#x9031;&#x4E94;)</span>
+                                        <a href="javascript:GoClinic('1151120', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151120', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/21&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/22&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">下午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/16&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151116', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/17&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151117', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9EC3;&#x60E0;&#x5A1F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/18&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151118', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/19&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/20&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/21&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/22&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">晚上</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/16&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/17&nbsp;(&#x9031;&#x4E8C;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/18&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151118', '3', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/19&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/20&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/21&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/22&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-mobilefriendly cart-list-check">
+                        <div>11/23 ~ 11/29</div>
+
+                    <div class="title-desktop table_week">
+                        <div class="item">
+
+                        </div>
+                            <div class="item">
+                                <p>11/23</p>
+                                <span>&#x9031;&#x4E00;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/24</p>
+                                <span>&#x9031;&#x4E8C;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/25</p>
+                                <span>&#x9031;&#x4E09;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/26</p>
+                                <span>&#x9031;&#x56DB;</span>
+                            </div>
+                            <div class="item">
+                                <p>11/27</p>
+                                <span>&#x9031;&#x4E94;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>11/28</p>
+                                <span>&#x9031;&#x516D;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>11/29</p>
+                                <span>&#x9031;&#x65E5;</span>
+                            </div>
+                    </div>
+                    <div class="item-content">
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">上午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/23&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151123', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151123', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/24&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151124', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/25&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/26&nbsp;(&#x9031;&#x56DB;)</span>
+                                        <a href="javascript:GoClinic('1151126', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/27&nbsp;(&#x9031;&#x4E94;)</span>
+                                        <a href="javascript:GoClinic('1151127', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151127', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/28&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/29&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">下午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/23&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151123', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/24&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151124', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9EC3;&#x60E0;&#x5A1F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/25&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151125', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/26&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/27&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/28&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/29&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">晚上</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/23&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/24&nbsp;(&#x9031;&#x4E8C;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/25&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151125', '3', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/26&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/27&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/28&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/29&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-mobilefriendly cart-list-check">
+                        <div>11/30 ~ 12/06</div>
+
+                    <div class="title-desktop table_week">
+                        <div class="item">
+
+                        </div>
+                            <div class="item">
+                                <p>11/30</p>
+                                <span>&#x9031;&#x4E00;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/01</p>
+                                <span>&#x9031;&#x4E8C;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/02</p>
+                                <span>&#x9031;&#x4E09;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/03</p>
+                                <span>&#x9031;&#x56DB;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/04</p>
+                                <span>&#x9031;&#x4E94;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>12/05</p>
+                                <span>&#x9031;&#x516D;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>12/06</p>
+                                <span>&#x9031;&#x65E5;</span>
+                            </div>
+                    </div>
+                    <div class="item-content">
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">上午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/30&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151130', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151130', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/01&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151201', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/02&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/03&nbsp;(&#x9031;&#x56DB;)</span>
+                                        <a href="javascript:GoClinic('1151203', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/04&nbsp;(&#x9031;&#x4E94;)</span>
+                                        <a href="javascript:GoClinic('1151204', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151204', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/05&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/06&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">下午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/30&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151130', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/01&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151201', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9EC3;&#x60E0;&#x5A1F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/02&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151202', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/03&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/04&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/05&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/06&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">晚上</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">11/30&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/01&nbsp;(&#x9031;&#x4E8C;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/02&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151202', '3', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/03&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/04&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/05&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/06&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-mobilefriendly cart-list-check">
+                        <div>12/07 ~ 12/13</div>
+
+                    <div class="title-desktop table_week">
+                        <div class="item">
+
+                        </div>
+                            <div class="item">
+                                <p>12/07</p>
+                                <span>&#x9031;&#x4E00;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/08</p>
+                                <span>&#x9031;&#x4E8C;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/09</p>
+                                <span>&#x9031;&#x4E09;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/10</p>
+                                <span>&#x9031;&#x56DB;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/11</p>
+                                <span>&#x9031;&#x4E94;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>12/12</p>
+                                <span>&#x9031;&#x516D;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>12/13</p>
+                                <span>&#x9031;&#x65E5;</span>
+                            </div>
+                    </div>
+                    <div class="item-content">
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">上午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/07&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151207', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151207', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/08&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151208', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/09&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/10&nbsp;(&#x9031;&#x56DB;)</span>
+                                        <a href="javascript:GoClinic('1151210', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/11&nbsp;(&#x9031;&#x4E94;)</span>
+                                        <a href="javascript:GoClinic('1151211', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151211', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/12&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/13&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">下午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/07&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151207', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/08&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151208', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9EC3;&#x60E0;&#x5A1F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/09&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151209', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/10&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/11&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/12&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/13&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">晚上</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/07&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/08&nbsp;(&#x9031;&#x4E8C;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/09&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151209', '3', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/10&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/11&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/12&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/13&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-mobilefriendly cart-list-check">
+                        <div>12/14 ~ 12/20</div>
+
+                    <div class="title-desktop table_week">
+                        <div class="item">
+
+                        </div>
+                            <div class="item">
+                                <p>12/14</p>
+                                <span>&#x9031;&#x4E00;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/15</p>
+                                <span>&#x9031;&#x4E8C;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/16</p>
+                                <span>&#x9031;&#x4E09;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/17</p>
+                                <span>&#x9031;&#x56DB;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/18</p>
+                                <span>&#x9031;&#x4E94;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>12/19</p>
+                                <span>&#x9031;&#x516D;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>12/20</p>
+                                <span>&#x9031;&#x65E5;</span>
+                            </div>
+                    </div>
+                    <div class="item-content">
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">上午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/14&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151214', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151214', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/15&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151215', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151215', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9673;&#x8070;&#x6D32;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/16&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/17&nbsp;(&#x9031;&#x56DB;)</span>
+                                        <a href="javascript:GoClinic('1151217', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/18&nbsp;(&#x9031;&#x4E94;)</span>
+                                        <a href="javascript:GoClinic('1151218', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151218', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;1&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/19&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/20&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">下午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/14&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151214', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/15&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151215', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9EC3;&#x60E0;&#x5A1F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/16&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151216', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/17&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/18&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/19&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/20&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">晚上</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/14&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/15&nbsp;(&#x9031;&#x4E8C;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/16&nbsp;(&#x9031;&#x4E09;)</span>
+                                        <a href="javascript:GoClinic('1151216', '3', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/17&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/18&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/19&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/20&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-mobilefriendly cart-list-check">
+                        <div>12/21 ~ 12/27</div>
+
+                    <div class="title-desktop table_week">
+                        <div class="item">
+
+                        </div>
+                            <div class="item">
+                                <p>12/21</p>
+                                <span>&#x9031;&#x4E00;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/22</p>
+                                <span>&#x9031;&#x4E8C;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/23</p>
+                                <span>&#x9031;&#x4E09;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/24</p>
+                                <span>&#x9031;&#x56DB;</span>
+                            </div>
+                            <div class="item">
+                                <p>12/25</p>
+                                <span>&#x9031;&#x4E94;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>12/26</p>
+                                <span>&#x9031;&#x516D;</span>
+                            </div>
+                            <div class="item weekends">
+                                <p>12/27</p>
+                                <span>&#x9031;&#x65E5;</span>
+                            </div>
+                    </div>
+                    <div class="item-content">
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">上午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/21&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151221', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                        <a href="javascript:GoClinic('1151221', '1', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/22&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151222', '1', '21', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x937E;&#x5148;&#x63DA;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/23&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/24&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/25&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/26&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/27&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">下午</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/21&nbsp;(&#x9031;&#x4E00;)</span>
+                                        <a href="javascript:GoClinic('1151221', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x91D1;&#x693F;&#x671F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/22&nbsp;(&#x9031;&#x4E8C;)</span>
+                                        <a href="javascript:GoClinic('1151222', '2', '23', '40', 'A')" class="clinic_link_click">
+                                            <div class="d-flex w-100 justify-content-center">
+                                                &#x9EC3;&#x60E0;&#x5A1F;
+                                                <small class="text-muted"><small>(&#x5DF2;&#x639B;0&#x4EBA;)</small></small>
+                                            </div>
+                                            <small class="text-muted"><small><small></small></small></small>
+                                        </a>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/23&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/24&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/25&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/26&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/27&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                        <div class="list">
+                            <div class="item">
+                                <span class="yu7-time">晚上</span>
+                            </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/21&nbsp;(&#x9031;&#x4E00;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/22&nbsp;(&#x9031;&#x4E8C;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/23&nbsp;(&#x9031;&#x4E09;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/24&nbsp;(&#x9031;&#x56DB;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/25&nbsp;(&#x9031;&#x4E94;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/26&nbsp;(&#x9031;&#x516D;)</span>
+                                </div>
+                                <div class="item">
+                                    <span class="mobile-title">12/27&nbsp;(&#x9031;&#x65E5;)</span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+<script>
+    $(document).ready(function () {
+        get_news_list();
+    }); 
+    
+    $("#home_bbtn").click(function () {
+        var link = '/';
+        location.href = link;
+    });
+    $("#division_bbtn").click(function () {
+        var link = '/';
+        location.href = link;
+    });
+    $("#doctor_bbtn").click(function () {
+        var link = '/DOCTOR';
+        location.href = link;
+    });
+    $("#query_bbtn").click(function () {
+        var link = '/QUERY';
+        location.href = link;
+    });
+    $("#view_bbtn").click(function () {
+        var link = '/VIEW';
+        location.href = link;
+    });
+    function get_news_list() {
+        $("#news_grid").data("kendoGrid").dataSource.read();
+    }
+
+    $(document).on("click", "a.disabled", function () {
+        return false;
+    });
+    function OnWeekChange(ele) {
+        console.log(ele);
+        $("#start_date").val($(ele).val());
+        //$("#GoWeek").submit();
+    }
+
+    $("#gotop").click(function () {
+        jQuery("html,body").animate({
+            scrollTop: 0
+        }, 200);
+    });
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 50) {
+            $('#gotop').fadeIn("fast");
+        } else {
+            $('#gotop').stop().fadeOut("fast");
+        }
+    });
+
+
+
+    function GoClinic(view_date, apn, clinic_no, web_div_no, zone) {
+        $("input[name='REG_ViewDate']").val(view_date);
+        $("input[name='REG_Apn']").val(apn);
+        $("input[name='REG_Clinic']").val(clinic_no);
+        $("input[name='REG_WebDivNo']").val(web_div_no);
+        $("input[name='REG_Zone']").val(zone);
+
+        $('#GoREG').submit();
+        //var link = '/REG';
+        //location.href = link;
+        //cls_sweetalert.noticealert(view_date, cls_sweetalert.icon_success);
+    }
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            cls_sweetalert.noticealert(message, cls_sweetalert.error);
+        }
+    }
+
+</script>
+<form name="GoREG" id="GoREG" method="post" action="REG">
+    <input type="hidden" name="REG_ViewDate" />
+    <input type="hidden" name="REG_Apn" />
+    <input type="hidden" name="REG_Clinic" />
+    <input type="hidden" name="REG_WebDivNo" />
+    <input type="hidden" name="REG_Zone" />
+</form>
+
+
+
+        </main>
+    </div>
+
+    <div class="modal" tabindex="-1" id="form-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="mainiframe" src=""></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="btnTriDefaultModal" type="button" style="display:none" data-bs-toggle="modal" data-bs-target="#form-modal-default"></button>
+    <div class="modal" tabindex="-1" id="form-modal-default">
+        <div class="modal-dialog  h-100" style="margin:0 auto;padding:1rem 0">
+            <div class="modal-content h-100">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body h-100">
+                    <iframe style="width:100%;height:100%;padding:0;margin:0" src=""></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="btnTriLGModal" type="button" style="display:none" data-bs-toggle="modal" data-bs-target="#form-modal-lg"></button>
+    <div class="modal" tabindex="-1" id="form-modal-lg">
+        <div class="modal-dialog modal-lg h-100" style="margin:0 auto;padding:1rem 0">
+            <div class="modal-content h-100">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body h-100">
+                    <iframe style="width:100%;height:100%;padding:0;margin:0" src=""></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="btnTriXLModal" type="button" style="display:none" data-bs-toggle="modal" data-bs-target="#form-modal-xl"></button>
+    <div class="modal" tabindex="-1" id="form-modal-xl">
+        <div class="modal-dialog modal-xl h-100" style="margin:0 auto;padding:1rem 0">
+            <div class="modal-content h-100">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body h-100">
+                    <iframe style="width:100%;height:100%;padding:0;margin:0" src=""></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="btnCustomModal" type="button" style="display:none" data-bs-toggle="modal" data-bs-target="form-modal-custom"></button>
+    <div class="modal" tabindex="-1" id="form-modal-custom">
+        <div class="modal-dialog" style="margin:0 auto;padding:1rem 0">
+            <div class="modal-content h-100">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body h-100">
+                    <iframe style="width:100%;height:100%;padding:0;margin:0" src=""></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="border-top footer text-muted">
+        <div class="row">
+            <div class="col-md-4 text-right">
+                &ensp;&copy; 2026 - Localization
+            </div>
+            <div class="col-md-4 text-right">
+                &ensp;版本：1.0.9748.31043
+            </div>
+            <div class="col-md-4 text-left">
+                &ensp;WEBREGMVC - <a href="/Home/Privacy">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    
+</body>
+</html>

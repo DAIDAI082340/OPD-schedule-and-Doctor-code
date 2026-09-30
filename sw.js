@@ -1,12 +1,13 @@
-// 門診時段交叉查詢與醫師代碼查詢系統 - PWA Service Worker (v1.0.1)
-const CACHE_NAME = 'opd-pwa-v1.0.1';
+// 門診時段交叉查詢與醫師代碼查詢系統 - PWA Service Worker (v1.1.0)
+const CACHE_NAME = 'opd-pwa-v1.1.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
   './apple-touch-icon.png',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './live_registration.json'
 ];
 
 // 安裝事件：預先載入核心資源

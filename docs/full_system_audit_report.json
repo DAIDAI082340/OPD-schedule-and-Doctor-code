@@ -1,0 +1,946 @@
+﻿[
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "10/5",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027莊佳慧|10/5|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "10/6",
+        "Slot":  "夜診",
+        "Detail":  "Shared key \u0027莊佳慧|10/6|夜診\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "10/12",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027莊佳慧|10/12|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "10/13",
+        "Slot":  "夜診",
+        "Detail":  "Shared key \u0027莊佳慧|10/13|夜診\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "10/19",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027莊佳慧|10/19|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "10/20",
+        "Slot":  "夜診",
+        "Detail":  "Shared key \u0027莊佳慧|10/20|夜診\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "10/27",
+        "Slot":  "夜診",
+        "Detail":  "Shared key \u0027莊佳慧|10/27|夜診\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "11/2",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027莊佳慧|11/2|上午\u0027 has differing official counts but index has \u00271\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "11/3",
+        "Slot":  "夜診",
+        "Detail":  "Shared key \u0027莊佳慧|11/3|夜診\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "11/9",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027莊佳慧|11/9|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "11/10",
+        "Slot":  "夜診",
+        "Detail":  "Shared key \u0027莊佳慧|11/10|夜診\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "11/16",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027莊佳慧|11/16|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "11/17",
+        "Slot":  "夜診",
+        "Detail":  "Shared key \u0027莊佳慧|11/17|夜診\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "11/23",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027莊佳慧|11/23|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "11/24",
+        "Slot":  "夜診",
+        "Detail":  "Shared key \u0027莊佳慧|11/24|夜診\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "11/30",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027莊佳慧|11/30|上午\u0027 has differing official counts but index has \u00273\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "12/7",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027莊佳慧|12/7|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "12/8",
+        "Slot":  "夜診",
+        "Detail":  "Shared key \u0027莊佳慧|12/8|夜診\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "12/14",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027莊佳慧|12/14|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "12/15",
+        "Slot":  "夜診",
+        "Detail":  "Shared key \u0027莊佳慧|12/15|夜診\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "莊佳慧",
+        "Dept":  "感染科 / M痘疫苗特診",
+        "Date":  "12/22",
+        "Slot":  "夜診",
+        "Detail":  "Shared key \u0027莊佳慧|12/22|夜診\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "鍾先揚",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/1",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027鍾先揚|10/1|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/2",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027金椿期|10/2|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "9/30",
+        "Slot":  "下午",
+        "Detail":  "Shared key \u0027金椿期|9/30|下午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/5",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027金椿期|10/5|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "鍾先揚",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/6",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027鍾先揚|10/6|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/5",
+        "Slot":  "下午",
+        "Detail":  "Shared key \u0027金椿期|10/5|下午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/7",
+        "Slot":  "下午",
+        "Detail":  "Shared key \u0027金椿期|10/7|下午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/12",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027金椿期|10/12|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "鍾先揚",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/13",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027鍾先揚|10/13|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/16",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027金椿期|10/16|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/12",
+        "Slot":  "下午",
+        "Detail":  "Shared key \u0027金椿期|10/12|下午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/14",
+        "Slot":  "下午",
+        "Detail":  "Shared key \u0027金椿期|10/14|下午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/19",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027金椿期|10/19|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "鍾先揚",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/20",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027鍾先揚|10/20|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/23",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027金椿期|10/23|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/21",
+        "Slot":  "下午",
+        "Detail":  "Shared key \u0027金椿期|10/21|下午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "鍾先揚",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/29",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027鍾先揚|10/29|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/30",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027金椿期|10/30|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "10/28",
+        "Slot":  "下午",
+        "Detail":  "Shared key \u0027金椿期|10/28|下午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "11/2",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027金椿期|11/2|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "11/6",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027金椿期|11/6|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "鍾先揚",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "11/12",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027鍾先揚|11/12|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "鍾先揚",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "11/19",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027鍾先揚|11/19|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "11/20",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027金椿期|11/20|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "11/16",
+        "Slot":  "下午",
+        "Detail":  "Shared key \u0027金椿期|11/16|下午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "鍾先揚",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "11/26",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027鍾先揚|11/26|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "11/27",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027金椿期|11/27|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "鍾先揚",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "12/1",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027鍾先揚|12/1|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "12/18",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027金椿期|12/18|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "金椿期",
+        "Dept":  "牙科 / 無障礙牙科特診",
+        "Date":  "12/23",
+        "Slot":  "下午",
+        "Detail":  "Shared key \u0027金椿期|12/23|下午\u0027 has differing official counts but index has \u0027\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "9/30",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|9/30|上午\u0027 has differing official counts but index has \u00275\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/1",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027蕭銘鴻|10/1|上午\u0027 has differing official counts but index has \u00274\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "葉騰尹",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/2",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027葉騰尹|10/2|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "陳羿行",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/5",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027陳羿行|10/5|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "王鴻松",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/6",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027王鴻松|10/6|上午\u0027 has differing official counts but index has \u00272\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/7",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|10/7|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/8",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027蕭銘鴻|10/8|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/9",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|10/9|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "陳羿行",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/12",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027陳羿行|10/12|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "王鴻松",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/13",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027王鴻松|10/13|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/14",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|10/14|上午\u0027 has differing official counts but index has \u00273\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/15",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027蕭銘鴻|10/15|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "梁孫源",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/16",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027梁孫源|10/16|上午\u0027 has differing official counts but index has \u00272\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "陳羿行",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/19",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027陳羿行|10/19|上午\u0027 has differing official counts but index has \u00271\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "王鴻松",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/20",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027王鴻松|10/20|上午\u0027 has differing official counts but index has \u00271\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/21",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|10/21|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/22",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027蕭銘鴻|10/22|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "葉騰尹",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/23",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027葉騰尹|10/23|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/26",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027蕭銘鴻|10/26|上午\u0027 has differing official counts but index has \u00271\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "王鴻松",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/27",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027王鴻松|10/27|上午\u0027 has differing official counts but index has \u00271\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/28",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|10/28|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/29",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027蕭銘鴻|10/29|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "葉騰尹",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "10/30",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027葉騰尹|10/30|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "陳羿行",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/2",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027陳羿行|11/2|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "王鴻松",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/3",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027王鴻松|11/3|上午\u0027 has differing official counts but index has \u00271\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/4",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|11/4|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/5",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027蕭銘鴻|11/5|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "葉騰尹",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/6",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027葉騰尹|11/6|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "陳羿行",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/9",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027陳羿行|11/9|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "王鴻松",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/10",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027王鴻松|11/10|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/11",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|11/11|上午\u0027 has differing official counts but index has \u00271\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/12",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027蕭銘鴻|11/12|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "葉騰尹",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/13",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027葉騰尹|11/13|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "陳羿行",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/16",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027陳羿行|11/16|上午\u0027 has differing official counts but index has \u00271\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "王鴻松",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/17",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027王鴻松|11/17|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/18",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|11/18|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/19",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027蕭銘鴻|11/19|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "葉騰尹",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/20",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027葉騰尹|11/20|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "陳羿行",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/23",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027陳羿行|11/23|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/24",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|11/24|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/25",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|11/25|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/26",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027蕭銘鴻|11/26|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "葉騰尹",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/27",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027葉騰尹|11/27|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "陳羿行",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "11/30",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027陳羿行|11/30|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "王鴻松",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/1",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027王鴻松|12/1|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/2",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|12/2|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/3",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027蕭銘鴻|12/3|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "葉騰尹",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/4",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027葉騰尹|12/4|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "陳羿行",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/7",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027陳羿行|12/7|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "王鴻松",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/8",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027王鴻松|12/8|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/9",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|12/9|上午\u0027 has differing official counts but index has \u00271\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/10",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027蕭銘鴻|12/10|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "葉騰尹",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/11",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027葉騰尹|12/11|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "陳羿行",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/14",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027陳羿行|12/14|上午\u0027 has differing official counts but index has \u00271\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "王鴻松",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/15",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027王鴻松|12/15|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/16",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|12/16|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/17",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027蕭銘鴻|12/17|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "葉騰尹",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/18",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027葉騰尹|12/18|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "陳羿行",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/21",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027陳羿行|12/21|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "王鴻松",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/22",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027王鴻松|12/22|上午\u0027 has differing official counts but index has \u00270\u0027"
+    },
+    {
+        "Category":  "Cross-Dept Collision",
+        "Doctor":  "李景嶽",
+        "Dept":  "精神科 / 藥癮門診(美沙冬)",
+        "Date":  "12/23",
+        "Slot":  "上午",
+        "Detail":  "Shared key \u0027李景嶽|12/23|上午\u0027 has differing official counts but index has \u0027\u0027"
+    },
+    {
+        "Category":  "Irregular Schedule Note Missing",
+        "Doctor":  "鍾瑞賢",
+        "Dept":  "小兒科",
+        "Date":  "10/23",
+        "Slot":  "W5 上午",
+        "Detail":  "Calendar has 12 weeks, doc only on 1 days (10/23), but schedule note is \u0027NOT_IN_SCHEDULES\u0027"
+    },
+    {
+        "Category":  "Irregular Schedule Note Missing",
+        "Doctor":  "蕭銘鴻",
+        "Dept":  "精神科",
+        "Date":  "10/26",
+        "Slot":  "W1 下午",
+        "Detail":  "Calendar has 12 weeks, doc only on 1 days (10/26), but schedule note is \u0027NOT_IN_SCHEDULES\u0027"
+    },
+    {
+        "Category":  "Irregular Schedule Note Missing",
+        "Doctor":  "葉騰尹",
+        "Dept":  "兒童青少年心智科",
+        "Date":  "11/25",
+        "Slot":  "W3 夜診",
+        "Detail":  "Calendar has 13 weeks, doc only on 1 days (11/25), but schedule note is \u0027NOT_IN_SCHEDULES\u0027"
+    },
+    {
+        "Category":  "Irregular Schedule Note Missing",
+        "Doctor":  "廖宜新",
+        "Dept":  "復健科",
+        "Date":  "10/16",
+        "Slot":  "W5 上午",
+        "Detail":  "Calendar has 12 weeks, doc only on 1 days (10/16), but schedule note is \u0027NOT_IN_SCHEDULES\u0027"
+    },
+    {
+        "Category":  "Irregular Schedule Note Missing",
+        "Doctor":  "陳信利",
+        "Dept":  "無障礙牙科特診",
+        "Date":  "9/30",
+        "Slot":  "W3 上午",
+        "Detail":  "Calendar has 13 weeks, doc only on 1 days (9/30), but schedule note is \u0027\u0027"
+    },
+    {
+        "Category":  "Irregular Schedule Note Missing",
+        "Doctor":  "黃惠娟",
+        "Dept":  "無障礙牙科特診",
+        "Date":  "10/7",
+        "Slot":  "W3 上午",
+        "Detail":  "Calendar has 13 weeks, doc only on 1 days (10/7), but schedule note is \u0027\u0027"
+    }
+]

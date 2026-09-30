@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    background: #1e293b;
+    color: white;
+    font-family: sans-serif;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .test-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .badge-add {
+    background: #088F89;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    font-weight: 800;
+    height: 24px;
+  }
+  .badge-sub {
+    background: #C66E00;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    font-weight: 800;
+    height: 24px;
+  }
+</style>
+</head>
+<body>
+
+  <h1>圖 3（加診）與 圖 4（代診）SVG 圖標測試</h1>
+
+  <div class="test-row">
+    <h3>圖 3 原圖：</h3>
+    <img src="C:/Users/X4715G/.gemini/antigravity/brain/1a555333-6d6f-4f27-9e1f-df414f54fab8/.user_uploaded/media_1790672160297.png" height="50" />
+    <h3>SVG 復刻：</h3>
+    <span class="badge-add">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" style="flex-shrink:0;">
+        <!-- Clock face with hands cut out -->
+        <path fill="#FFFFFF" fill-rule="evenodd" clip-rule="evenodd" d="M10 2C5.58 2 2 5.58 2 10c0 4.42 3.58 8 8 8 1.15 0 2.24-.24 3.22-.68-.14-.58-.22-1.19-.22-1.82 0-3.37 2.33-6.19 5.48-6.9C17.76 4.96 14.18 2 10 2zm1 4a1 1 0 0 0-2 0v4.25c0 .35.18.67.48.85l3.25 1.95a1 1 0 0 0 1.02-1.72l-2.75-1.65V6z"/>
+        <!-- Plus sign with gap -->
+        <path fill="#FFFFFF" d="M18 13.5a1.25 1.25 0 0 0-1.25 1.25v2H14.75a1.25 1.25 0 1 0 0 2.5h2v2a1.25 1.25 0 1 0 2.5 0v-2h2a1.25 1.25 0 1 0 0-2.5h-2v-2c0-.69-.56-1.25-1.25-1.25z"/>
+      </svg>
+      10/20加診
+    </span>
+  </div>
+
+  <div class="test-row">
+    <h3>圖 4 原圖：</h3>
+    <img src="C:/Users/X4715G/.gemini/antigravity/brain/1a555333-6d6f-4f27-9e1f-df414f54fab8/.user_uploaded/media_1790672341413.png" height="40" />
+    <h3>SVG 復刻：</h3>
+    <span class="badge-sub">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="#FFFFFF" style="flex-shrink:0;">
+        <!-- Person Head -->
+        <circle cx="8" cy="6.5" r="3.5"/>
+        <!-- Person Body -->
+        <path d="M 2.5 19 C 2.5 14.5 4.8 12 8 12 C 10.1 12 11.8 13.1 12.7 14.8 C 11.6 15.5 11 16.7 11 18 L 11 19 Z"/>
+        <!-- Right Arrow -->
+        <path d="M 13 16.5 L 18 16.5 L 18 14 L 22.5 17.5 L 18 21 L 18 18.5 L 13 18.5 Z"/>
+      </svg>
+      10/9代診
+    </span>
+  </div>
+
+</body>
+</html>
