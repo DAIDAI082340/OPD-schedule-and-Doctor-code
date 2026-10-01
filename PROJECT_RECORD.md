@@ -1362,6 +1362,39 @@ flowchart TD
   - `門診時段交叉查詢與醫師代碼查詢系統.html`：`9CC33C2E83A82D0DC49F70B8C4743CA8C883A847DE50ADFF343B329340846C5B`
   - 兩者 SHA-256 達成 100% 絕對一致。
 
+---
+
+## 36. 按鈕更名「即時同步官方資訊」與 Android 桌面圖示自適應安全邊距金框升級 (v1.1.2 - 2026-10-01)
+
+### 36.1 需求背景與問題根因
+1. **首頁按鈕名稱更名**：
+   - 使用者指定將頁籤列右側即時同步按鈕由「即時同步官方數據」更名為 **「即時同步官方資訊」**。
+2. **Android 桌面圖示異常變形（金框裁切與角標）**：
+   - **痛點一（金框被切除）**：Android 系統套用 Adaptive Icon 自適應遮罩時，強制放大約 125%~140% 裁切外圍 20% 出血區。因原圖金框位於畫布最外邊界，整圈黃金邊框被硬生生切除。
+   - **痛點二（Brave 獅子頭角標）**：Android 系統對非 WebAPK 形式的「加到主畫面」捷徑強制套用防偽母瀏覽器徽章，遮蔽了右下角「卉」字醫學圖騰。
+   - **iPhone 隔離保證**：iPhone 透過專屬 `<link rel="apple-touch-icon">` 讀取滿版 `apple-touch-icon.png`，完全不受 Android 規範影響，維持 100% 原始高品質。
+
+### 36.2 修正方案與技術實現
+1. **按鈕更名**：
+   - 於 `index.html` 更新按鈕標籤為 `即時同步官方資訊`，連動連線狀態 `同步官方資訊中...` 與計時器 3 秒復原文字。
+2. **Android 專屬自適應圖示 (`icon-maskable-512.png`)**：
+   - 建立 512×512 畫布，背景填滿象牙微光紙紋 `#FAF8F5`。
+   - 3D 立體黃金圓角框與「卉」字圖騰等比縮放至直徑 370px（中央 72% 安全區 Safe Zone）。
+   - 歸檔至根目錄與 `BRAND_ASSETS/`。
+3. **PWA 規範分離升級**：
+   - `manifest.json`：
+     - `icon-192.png` & `icon-512.png` 宣告 `purpose: "any"`（供一般瀏覽器及桌面版使用）。
+     - `icon-maskable-512.png` 宣告 `purpose: "maskable"`（供 Android 專屬自適應桌面讀取）。
+   - `sw.js`：升級快取版號為 `opd-pwa-v1.1.2`，並將 `icon-maskable-512.png` 納入預先快取資產清單。
+
+### 36.3 驗證與雙生檔案一致性
+- **視覺驗證**：已生成 `preview_sync_text_and_android_icon.png` 與 `verified_header_sync_text.png`，確認按鈕更名與圖示在 Android 圓形、圓角方塊遮罩下 100% 完整保留立體金框。
+- **雙生檔案 SHA-256 一致性校驗**：
+  - `index.html`：`7E36E0BC9B55F93F5E32B96B5A9B5281E11C200E5BB4E6FAA207CB1FD7AD19E6`
+  - `門診時段交叉查詢與醫師代碼查詢系統.html`：`7E36E0BC9B55F93F5E32B96B5A9B5281E11C200E5BB4E6FAA207CB1FD7AD19E6`
+  - 兩者 SHA-256 達成 100% 絕對一致。
+
+
 
 
 
