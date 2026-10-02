@@ -1,4 +1,4 @@
-﻿# ==============================================================================
+# ==============================================================================
 # 衛生福利部彰化醫院 (CHHW) 門診時刻表、醫師代碼與停代診公告 原生同步程式 (PowerShell)
 # 支援台灣在地 IP 直接連線、熔斷保護機制 (Circuit Breaker)、雙生檔案 100% SHA-256 同步
 # ==============================================================================
@@ -7,7 +7,7 @@ $ErrorActionPreference = "Stop"
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $baseDir = Split-Path -Parent $scriptDir
-$noticesDir = Join-Path $baseDir "assets\notices"
+$noticesDir = Join-Path $baseDir "assets/notices"
 if (-not (Test-Path $noticesDir)) {
     New-Item -ItemType Directory -Path $noticesDir -Force | Out-Null
 }
@@ -521,7 +521,7 @@ if ($liveCountsMap.Count -gt 0) {
     # 同步寫出獨立 JSON 供前端無快取非同步即時更新
     $livePrettyJson = ($liveCountsMap | ConvertTo-Json -Depth 3)
     [System.IO.File]::WriteAllText((Join-Path $baseDir "live_registration.json"), $livePrettyJson, [System.Text.Encoding]::UTF8)
-    $dataDir = Join-Path $baseDir "assets\data"
+    $dataDir = Join-Path $baseDir "assets/data"
     if (-not (Test-Path $dataDir)) { New-Item -ItemType Directory -Path $dataDir -Force | Out-Null }
     [System.IO.File]::WriteAllText((Join-Path $dataDir "live_netreg.json"), $livePrettyJson, [System.Text.Encoding]::UTF8)
 }

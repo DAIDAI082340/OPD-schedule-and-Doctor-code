@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -4159,18 +4159,21 @@
                        (freshMap[k2] !== undefined ? freshMap[k2] :
                        (freshMap[k3] !== undefined ? freshMap[k3] : freshMap[k4]))))));
 
+          let isStop = liveVal === "停" || (liveVal && typeof liveVal === "object" && liveVal.isStopped);
+          let numVal = typeof liveVal === "number" ? liveVal : (liveVal && typeof liveVal === "object" && typeof liveVal.count === "number" ? liveVal.count : null);
+
           const valEl = item.querySelector(".reg-count-val");
-          if (liveVal === "停") {
+          if (isStop) {
             if (valEl) {
               valEl.className = "reg-stop-val";
               valEl.textContent = "停診";
               updatedItemsCount++;
             }
-          } else if (valEl && liveVal !== undefined && liveVal !== null && typeof liveVal === "number") {
+          } else if (valEl && numVal !== null && typeof numVal === "number") {
             const oldVal = parseInt(valEl.getAttribute("data-count"), 10);
-            if (oldVal !== liveVal) {
-              valEl.textContent = `已掛${liveVal}人`;
-              valEl.setAttribute("data-count", liveVal);
+            if (oldVal !== numVal) {
+              valEl.textContent = `已掛${numVal}人`;
+              valEl.setAttribute("data-count", numVal);
               valEl.classList.remove("count-updated-highlight");
               void valEl.offsetWidth;
               valEl.classList.add("count-updated-highlight");
@@ -4182,7 +4185,7 @@
         const now = new Date();
         const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
         if (statusEl) {
-          statusEl.innerHTML = `<span style="color:#059669; font-weight:700;">已成功連線同步衛福部最新數據！（最後更新：${timeStr}）</span>`;
+          statusEl.innerHTML = `<span style="color:#059669; font-weight:700;">⏱️ 官方資料時間：今日 ${timeStr}（定時自動校正）</span>`;
         }
       } catch (err) {
         const now = new Date();
