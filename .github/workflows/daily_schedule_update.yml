@@ -1,9 +1,7 @@
 name: Daily Schedule & Suspension Notice Update
 
+# 衛福部機房防火牆嚴格封鎖境外 IP (403 阻擋)，全面停用國外雲端排程，由台灣本地 30 分鐘睡眠喚醒排程接手
 on:
-  schedule:
-    # 每天台灣時間 07:00 ~ 21:30 (即 UTC 23:00 ~ 13:30) 每 30 分鐘自動執行巡檢與更新
-    - cron: '0,30 23,0-13 * * *'
   workflow_dispatch:
     inputs:
       force_update:
