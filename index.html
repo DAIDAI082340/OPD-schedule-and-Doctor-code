@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -1487,6 +1487,55 @@
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(52, 73, 94, 0.16);
     }
+    /* 全域即時同步狀態透明時間徽章 */
+    .global-sync-status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(45, 90, 91, 0.08);
+      border: 1px solid rgba(45, 90, 91, 0.22);
+      border-radius: 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #2D5A5B;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap !important;
+      word-break: keep-all !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      user-select: none;
+    }
+    .global-sync-status-badge:hover {
+      background: rgba(45, 90, 91, 0.15);
+      border-color: rgba(45, 90, 91, 0.45);
+      transform: translateY(-1px);
+    }
+    .live-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      display: inline-block;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: livePulseAnim 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+      flex-shrink: 0;
+    }
+    @keyframes livePulseAnim {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
+    }
     @keyframes spin {
       100% { transform: rotate(360deg); }
     }
@@ -2156,6 +2205,10 @@
           <span id="globalSyncIcon" style="font-size: 0.95rem; color: #0284c7; display: inline-block;">🔄</span>
           <span id="globalSyncText">即時同步官方資訊</span>
         </button>
+        <div id="globalSyncStatusBadge" class="global-sync-status-badge" onclick="triggerGlobalLiveSync(document.getElementById('btnGlobalLiveSync'))" title="衛福部最新即時排班資料庫同步時間，點擊可立即重新對齊">
+          <span class="live-pulse-dot"></span>
+          <span id="globalSyncStatusText">官方數據時間：載入中...</span>
+        </div>
       </div>
     </div>
 
@@ -3143,6 +3196,7 @@
       initCrossTab();
       initCodeSearchModule();
       initAntiUpwardDropdowns();
+      updateGlobalSyncBadge();
     }
 
     // ==================== 功能 1: 某科別醫師門診時段 vs 其他科別同時段醫師查詢 ====================
@@ -4242,6 +4296,42 @@
           text.textContent = "即時同步官方資訊";
           if (btn) btn.disabled = false;
         }, 3000);
+      }
+      updateGlobalSyncBadge();
+    }
+
+    // 更新首頁頂部官方同步時間徽章
+    function updateGlobalSyncBadge() {
+      const el = document.getElementById("globalSyncStatusText");
+      if (!el) return;
+
+      let timeStr = "";
+      if (typeof liveNetregCounts !== "undefined" && liveNetregCounts && liveNetregCounts._meta_update_time) {
+        timeStr = liveNetregCounts._meta_update_time;
+      } else if (typeof officialNotice !== "undefined" && officialNotice && officialNotice.updateTime) {
+        timeStr = officialNotice.updateTime;
+      }
+
+      const now = new Date();
+      const padZero = (n) => String(n).padStart(2, '0');
+      const todayStr = `${now.getFullYear()}-${padZero(now.getMonth() + 1)}-${padZero(now.getDate())}`;
+
+      if (!timeStr) {
+        const hh = padZero(now.getHours());
+        const mm = padZero(now.getMinutes());
+        el.textContent = `官方數據時間：今日 ${hh}:${mm}（每 30 分鐘自動對齊）`;
+        return;
+      }
+
+      if (timeStr.startsWith(todayStr)) {
+        const timeOnly = timeStr.substring(11, 16);
+        el.textContent = `官方數據時間：今日 ${timeOnly}（每 30 分鐘自動對齊）`;
+      } else {
+        const parts = timeStr.split(" ");
+        const dateParts = (parts[0] || "").split("-");
+        const formattedDate = dateParts.length === 3 ? `${parseInt(dateParts[1], 10)}/${parseInt(dateParts[2], 10)}` : parts[0];
+        const formattedTime = (parts[1] || "").substring(0, 5);
+        el.textContent = `官方數據時間：${formattedDate} ${formattedTime}（每 30 分鐘自動對齊）`;
       }
     }
 

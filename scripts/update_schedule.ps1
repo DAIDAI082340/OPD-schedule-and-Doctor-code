@@ -18,6 +18,27 @@ $headers = @{
     "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
 }
 
+# ------------------------------------------------------------------------------
+# 0. 鎖定狀態智慧 0 秒黑屏防護（休眠/鎖定喚醒爬蟲時強制黑屏，上班使用時長亮）
+# ------------------------------------------------------------------------------
+function Set-ScreenOffIfLocked {
+    $isLocked = (Get-Process -Name logonui -ErrorAction SilentlyContinue) -ne $null
+    if ($isLocked) {
+        try {
+            if (-not ([System.Management.Automation.PSTypeName]'Win32.ScreenHelper').Type) {
+                Add-Type -MemberDefinition '[DllImport("user32.dll")] public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);' -Name 'ScreenHelper' -Namespace 'Win32' -ErrorAction SilentlyContinue
+            }
+            [Win32.ScreenHelper]::SendMessage([IntPtr](-1), 0x0112, [IntPtr]0xF170, [IntPtr]2) | Out-Null
+            Write-Host "🌙 偵測到 Windows 處於鎖定/睡眠喚醒狀態：已執行 0 秒強制黑屏（關閉螢幕電源），防止值班人員誤關機！" -ForegroundColor DarkCyan
+        } catch {
+            Write-Warning "執行強制黑屏時發生錯誤: $_"
+        }
+    } else {
+        Write-Host "☀️ 偵測到 Windows 處於正常使用中：保持螢幕亮起，不干擾辦公操作。" -ForegroundColor DarkGray
+    }
+}
+Set-ScreenOffIfLocked
+
 Write-Host "=================================================================" -ForegroundColor Cyan
 Write-Host " 🏥 啟動衛生福利部彰化醫院 (CHHW) 門診時刻與停代診公告同步程式" -ForegroundColor Cyan
 Write-Host "=================================================================" -ForegroundColor Cyan
@@ -218,6 +239,7 @@ foreach ($d in $depts) {
         Write-Warning "抓取專科 $dName ($dCode) 失敗: $_"
     }
 }
+$liveCountsMap["_meta_update_time"] = (Get-Date -Format "yyyy-MM-dd HH:mm")
 
 # ------------------------------------------------------------------------------
 # 5. 聚合門診排班規則與停診日期
@@ -560,6 +582,9 @@ if ($LASTEXITCODE -eq 0) {
     git push origin main
     Write-Host "🎉 成功推播至 GitHub Pages 線上服務！" -ForegroundColor Green
 }
+
+# 任務完成後，若仍處於鎖定待機狀態，再次確保螢幕電源關閉
+Set-ScreenOffIfLocked
 
 Write-Host "=================================================================" -ForegroundColor Cyan
 Write-Host " 🎉 衛生福利部彰化醫院 (CHHW) 全院門診時刻表即時同步作業圓滿完成！" -ForegroundColor Cyan
