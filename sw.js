@@ -1,5 +1,5 @@
-// 門診時段交叉查詢與醫師代碼查詢系統 - PWA Service Worker (v1.1.2)
-const CACHE_NAME = 'opd-pwa-v1.1.2';
+// 門診時段交叉查詢與醫師代碼查詢系統 - PWA Service Worker (v1.1.3)
+const CACHE_NAME = 'opd-pwa-v1.1.3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -39,6 +39,22 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   // 只處理 GET 請求
   if (event.request.method !== 'GET') return;
+
+  // 即時掛號數據與帶有動態時間戳的請求：採用 Network-First（網路優先獲取最新資料，離線時才讀快取）
+  if (event.request.url.includes('live_registration.json') || event.request.url.includes('_t=')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -3197,6 +3197,22 @@
       initCodeSearchModule();
       initAntiUpwardDropdowns();
       updateGlobalSyncBadge();
+
+      // 1. 畫面載入立即於背景自動對齊最新官方數據（無需手動點按）
+      silentAutoSync();
+
+      // 2. 開著畫面時，每 60 秒背景自動檢查並對齊最新資料庫
+      setInterval(silentAutoSync, 60000);
+
+      // 3. 手機解鎖、切換分頁或喚醒 App 時，立即自動刷新至最新時間
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          silentAutoSync();
+        }
+      });
+      window.addEventListener("focus", () => {
+        silentAutoSync();
+      });
     }
 
     // ==================== 功能 1: 某科別醫師門診時段 vs 其他科別同時段醫師查詢 ====================
@@ -4252,7 +4268,37 @@
       }
     }
 
-    // 全域首頁即時同步官方資訊：免進入醫師彈窗，一鍵連線刷新全院最新已掛人數與停代診異動快訊
+    // 靜默背景自動同步：不打擾使用者操作，自動拉取最新官方掛號與停診數據並即時刷新畫面
+    let isAutoSyncing = false;
+    async function silentAutoSync() {
+      if (isAutoSyncing) return;
+      isAutoSyncing = true;
+      try {
+        const res = await fetch("live_registration.json?_t=" + Date.now(), { cache: "no-store" });
+        if (res.ok) {
+          const freshMap = await res.json();
+          if (typeof liveNetregCounts !== "undefined" && liveNetregCounts) {
+            Object.assign(liveNetregCounts, freshMap);
+          } else {
+            window.liveNetregCounts = freshMap;
+          }
+          updateGlobalSyncBadge();
+          // 若當前大課表已有查詢結果，原地重新執行以動態更新標籤與停診狀態
+          if (typeof doQuery === "function") {
+            const resultArea = document.getElementById("resultArea");
+            if (resultArea && resultArea.innerHTML.trim() !== "") {
+              doQuery();
+            }
+          }
+        }
+      } catch (e) {
+        // 離線或網絡偶發波動時保持安靜
+      } finally {
+        isAutoSyncing = false;
+      }
+    }
+
+    // 全域首頁手動同步官方資訊：手動點擊按鈕刷新全院最新已掛人數與停代診異動快訊
     async function triggerGlobalLiveSync(btn) {
       const icon = document.getElementById("globalSyncIcon");
       const text = document.getElementById("globalSyncText");
@@ -4262,27 +4308,7 @@
       }
       if (text) text.textContent = "同步官方資訊中...";
 
-      try {
-        const res = await fetch("live_registration.json?_t=" + Date.now(), { cache: "no-store" });
-        if (res.ok) {
-          const freshMap = await res.json();
-          if (typeof liveNetregCounts !== "undefined") {
-            Object.assign(liveNetregCounts, freshMap);
-          } else {
-            window.liveNetregCounts = freshMap;
-          }
-        }
-      } catch (e) {
-        console.warn("無法取得最新掛號快照，維持目前資料庫數據", e);
-      }
-
-      // 若當前大課表已有查詢結果，原地重新執行以動態更新標籤與停診狀態
-      if (typeof doQuery === "function") {
-        const resultArea = document.getElementById("resultArea");
-        if (resultArea && resultArea.innerHTML.trim() !== "") {
-          doQuery();
-        }
-      }
+      await silentAutoSync();
 
       const now = new Date();
       const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
@@ -4297,7 +4323,6 @@
           if (btn) btn.disabled = false;
         }, 3000);
       }
-      updateGlobalSyncBadge();
     }
 
     // 更新首頁頂部官方同步時間徽章
