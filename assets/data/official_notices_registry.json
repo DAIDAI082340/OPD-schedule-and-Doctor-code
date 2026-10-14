@@ -1,8 +1,4 @@
 [
-  { "dept": "耳鼻喉科", "doctor": "許嘉方", "date": "2026-10-19", "slot": "上午", "type": "代診", "subDoctor": "施凱翔", "note": "每週一代診" },
-  { "dept": "耳鼻喉科", "doctor": "施凱翔", "date": "2026-10-20", "slot": "上午", "type": "代診", "subDoctor": "許嘉方", "note": "每週二代診" },
-  { "dept": "耳鼻喉科", "doctor": "許嘉方", "date": "2026-10-21", "slot": "上午", "type": "代診", "subDoctor": "施凱翔", "note": "每週三代診" },
-  { "dept": "耳鼻喉科", "doctor": "許嘉方", "date": "2026-10-23", "slot": "上午", "type": "代診", "subDoctor": "施凱翔", "note": "每週五代診" },
   { "dept": "家醫科", "doctor": "廖曜磐", "date": "2026-10-13", "slot": "上午", "type": "代診", "subDoctor": "連宮瑩" },
   { "dept": "婦產科", "doctor": "林文斌", "date": "2026-10-13", "slot": "上午", "type": "停診" },
   { "dept": "牙科", "doctor": "黃惠娟", "date": "2026-10-13", "slot": "下午", "type": "停診" },
