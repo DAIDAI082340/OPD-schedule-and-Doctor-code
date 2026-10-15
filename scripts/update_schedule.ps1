@@ -204,7 +204,13 @@ foreach ($d in $depts) {
             # 嚴格停診判斷：只有文字明確標示「停診」且完全沒有掛號人數時，才列為停診
             # 絕對禁止將「預約已額滿」、「網掛不開放」、或 disabled 誤判為停診！
             $isStopped = ($inner -like "*停診*") -and ($count -eq $null)
-            $isSubstitute = ($inner -like "*代診*")
+            $isSubstitute = $false
+            if ($inner -match '代診[：:]\s*([^\s\)<]+)') {
+                # 欄位中標註「代診:某醫師」，代表原醫師請假停診
+                $isStopped = $true
+            } elseif ($inner -like "*代診*") {
+                if (-not $isStopped) { $isSubstitute = $true }
+            }
             $slotLabel = if ($slotMap.ContainsKey($apn)) { $slotMap[$apn] } else { "上午" }
             $roomLabel = if ($roomNo.EndsWith("診")) { $roomNo } else { "${roomNo}診" }
 
@@ -245,6 +251,9 @@ $liveCountsMap["_meta_update_time"] = (Get-Date -Format "yyyy-MM-dd HH:mm")
 # 5. 聚合門診排班規則與停診日期
 # ------------------------------------------------------------------------------
 $grouped = @{}
+$today = (Get-Date).Date
+$currentYear = $today.Year
+
 foreach ($item in $allRawSlots) {
     $k = "$($item.dept_code)|$($item.dept_name)|$($item.doctor)|$($item.weekday)|$($item.slot)"
     if (-not $grouped.ContainsKey($k)) {
@@ -255,19 +264,178 @@ foreach ($item in $allRawSlots) {
             weekday = $item.weekday
             slot = $item.slot
             rooms = [System.Collections.Generic.List[string]]::new()
-            stopped_dates = [System.Collections.Generic.List[string]]::new()
-            substitute_dates = [System.Collections.Generic.List[string]]::new()
+            stopped_dates = [System.Collections.Generic.List[datetime]]::new()
+            substitute_dates = [System.Collections.Generic.List[datetime]]::new()
+            added_dates = [System.Collections.Generic.List[datetime]]::new()
             total_occurrences = 0
         }
     }
     $grouped[$k].total_occurrences++
     $grouped[$k].rooms.Add($item.room)
     if ($item.is_stopped) {
-        $grouped[$k].stopped_dates.Add($item.date)
+        $grouped[$k].stopped_dates.Add($item.dt)
     }
-    if ($item.is_substitute) {
-        $grouped[$k].substitute_dates.Add($item.date)
+    if ($item.is_substitute -and -not $item.is_stopped) {
+        $grouped[$k].substitute_dates.Add($item.dt)
     }
+}
+
+# ------------------------------------------------------------------------------
+# 5.1 注入全院官方公文停代診資料庫 (Dual Fusion 網掛 + 官方公文 109 筆對齊)
+# ------------------------------------------------------------------------------
+$officialNoticesPath = Join-Path $baseDir "assets/data/official_notices_registry.json"
+if (Test-Path $officialNoticesPath) {
+    try {
+        $officialNotices = Get-Content $officialNoticesPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        Write-Host " -> 成功載入官方公文歷史/遠期停代診紀錄: 共 $($officialNotices.Count) 筆" -ForegroundColor Green
+
+        foreach ($n in $officialNotices) {
+            $nDt = [DateTime]::ParseExact($n.date, "yyyy-MM-dd", $null)
+            if ($nDt.Date -lt $today) { continue } # 自動剃除過期公文紀錄
+
+            $nw = [int]$nDt.DayOfWeek
+            $nWeekday = if ($nw -eq 0) { 7 } else { $nw }
+            $nDoc = $n.doctor.Trim()
+            $nSlot = $n.slot.Trim()
+            $nDept = $n.dept.Trim()
+            $nType = $n.type.Trim() # 停診, 代診, 加診
+
+            # 尋找匹配的門診 entry
+            $matchedEntries = @($grouped.Values | Where-Object { 
+                $_.doctor -eq $nDoc -and $_.weekday -eq $nWeekday -and $_.slot -eq $nSlot -and ($_.dept_name -like "*$nDept*" -or $nDept -like "*$($_.dept_name)*")
+            })
+
+            # 若無精確科別匹配，放寬至醫師姓名、星期與時段匹配
+            if ($matchedEntries.Count -eq 0) {
+                $matchedEntries = @($grouped.Values | Where-Object { 
+                    $_.doctor -eq $nDoc -and $_.weekday -eq $nWeekday -and $_.slot -eq $nSlot
+                })
+            }
+
+            if ($matchedEntries.Count -gt 0) {
+                foreach ($mEntry in $matchedEntries) {
+                    if ($nType -eq "停診" -and -not ($mEntry.stopped_dates | Where-Object { $_.Date -eq $nDt.Date })) {
+                        $mEntry.stopped_dates.Add($nDt)
+                    } elseif ($nType -eq "代診" -and -not ($mEntry.substitute_dates | Where-Object { $_.Date -eq $nDt.Date })) {
+                        # 嚴格互斥防呆：停診日不可列為代診日
+                        if (-not ($mEntry.stopped_dates | Where-Object { $_.Date -eq $nDt.Date })) {
+                            $mEntry.substitute_dates.Add($nDt)
+                        }
+                    } elseif ($nType -eq "加診" -and -not ($mEntry.added_dates | Where-Object { $_.Date -eq $nDt.Date })) {
+                        $mEntry.added_dates.Add($nDt)
+                    }
+                }
+            } else {
+                # 門診表中尚無此常態診次 (例如特定臨時代診醫師：如 12/31 黃耀宣代診，但黃耀宣原無週四上午常態診)
+                $refRoom = "診"
+                $refDeptCode = ""
+                $refDeptName = $nDept
+
+                $subTarget = if ($n.subDoctor) { $n.subDoctor.Trim() } else { "" }
+                $targetDoc = if ($subTarget) { $subTarget } else {
+                    $matchedStop = $officialNotices | Where-Object { $_.date -eq $n.date -and $_.slot -eq $n.slot -and $_.type -eq "停診" -and ($_.dept -eq $n.dept -or $_.dept -like "*$nDept*") } | Select-Object -First 1
+                    if ($matchedStop) { $matchedStop.doctor.Trim() } else { "" }
+                }
+
+                if ($targetDoc) {
+                    $refEntry = $grouped.Values | Where-Object { $_.doctor -eq $targetDoc -and $_.weekday -eq $nWeekday -and $_.slot -eq $nSlot } | Select-Object -First 1
+                    if ($refEntry) {
+                        $refRoom = if ($refEntry.rooms.Count -gt 0) { $refEntry.rooms[0] } else { "診" }
+                        $refDeptCode = $refEntry.dept_code
+                        $refDeptName = $refEntry.dept_name
+                    }
+                }
+                if (-not $refDeptCode) {
+                    $dMatch = $depts | Where-Object { $_.name -like "*$nDept*" -or $nDept -like "*$($_.name)*" } | Select-Object -First 1
+                    if ($dMatch) { $refDeptCode = $dMatch.code; $refDeptName = $dMatch.name } else { $refDeptCode = "00" }
+                }
+
+                $kNew = "$refDeptCode|$refDeptName|$nDoc|$nWeekday|$nSlot"
+                $newEntry = [PSCustomObject]@{
+                    dept_code = $refDeptCode
+                    dept_name = $refDeptName
+                    doctor = $nDoc
+                    weekday = $nWeekday
+                    slot = $nSlot
+                    rooms = [System.Collections.Generic.List[string]]::new()
+                    stopped_dates = [System.Collections.Generic.List[datetime]]::new()
+                    substitute_dates = [System.Collections.Generic.List[datetime]]::new()
+                    added_dates = [System.Collections.Generic.List[datetime]]::new()
+                    total_occurrences = 0 # 標記為臨時診次
+                }
+                if ($refRoom) { $newEntry.rooms.Add($refRoom) }
+                if ($nType -eq "停診") { $newEntry.stopped_dates.Add($nDt) }
+                elseif ($nType -eq "代診") { $newEntry.substitute_dates.Add($nDt) }
+                elseif ($nType -eq "加診") { $newEntry.added_dates.Add($nDt) }
+                $grouped[$kNew] = $newEntry
+            }
+        }
+    } catch {
+        Write-Warning "載入/解析 official_notices_registry.json 異常: $_"
+    }
+}
+
+function Format-DateNoteItem {
+    param([DateTime]$d)
+    if ($d.Year -gt $currentYear) {
+        return "$($d.Year - 1911)/$($d.Month)/$($d.Day)"
+    } else {
+        return "$($d.Month)/$($d.Day)"
+    }
+}
+
+function Prune-TextNote {
+    param([string]$text, [DateTime]$refDate = $today)
+    if ([string]::IsNullOrWhiteSpace($text)) { return "" }
+    $parts = $text -split '\s+'
+    $kept = @()
+    foreach ($p in $parts) {
+        if ($p -in @("網掛不開放", "網路不開放")) {
+            $kept += $p; continue
+        }
+        $suffix = ""
+        $isStartFrom = $false
+        if ($p -match '(起看診|起開診)$') { $suffix = "起看診"; $isStartFrom = $true }
+        elseif ($p -match '(起停診)$') { $suffix = "起停診"; $isStartFrom = $true }
+        elseif ($p -match '(看診|開診)$') { $suffix = "看診" }
+        elseif ($p -match '(停診)$') { $suffix = "停診" }
+        elseif ($p -match '(代診)$') { $suffix = "代診" }
+        elseif ($p -match '(加診)$') { $suffix = "加診" }
+
+        if (-not $suffix) { $kept += $p; continue }
+        $dStr = $p.Substring(0, $p.Length - $suffix.Length)
+        $subToks = $dStr -split '\.'
+        $valid = @()
+        $lastM = 0
+        foreach ($tok in $subToks) {
+            $cTok = $tok -replace '起$', ''
+            $dt = $null
+            if ($cTok -match '^(\d{2,3})\/(\d{1,2})\/(\d{1,2})$') {
+                $y = [int]$Matches[1] + 1911; $m = [int]$Matches[2]; $d = [int]$Matches[3]
+                $dt = Get-Date -Year $y -Month $m -Day $d -Hour 0 -Minute 0 -Second 0
+            } elseif ($cTok -match '^(\d{1,2})\/(\d{1,2})$') {
+                $m = [int]$Matches[1]; $d = [int]$Matches[2]
+                $y = if ($m -lt 6 -and $refDate.Month -ge 10) { $currentYear + 1 } else { $currentYear }
+                $dt = Get-Date -Year $y -Month $m -Day $d -Hour 0 -Minute 0 -Second 0
+            } elseif ($cTok -match '^\d{1,2}$' -and $lastM -gt 0) {
+                $m = $lastM; $d = [int]$cTok
+                $y = if ($m -lt 6 -and $refDate.Month -ge 10) { $currentYear + 1 } else { $currentYear }
+                $dt = Get-Date -Year $y -Month $m -Day $d -Hour 0 -Minute 0 -Second 0
+            }
+            if ($dt -ne $null) {
+                if ($cTok -match '\/') { $lastM = $dt.Month }
+                if ($isStartFrom -or $dt.Date -ge $refDate) {
+                    $valid += $dt
+                }
+            }
+        }
+        if ($valid.Count -gt 0) {
+            $sorted = $valid | Sort-Object { $_.Ticks }
+            $fmtList = $sorted | ForEach-Object { Format-DateNoteItem $_ }
+            $kept += (($fmtList -join ".") + $suffix)
+        }
+    }
+    return ($kept -join " ").Trim()
 }
 
 $schedules = @()
@@ -276,87 +444,102 @@ foreach ($k in $grouped.Keys) {
     # 選取出現頻率最高的診間號
     $roomFinal = ($entry.rooms | Group-Object | Sort-Object Count -Descending | Select-Object -First 1).Name
 
-    # 彙整停診備註
+    # 彙整停診備註 (按真實日曆排序、跨年感知、過期自動剃除)
     $noteParts = @()
     if ($entry.stopped_dates.Count -gt 0) {
-        $uniqueDates = $entry.stopped_dates | Select-Object -Unique
-        # 按月日排序
-        $sortedDates = $uniqueDates | Sort-Object {
-            $parts = $_ -split '/'
-            [int]$parts[0] * 100 + [int]$parts[1]
+        $validStopped = @($entry.stopped_dates | Where-Object { $_.Date -ge $today } | Sort-Object { $_.Ticks } | Select-Object -Unique)
+        if ($validStopped.Count -gt 0) {
+            $formattedStopped = $validStopped | ForEach-Object { Format-DateNoteItem $_ }
+            $noteParts += (($formattedStopped -join ".") + "停診")
         }
-        $noteParts += (($sortedDates -join ".") + "停診")
     }
 
-    # 彙整代診備註 (方案 1 專屬：代診醫師加上專屬色彩標籤)
+    # 彙整代診備註 (方案 1 專屬：按真實日曆排序、跨年感知、過期自動剃除，且排除同一日已停診之矛盾)
     if ($entry.substitute_dates.Count -gt 0) {
-        $uniqueSubDates = $entry.substitute_dates | Select-Object -Unique
-        $sortedSubDates = $uniqueSubDates | Sort-Object {
-            $parts = $_ -split '/'
-            [int]$parts[0] * 100 + [int]$parts[1]
+        $validSub = @($entry.substitute_dates | Where-Object { 
+            $_.Date -ge $today -and -not ($entry.stopped_dates | Where-Object { $_.Date -eq $_.Date })
+        } | Sort-Object { $_.Ticks } | Select-Object -Unique)
+        if ($validSub.Count -gt 0) {
+            $formattedSub = $validSub | ForEach-Object { Format-DateNoteItem $_ }
+            $noteParts += (($formattedSub -join ".") + "代診")
         }
-        $noteParts += (($sortedSubDates -join ".") + "代診")
     }
 
-    # 官方指定臨時代診與停診雙向交叉比對維護 (圖 2 焦糖金珀代診框 & 官方 Ground-Truth 停診)
-    if ($entry.doctor -eq "黃耀宣" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 4 -and $entry.slot -eq "上午") {
-        if (-not ($noteParts -like "*代診*")) { $noteParts += "10/1.10/15代診" }
+    # 彙整加診備註 (按真實日曆排序、跨年感知、過期自動剃除)
+    if ($entry.added_dates.Count -gt 0) {
+        $validAdded = @($entry.added_dates | Where-Object { $_.Date -ge $today } | Sort-Object { $_.Ticks } | Select-Object -Unique)
+        if ($validAdded.Count -gt 0) {
+            $formattedAdded = $validAdded | ForEach-Object { Format-DateNoteItem $_ }
+            $noteParts += (($formattedAdded -join ".") + "加診")
+        }
+    }
+
+    # 常態性「網掛不開放」醫師時段保護
+    if ($entry.doctor -eq "李文宏" -and $entry.dept_code -eq "06" -and $entry.weekday -eq 4 -and $entry.slot -eq "上午") {
+        if (-not ($noteParts -contains "網掛不開放")) { $noteParts = @("網掛不開放") + $noteParts }
     }
     if ($entry.doctor -eq "吳佶育" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 4 -and $entry.slot -eq "上午") {
-        $noteParts = @("網掛不開放 9/24.10/1.10/8.10/15停診")
+        if (-not ($noteParts -contains "網掛不開放")) { $noteParts = @("網掛不開放") + $noteParts }
     }
     if ($entry.doctor -eq "陳詩典" -and $entry.dept_code -eq "AA" -and $entry.weekday -eq 4 -and $entry.slot -eq "下午") {
-        $noteParts = @("網掛不開放 9/24.10/8.10/15停診")
-    }
-    if ($entry.doctor -eq "李文宏" -and $entry.dept_code -eq "06" -and $entry.weekday -eq 4 -and $entry.slot -eq "上午") {
-        $noteParts = @("網掛不開放")
-    }
-    if ($entry.doctor -eq "蔡旻叡" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
-        if (-not ($noteParts -like "*代診*")) { $noteParts += "10/9代診" }
-    }
-    if ($entry.doctor -eq "黃耀宣" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
-        if (-not ($noteParts -like "*10/9*")) { $noteParts += "10/9停診" }
-    }
-    # 小兒科 10/17 停代診校正 (鍾瑞賢請假停診、馬瑞杉臨時代診)
-    if ($entry.doctor -eq "鍾瑞賢" -and $entry.dept_code -eq "04" -and $entry.weekday -eq 6 -and $entry.slot -eq "上午") {
-        $noteParts = @("10/3.24.31看診", "10/17停診")
-    }
-    if ($entry.doctor -eq "馬瑞杉" -and $entry.dept_code -eq "04" -and $entry.weekday -eq 6 -and $entry.slot -eq "上午") {
-        $noteParts = @("10/10看診", "10/17代診")
-    }
-    # 精神科 10/9 李景嶽代診、葉騰尹停診、王鴻松停診
-    if ($entry.doctor -eq "李景嶽" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
-        if (-not ($noteParts -like "*代診*")) { $noteParts += "10/9代診" }
-    }
-    if ($entry.doctor -eq "葉騰尹" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
-        $noteParts = @("10/9.10/16停診")
-    }
-    if ($entry.doctor -eq "李景嶽" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 5 -and $entry.slot -eq "下午") {
-        if (-not ($noteParts -like "*代診*")) { $noteParts += "10/9代診" }
-    }
-    if ($entry.doctor -eq "王鴻松" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 5 -and $entry.slot -eq "下午") {
-        $noteParts = @("10/9.11/27停診")
-    }
-    # 復健科 10/16 林昭宏停診 (廖宜新本有門診免代診框)
-    if ($entry.doctor -eq "林昭宏" -and $entry.dept_code -eq "14" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
-        if (-not ($noteParts -like "*10/16*")) { $noteParts += "10/16停診" }
-    }
-    # 胸腔內科 10/9 林澤宏停診 (網路掛號即時比對防漏)
-    if ($entry.doctor -eq "林澤宏" -and $entry.dept_code -eq "AC" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
-        if (-not ($noteParts -like "*10/9*")) { $noteParts += "10/9停診" }
-    }
-    # 胸腔內科 10/20 余養豪加診 (公文新增加診)
-    if ($entry.doctor -eq "余養豪" -and $entry.dept_code -eq "AC" -and $entry.weekday -eq 2 -and $entry.slot -eq "下午") {
-        if (-not ($noteParts -like "*10/20*")) { $noteParts += "10/20加診" }
-    }
-    # 牙科 10/17 金椿期加診 (公文新增加診)
-    if ($entry.doctor -eq "金椿期" -and $entry.dept_code -eq "40" -and $entry.weekday -eq 6 -and $entry.slot -eq "上午") {
-        $noteParts = @("10/17加診")
+        if (-not ($noteParts -contains "網掛不開放")) { $noteParts = @("網掛不開放") + $noteParts }
     }
 
-    $note = $noteParts -join " "
+    # 星期六輪週看診與特定看診日自動過期剃除機制
+    $rosterRules = @{
+        "13|王鴻松|6" = "10/3看診"
+        "13|梁孫源|6" = "10/10.10/31看診"
+        "13|蕭銘鴻|6" = "10/17看診"
+        "13|葉騰尹|6" = "10/24看診"
+        "AD|張淑鈺|6" = "10/10.10/24看診"
+        "AB|李學林|6" = "10/10.10/24看診"
+        "40|金椿期|6" = "10/17看診"
+        "04|鍾瑞賢|6" = "10/3.10/24.10/31看診"
+        "04|馬瑞杉|6" = "10/10看診"
+        "AF|陳筠方|5" = "9/11.9/25看診"
+        "09|許嘉方|5|下午" = "10/23起看診"
+        "09|施彥旭|3|下午" = "10/7.10/21看診"
+        "09|施凱翔|1|上午" = "10/18起看診"
+        "09|許嘉方|2|上午" = "10/18起看診"
+        "09|施凱翔|3|上午" = "10/18起看診"
+        "09|施凱翔|5|上午" = "10/18起看診"
+    }
 
-    # 排除單日臨時代診或幽靈常態診次
+    $rKeySlot = "$($entry.dept_code)|$($entry.doctor)|$($entry.weekday)|$($entry.slot)"
+    $rKeyDay = "$($entry.dept_code)|$($entry.doctor)|$($entry.weekday)"
+    $ruleRaw = if ($rosterRules.ContainsKey($rKeySlot)) { $rosterRules[$rKeySlot] } elseif ($rosterRules.ContainsKey($rKeyDay)) { $rosterRules[$rKeyDay] } else { $null }
+
+    if ($ruleRaw) {
+        $prunedRoster = Prune-TextNote $ruleRaw
+        if ($prunedRoster) {
+            $noteParts = @($prunedRoster) + $noteParts
+        }
+    }
+
+    # 退休/轉任起停診標註
+    if ($entry.doctor -eq "蔡豐璟" -and $entry.dept_code -eq "BA" -and $entry.weekday -eq 4 -and $entry.slot -eq "上午") {
+        $noteParts = @("10/1起停診")
+        $roomFinal = "16診"
+    }
+    if ($entry.doctor -eq "許嘉方" -and $entry.dept_code -eq "09" -and $entry.weekday -eq 4 -and $entry.slot -eq "夜診") {
+        $noteParts = @("10/1起停診")
+        $roomFinal = "22診"
+    }
+
+    # 若為純臨時代診/臨時加診診次且備註日期皆已過期，則不產出該診次
+    if ($entry.total_occurrences -eq 0 -and $noteParts.Count -eq 0) {
+        continue
+    }
+
+    # 耳鼻喉科 (09) 10/18 起全面互換看診時段：排除舊醫師時段，確保大課表與個人時刻表乾淨呈現新常態
+    if ($entry.dept_code -eq "09" -and $entry.doctor -eq "許嘉方" -and ($entry.weekday -eq 1 -or $entry.weekday -eq 3 -or $entry.weekday -eq 5) -and $entry.slot -eq "上午") {
+        continue
+    }
+    if ($entry.dept_code -eq "09" -and $entry.doctor -eq "施凱翔" -and $entry.weekday -eq 2 -and $entry.slot -eq "上午") {
+        continue
+    }
+
+    # 排除幽靈常態診次
     if ($entry.doctor -eq "蕭銘鴻" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 1 -and $entry.slot -eq "下午") {
         continue
     }
@@ -369,68 +552,8 @@ foreach ($k in $grouped.Keys) {
     if ($entry.doctor -eq "葉騰尹" -and $entry.dept_code -eq "1303" -and ($entry.weekday -eq 3 -or $entry.weekday -eq 4) -and $entry.slot -eq "夜診") {
         continue
     }
-    if ($entry.doctor -eq "蔡豐璟" -and $entry.dept_code -eq "BA" -and $entry.weekday -eq 4 -and $entry.slot -eq "上午") {
-        $note = "10/1起停診"
-        $roomFinal = "16診"
-    }
-    if ($entry.doctor -eq "許嘉方" -and $entry.dept_code -eq "09" -and $entry.weekday -eq 4 -and $entry.slot -eq "夜診") {
-        $note = "10/1起停診"
-        $roomFinal = "22診"
-    }
 
-    # 星期六輪週看診（X/X看診）全院標註
-    if ($entry.doctor -eq "王鴻松" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 6) {
-        $note = "10/3看診"
-    }
-    if ($entry.doctor -eq "梁孫源" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 6) {
-        $note = "10/10.31看診"
-    }
-    if ($entry.doctor -eq "蕭銘鴻" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 6) {
-        $note = "10/17看診"
-    }
-    if ($entry.doctor -eq "葉騰尹" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 6) {
-        $note = "10/24看診"
-    }
-    if ($entry.doctor -eq "張淑鈺" -and $entry.dept_code -eq "AD" -and $entry.weekday -eq 6) {
-        $note = "10/10.10/24看診"
-    }
-    if ($entry.doctor -eq "李學林" -and $entry.dept_code -eq "AB" -and $entry.weekday -eq 6) {
-        $note = "10/10.10/24看診"
-    }
-    if ($entry.doctor -eq "金椿期" -and $entry.dept_code -eq "40" -and $entry.weekday -eq 6) {
-        $note = "10/17看診"
-    }
-    if ($entry.doctor -eq "陳筠方" -and $entry.dept_name -eq "血液腫瘤科" -and $entry.weekday -eq 5) {
-        $note = ("9/11.25看診 " + $note).Trim()
-    }
-
-    # 耳鼻喉科 (09) 10月~11月開診時段真實變動深度維護
-    if ($entry.dept_code -eq "09") {
-        if ($entry.doctor -eq "許嘉方" -and $entry.weekday -eq 2 -and $entry.slot -eq "上午") {
-            $note = "10/20起看診"
-        }
-        if ($entry.doctor -eq "許嘉方" -and $entry.weekday -eq 5 -and $entry.slot -eq "下午") {
-            $note = "10/23起看診"
-        }
-        if ($entry.doctor -eq "許嘉方" -and $entry.weekday -eq 1 -and $entry.slot -eq "上午") {
-            $note = "10/5.12看診"
-        }
-        if ($entry.doctor -eq "許嘉方" -and $entry.weekday -eq 3 -and $entry.slot -eq "上午") {
-            $note = "10/7.14看診"
-        }
-        if ($entry.doctor -eq "許嘉方" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
-            $note = "10/2.16看診 10/9停診"
-        }
-        if ($entry.doctor -eq "許嘉方" -and $entry.weekday -eq 4 -and $entry.slot -eq "下午") {
-            $note = ""
-        }
-        if ($entry.doctor -eq "施彥旭" -and $entry.weekday -eq 3 -and $entry.slot -eq "下午") {
-            $note = "10/7.21看診"
-        }
-        if ($entry.doctor -eq "施凱翔" -and $entry.weekday -eq 2 -and $entry.slot -eq "上午") {
-            $note = "10/6.13看診"
-        }
-    }
+    $note = ($noteParts -join " ").Trim()
 
     $schedules += [PSCustomObject]@{
         dept_code = $entry.dept_code
@@ -476,6 +599,31 @@ foreach ($s in $schedules) {
             docCode = $docCode
         }
     }
+}
+
+# ------------------------------------------------------------------------------
+# 7.5 全面排班品質與防呆斷言檢核 (Assert Zero Contradiction)
+# ------------------------------------------------------------------------------
+$conflictCount = 0
+foreach ($s in $schedules) {
+    if ($s.note -match '(\d+\/\d+).*?停診' -and $s.note -match '(\d+\/\d+).*?代診') {
+        $stopMatches = [regex]::Matches($s.note, '(\d+\/\d+(?:\.\d+\/\d+)*)停診')
+        $subMatches = [regex]::Matches($s.note, '(\d+\/\d+(?:\.\d+\/\d+)*)代診')
+        if ($stopMatches.Count -gt 0 -and $subMatches.Count -gt 0) {
+            $stopDates = $stopMatches[0].Groups[1].Value -split '\.'
+            $subDates = $subMatches[0].Groups[1].Value -split '\.'
+            $intersection = $stopDates | Where-Object { $_ -in $subDates }
+            if ($intersection) {
+                Write-Warning "⚠️ 偵測到排班同日停代診矛盾: $($s.doctor) [$($s.dept_code)] $($s.note) -> 衝突日期: $($intersection -join ',')"
+                $conflictCount++
+            }
+        }
+    }
+}
+if ($conflictCount -gt 0) {
+    Write-Warning "🚨 總共檢測到 $conflictCount 處同日停代診衝突，請檢查資料源！"
+} else {
+    Write-Host "✅ 全院排班品質檢核通過：0 處停診代診邏輯矛盾！" -ForegroundColor Green
 }
 
 # ------------------------------------------------------------------------------
