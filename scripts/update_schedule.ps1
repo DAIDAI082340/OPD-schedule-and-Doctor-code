@@ -296,6 +296,7 @@ if (Test-Path $officialNoticesPath) {
             $nw = [int]$nDt.DayOfWeek
             $nWeekday = if ($nw -eq 0) { 7 } else { $nw }
             $nDoc = $n.doctor.Trim()
+            if ($nDoc -eq "劉青耀") { $nDoc = "劉清耀" }
             $nSlot = $n.slot.Trim()
             $nDept = $n.dept.Trim()
             $nType = $n.type.Trim() # 停診, 代診, 加診
@@ -331,6 +332,21 @@ if (Test-Path $officialNoticesPath) {
                 $refDeptCode = ""
                 $refDeptName = $nDept
 
+                # 防呆鐵律：若該代診醫師在此科別、此星期、此時段本來就已有常態門診，
+                # 絕不另外多建一個診次！直接將代診日期合併進其原門診 entry！
+                $existSlotEntry = $grouped.Values | Where-Object { 
+                    $_.doctor -eq $nDoc -and $_.weekday -eq $nWeekday -and $_.slot -eq $nSlot -and ($_.dept_name -like "*$nDept*" -or $nDept -like "*$($_.dept_name)*")
+                } | Select-Object -First 1
+
+                if ($existSlotEntry) {
+                    if (-not ($existSlotEntry.stopped_dates | Where-Object { $_.Date -eq $nDt.Date })) {
+                        if (-not ($existSlotEntry.substitute_dates | Where-Object { $_.Date -eq $nDt.Date })) {
+                            $existSlotEntry.substitute_dates.Add($nDt)
+                        }
+                    }
+                    continue
+                }
+
                 # 鐵律：代診若非代同科醫師的就不顯示代診
                 if ($nType -eq "代診") {
                     $docCodeObj = if ($docCodeMap.ContainsKey($nDoc)) { $docCodeMap[$nDoc] } else { "" }
@@ -341,6 +357,7 @@ if (Test-Path $officialNoticesPath) {
                 }
 
                 $subTarget = if ($n.subDoctor) { $n.subDoctor.Trim() } elseif ($n.subFor) { $n.subFor.Trim() } else { "" }
+                if ($subTarget -eq "劉青耀") { $subTarget = "劉清耀" }
                 $targetDoc = if ($subTarget) { $subTarget } else {
                     $matchedStop = $officialNotices | Where-Object { $_.date -eq $n.date -and $_.slot -eq $n.slot -and $_.type -eq "停診" -and ($_.dept -eq $n.dept -or $_.dept -like "*$nDept*") } | Select-Object -First 1
                     if ($matchedStop) { $matchedStop.doctor.Trim() } else { "" }
@@ -466,7 +483,8 @@ foreach ($k in $grouped.Keys) {
     # 彙整代診備註 (方案 1 專屬：按真實日曆排序、跨年感知、過期自動剃除，且排除同一日已停診之矛盾)
     if ($entry.substitute_dates.Count -gt 0) {
         $validSub = @($entry.substitute_dates | Where-Object { 
-            $_.Date -ge $today -and -not ($entry.stopped_dates | Where-Object { $_.Date -eq $_.Date })
+            $subDate = $_.Date
+            $subDate -ge $today -and -not ($entry.stopped_dates | Where-Object { $_.Date -eq $subDate })
         } | Sort-Object { $_.Ticks } | Select-Object -Unique)
         if ($validSub.Count -gt 0) {
             $formattedSub = $validSub | ForEach-Object { Format-DateNoteItem $_ }
@@ -584,7 +602,7 @@ foreach ($k in $grouped.Keys) {
     if ($entry.doctor -eq "蕭銘鴻" -and $entry.dept_code -eq "13" -and $entry.weekday -eq 1 -and $entry.slot -eq "下午") {
         continue
     }
-    if ($entry.doctor -eq "鍾瑞賢" -and $entry.dept_code -eq "04" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
+    if ($entry.doctor -eq "鍾瑞賢" -and $entry.dept_code -eq "04" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午" -and $noteParts.Count -eq 0) {
         continue
     }
     if ($entry.doctor -eq "廖宜新" -and $entry.dept_code -eq "14" -and $entry.weekday -eq 5 -and $entry.slot -eq "上午") {
@@ -665,6 +683,25 @@ if ($conflictCount -gt 0) {
     Write-Warning "🚨 總共檢測到 $conflictCount 處同日停代診衝突，請檢查資料源！"
 } else {
     Write-Host "✅ 全院排班品質檢核通過：0 處停診代診邏輯矛盾！" -ForegroundColor Green
+}
+
+# 斷言檢核：全院是否出現同科同醫師同診次之重複卡片
+$dupDocCount = 0
+$docSlotKeys = @{}
+foreach ($s in $schedules) {
+    $slotKey = "$($s.dept_code)|$($s.doctor)|$($s.weekday)|$($s.slot)"
+    if ($docSlotKeys.ContainsKey($slotKey)) {
+        Write-Warning "🚨 檢測到醫師同科同診次重複卡片: $slotKey (診間: $($docSlotKeys[$slotKey]) 與 $($s.room))"
+        $dupDocCount++
+    } else {
+        $docSlotKeys[$slotKey] = $s.room
+    }
+}
+if ($dupDocCount -gt 0) {
+    Write-Error "🚨【嚴重錯誤】檢測到 $dupDocCount 筆同醫師重複診次卡片，違反零重複鐵律！"
+    exit 1
+} else {
+    Write-Host "✅ 全院醫師診次卡片唯一性檢核通過：0 筆重複診次卡片！" -ForegroundColor Green
 }
 
 # ------------------------------------------------------------------------------
