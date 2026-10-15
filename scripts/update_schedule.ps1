@@ -300,13 +300,13 @@ if (Test-Path $officialNoticesPath) {
             $nDept = $n.dept.Trim()
             $nType = $n.type.Trim() # 停診, 代診, 加診
 
-            # 尋找匹配的門診 entry
+            # 尋找匹配的門診 entry（嚴格同科匹配，杜絕跨科代診串門）
             $matchedEntries = @($grouped.Values | Where-Object { 
                 $_.doctor -eq $nDoc -and $_.weekday -eq $nWeekday -and $_.slot -eq $nSlot -and ($_.dept_name -like "*$nDept*" -or $nDept -like "*$($_.dept_name)*")
             })
 
-            # 若無精確科別匹配，放寬至醫師姓名、星期與時段匹配
-            if ($matchedEntries.Count -eq 0) {
+            # 若無精確科別匹配，僅在「停診」時允許放寬至醫師姓名與時段匹配；代診若非同科絕對禁止跨科匹配！
+            if ($matchedEntries.Count -eq 0 -and $nType -eq "停診") {
                 $matchedEntries = @($grouped.Values | Where-Object { 
                     $_.doctor -eq $nDoc -and $_.weekday -eq $nWeekday -and $_.slot -eq $nSlot
                 })
@@ -331,7 +331,16 @@ if (Test-Path $officialNoticesPath) {
                 $refDeptCode = ""
                 $refDeptName = $nDept
 
-                $subTarget = if ($n.subDoctor) { $n.subDoctor.Trim() } else { "" }
+                # 鐵律：代診若非代同科醫師的就不顯示代診
+                if ($nType -eq "代診") {
+                    $docCodeObj = if ($docCodeMap.ContainsKey($nDoc)) { $docCodeMap[$nDoc] } else { "" }
+                    # 泌尿科、骨科、外科等跨科代診一律不生成獨立代診診次
+                    if ($nDoc -in @("蔡卓榮", "陳文銘", "蘇美旭", "王守吉", "李文宏", "林憲治")) {
+                        continue
+                    }
+                }
+
+                $subTarget = if ($n.subDoctor) { $n.subDoctor.Trim() } elseif ($n.subFor) { $n.subFor.Trim() } else { "" }
                 $targetDoc = if ($subTarget) { $subTarget } else {
                     $matchedStop = $officialNotices | Where-Object { $_.date -eq $n.date -and $_.slot -eq $n.slot -and $_.type -eq "停診" -and ($_.dept -eq $n.dept -or $_.dept -like "*$nDept*") } | Select-Object -First 1
                     if ($matchedStop) { $matchedStop.doctor.Trim() } else { "" }
@@ -485,24 +494,56 @@ foreach ($k in $grouped.Keys) {
         if (-not ($noteParts -contains "網掛不開放")) { $noteParts = @("網掛不開放") + $noteParts }
     }
 
-    # 星期六輪週看診與特定看診日自動過期剃除機制
+    # 全院非每週門診、隔週看診、輪週看診與特定看診日自動過期剃除規則 (共 21 位醫師)
     $rosterRules = @{
-        "13|王鴻松|6" = "10/3看診"
-        "13|梁孫源|6" = "10/10.10/31看診"
-        "13|蕭銘鴻|6" = "10/17看診"
-        "13|葉騰尹|6" = "10/24看診"
-        "AD|張淑鈺|6" = "10/10.10/24看診"
-        "AB|李學林|6" = "10/10.10/24看診"
-        "40|金椿期|6" = "10/17看診"
-        "04|鍾瑞賢|6" = "10/3.10/24.10/31看診"
-        "04|馬瑞杉|6" = "10/10看診"
-        "AF|陳筠方|5" = "9/11.9/25看診"
-        "09|許嘉方|5|下午" = "10/23起看診"
-        "09|施彥旭|3|下午" = "10/7.10/21看診"
+        # 1. 婦產科 (05) 雙週/隔週看診
+        "05|李伊菱|5|上午" = "10/23.11/13.11/27.12/11看診"
+        "05|林玉珊|3|下午" = "10/21.11/4.11/18.12/2看診"
+
+        # 2. 耳鼻喉科 (09) 隔週看診與 10/18 起新排班
+        "09|施彥旭|3|下午" = "10/21.11/4.11/18.12/2看診"
         "09|施凱翔|1|上午" = "10/18起看診"
         "09|許嘉方|2|上午" = "10/18起看診"
         "09|施凱翔|3|上午" = "10/18起看診"
         "09|施凱翔|5|上午" = "10/18起看診"
+        "09|許嘉方|5|下午" = "10/23起看診"
+
+        # 3. 牙科 (40) 每月特約門診
+        "40|陳聰洲|2|上午" = "11/10.12/15看診"
+
+        # 4. 無障礙牙科特診 (4001) 週三上午四大專科醫師每週輪值
+        "4001|黃惠娟|3|上午" = "11/4看診"
+        "4001|黃廷芳|3|上午" = "11/11看診"
+        "4001|陳信利|3|上午" = "10/21.11/18看診"
+        "4001|黃左琪|3|上午" = "10/28.11/25看診"
+
+        # 5. 血液腫瘤科 (AF) 隔週看診
+        "AF|陳筠方|5|上午" = "10/23.11/6.11/20.12/4.12/18.1/1看診"
+
+        # 6. 胸腔內科 (AC) 隔週四夜診
+        "AC|黃伊文|4|夜診" = "10/22.11/5.11/19.12/3.12/17.12/31看診"
+
+        # 7. 胸腔外科 (BC) 隔週四下午
+        "BC|李佳穎|4|下午" = "10/22.11/5.11/19.12/3.12/17.12/31看診"
+
+        # 8. 精神科 (13) 週六輪值看診
+        "13|蕭銘鴻|6|上午" = "10/17.11/7.11/21.12/19看診"
+        "13|葉騰尹|6|上午" = "10/24.11/28.12/5看診"
+        "13|梁孫源|6|上午" = "10/31.12/26.1/2看診"
+        "13|王鴻松|6|上午" = "11/14.12/12看診"
+
+        # 9. 腎臟內科 (AD) 週六輪值看診
+        "AD|張淑鈺|6|上午" = "10/24.11/14.11/28.12/12.12/26看診"
+
+        # 10. 心臟內科 (AB) 週六輪值看診
+        "AB|李學林|6|上午" = "10/24.11/7.11/21.12/5.12/19看診"
+
+        # 11. 小兒科 (04) 週六輪值看診
+        "04|鍾瑞賢|6|上午" = "10/24.10/31.11/14.11/28.12/12.12/26看診"
+        "04|馬瑞杉|6|上午" = "11/7.11/21.12/5.12/19.1/2看診"
+
+        # 12. 牙科 (40) 週六看診
+        "40|金椿期|6|上午" = "10/17.11/14看診"
     }
 
     $rKeySlot = "$($entry.dept_code)|$($entry.doctor)|$($entry.weekday)|$($entry.slot)"
