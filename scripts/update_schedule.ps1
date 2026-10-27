@@ -211,12 +211,21 @@ foreach ($d in $depts) {
             } elseif ($inner -like "*代診*") {
                 if (-not $isStopped) { $isSubstitute = $true }
             }
+            $isFull = ($inner -match '額滿')
             $slotLabel = if ($slotMap.ContainsKey($apn)) { $slotMap[$apn] } else { "上午" }
             $roomLabel = if ($roomNo.EndsWith("診")) { $roomNo } else { "${roomNo}診" }
 
             $cleanKey = "$month/$day"
             $padKey = "{0:D2}/{1:D2}" -f $month, $day
-            $val = if ($isStopped) { "停" } elseif ($count -ne $null) { $count } else { $null }
+            $val = if ($isStopped) { 
+                "停" 
+            } elseif ($count -ne $null) { 
+                if ($isFull) { "$count(已額滿)" } else { $count }
+            } elseif ($isFull) {
+                "已額滿"
+            } else { 
+                $null 
+            }
             if ($val -ne $null) {
                 # 複合科別專屬唯一鍵（徹底杜絕跨科特診覆寫）
                 $liveCountsMap["$dCode|$docName|$cleanKey|$slotLabel"] = $val
