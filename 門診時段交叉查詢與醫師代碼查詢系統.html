@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -4052,7 +4052,7 @@
       const now = new Date();
       const curDay = now.getDay(); // 0: 日, 1: 一 ... 6: 六
       let diff = weekday - curDay;
-      if (diff <= 0) {
+      if (diff < 0) {
         diff += 7;
       }
       const baseTime = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diff);
